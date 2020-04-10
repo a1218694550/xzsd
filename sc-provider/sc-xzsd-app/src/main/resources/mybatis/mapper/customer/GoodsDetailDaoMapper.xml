@@ -10,7 +10,7 @@
         store.phone,
         store.inv_code as invCode,
         store.bus_lis_code as busLisCode,
-		CONCAT_WS('-',store.province,store.city,store.area,store.detailed_addr) as detailedAddress,
+		CONCAT_WS('-',store.store_name,store.province,store.city,store.area,store.detailed_addr) as detailedAddress,
         store.version
         from t_sys_store store
         left join t_sys_customer customer on (store.inv_code = customer.inv_code)
@@ -26,9 +26,12 @@
             goods.sellprice as sellPrice,
             goods.sumsales_volume as sumSalesVolume,
             goods.stock,
+			avg(evaluate.evaluate_class) as starClass,
             goods.version
         from t_sys_goods goods
+		left JOIN t_sys_goods_evaluate evaluate ON (evaluate.goods_code = goods.goods_code and evaluate.is_delete = 0)
         where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
+		GROUP BY goods.goods_code
     </select>
 <!--    加入购物车-->
     <insert id="addGoodsToCart" parameterType="com.xzsd.app.customer.goodsDetail.entity.OpeGoods">
@@ -157,7 +160,7 @@
             img.sort_ordinal
         from t_sys_goods_evaluate evaluate
         left join t_sys_user `user` on (evaluate.creater = `user`.user_code)
-        left join t_sys_evaluate_img img on (evaluate.evaluate_code = img.evaluate_code)
+        left join t_sys_evaluate_img img on (evaluate.evaluate_code = img.evaluate_code and img.is_delete = 0)
         where evaluate.is_delete = 0 and evaluate.goods_code = #{goodsCode}
         <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 1">
             AND evaluate.evaluate_class in (4,5)
@@ -168,6 +171,6 @@
         <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 3">
             AND evaluate.evaluate_class = 1
         </if>
-        order by img.sort_ordinal asc
+        order by evaluate.create_time desc,img.sort_ordinal asc
     </select>
 </mapper>

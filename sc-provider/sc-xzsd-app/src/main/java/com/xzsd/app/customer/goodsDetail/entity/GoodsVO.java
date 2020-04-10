@@ -36,6 +36,10 @@ public class GoodsVO {
      */
     private int stock;
     /**
+     * 评价星级
+     */
+    private float starClass;
+    /**
      * 送货地
      */
     private String address;
@@ -98,6 +102,14 @@ public class GoodsVO {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public float getStarClass() {
+        return starClass;
+    }
+
+    public void setStarClass(float starClass) {
+        this.starClass = starClass;
     }
 
     public String getAddress() {
