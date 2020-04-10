@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.order.dao.OrderDao">
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code as userCode,
+            role,
+            version
+        from t_sys_user
+        where user_code = #{userCode}
+        and is_delete = 0
+    </select>
+    <select id="listOrder" parameterType="com.xzsd.pc.order.entity.OrderInfo" resultType="com.xzsd.pc.order.entity.OrderVO">
+        select
+            od.order_code as orderCode,
+            od.cus_code as cusCode,
+            us.user_name as cusName,
+            us.phone,
+            od.sum_price as sumPrice,
+            od.order_Status as orderStatus,
+            od.pay_time as payTime,
+            od.store_code as storeCode,
+            od.remarks,
+            od.is_delete as isDelete,
+            od.creater,
+            od.create_time as createTime,
+            od.updater,
+            od.update_time as updateTime,
+            od.version
+        from t_sys_order od
+        left join t_sys_user us on (od.cus_code = us.user_code)
+        where od.is_delete = 0
+        <if test="role !=null and role !='' and role == 2">
+            AND od.store_code in (select store_code from t_sys_store where user_code = #{operator})
+        </if>
+        <if test="cusName != null and cusName != ''">
+            AND us.user_name like concat ('%',#{cusName},'%')
+        </if>
+        <if test="orderCode != null and orderCode != ''">
+            AND od.order_code like concat ('%',#{orderCode},'%')
+        </if>
+        <if test="time != null and time != ''">
+            AND od.pay_time between #{payTimeStart} and #{payTimeOver}
+        </if>
+        <if test="phone != null and phone != ''">
+            AND us.phone like concat ('%',#{phone},'%')
+        </if>
+        <if test="orderStatus != null and orderStatus != ''">
+            AND od.order_status = #{orderStatus}
+        </if>
+        order by od.create_time desc
+    </select>
+    <resultMap id="orderDetailsMap" type="com.xzsd.pc.order.entity.OrderDetails">
+        <id property="orderCode" column="cusCode" jdbcType="VARCHAR"/>
+        <result property="cusCode" column="orderCode" jdbcType="VARCHAR"/>
+        <collection property="goodsList" ofType="com.xzsd.pc.order.entity.Goods">
+            <id property="ordDetailsCode" column="ordDetailsCode" jdbcType="VARCHAR"/>
+            <result property="goodsCode" column="goodsCode" jdbcType="VARCHAR"/>
+            <result property="goodsName" column="goodsName" jdbcType="VARCHAR"/>
+            <result property="buyCount" column="buyCount"/>
+            <result property="sumPrice" column="sumPrice"/>
+            <result property="sellPrice" column="sellPrice"/>
+        </collection>
+    </resultMap>
+
+    <select id="getOrderDetails" parameterType="java.lang.String" resultMap="orderDetailsMap">
+        select
+            od.cus_code as cusCode,
+            od.order_code as orderCode,
+            odd.ord_details_code as ordDetailsCode,
+            odd.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            odd.buy_count as buyCount,
+            odd.sum_price as sumPrice,
+            goods.sellprice as sellPrice
+        from t_sys_order od
+        left join t_sys_order_details odd on (od.order_code = odd.order_code)
+        left join t_sys_goods goods on (odd.goods_code = goods.goods_code)
+        where od.is_delete = 0 and od.order_code = #{orderCode}
+        order by odd.create_time desc
+    </select>
+
+    <update id="updateOrderState" parameterType="java.lang.String">
+        update t_sys_order set
+            order_status = #{orderStatus},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and order_code in
+        <foreach collection="orderCodeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

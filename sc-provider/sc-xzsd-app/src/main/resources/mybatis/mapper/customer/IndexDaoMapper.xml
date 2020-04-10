@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.customer.index.dao.IndexDao">
+<!--    查询邀请码-->
+    <select id="findInvCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from t_sys_store
+        where is_delete = 0 and inv_code = #{invCode}
+    </select>
+    <select id="countUserAcct" parameterType="com.xzsd.app.customer.index.entity.CustomerInfo" resultType="int">
+        select count(user_acco)
+        from t_sys_user
+        where user_acco = #{userAccount}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+<!--    注册客户-->
+    <insert id="addUser" parameterType="com.xzsd.app.customer.index.entity.CustomerInfo">
+        insert into t_sys_user(
+            user_code,
+            user_name,
+            user_acco,
+            user_pwd,
+            role,
+            idcard,
+            sex,
+            phone,
+            email,
+            user_img,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+         ) values(
+            #{userCode},
+            #{name},
+            #{userAccount},
+            #{password},
+            3,
+            #{idCard},
+            #{sex},
+            #{phone},
+            #{email},
+            #{userImg},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+    <insert id="addCustomer" parameterType="com.xzsd.app.customer.index.entity.CustomerInfo">
+        insert into t_sys_customer(
+            cus_code,
+            inv_code,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values (
+            #{userCode},
+            #{invCode},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+<!--    查询轮播图列表-->
+    <select id="listRotationChart" resultType="com.xzsd.app.customer.index.entity.RotationChartVO">
+        select
+            rotationchart_code as rotationChartCode,
+            img_url as image,
+            sort_ordinal as sortOrdinal,
+            status,
+            goods_code as goodsCode,
+            valperiod_start as valperiodStart,
+            valperiod_over as valperiodOver,
+            version
+        from t_sys_rotationchart
+        where is_delete = 0 and status = 1
+        order by sort_ordinal asc
+    </select>
+<!--    查询热门商品列表-->
+    <select id="getDisPlayCount" resultType="java.lang.String">
+        select `value`
+        from t_sys_word
+        where is_delete = 0 and pub_class = 'hotgoods' and class = 'displaycount'
+    </select>
+    <select id="listHotGoods" parameterType="java.lang.Integer" resultType="com.xzsd.app.customer.index.entity.HotGoodsVO">
+        select
+            hotgoods.hotgoods_code as hotGoodsCode,
+            hotgoods.sort_ordinal as sortOrdinal,
+            hotgoods.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            goods.sellprice as sellPrice,
+            goods.goods_intro as goodsIntro,
+            goods.image_url as goodsImg
+        from t_sys_hotgoods hotgoods
+        left join t_sys_goods goods on (hotgoods.goods_code = goods.goods_code)
+        where hotgoods.is_delete = 0
+        order by hotgoods.sort_ordinal asc
+        LIMIT 0,#{disPlayCount}
+    </select>
+</mapper>

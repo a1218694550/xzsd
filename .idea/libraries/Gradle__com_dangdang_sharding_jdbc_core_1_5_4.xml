@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.dangdang:sharding-jdbc-core:1.5.4">
+    <CLASSES>
+      <root url="jar://D:/development_tool/gradle/gradle-6.0/caches/modules-2/files-2.1/com.dangdang/sharding-jdbc-core/1.5.4/7d4bf0b9c810a67dcdc5864ec171b4fb10704ab3/sharding-jdbc-core-1.5.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://D:/development_tool/gradle/gradle-6.0/caches/modules-2/files-2.1/com.dangdang/sharding-jdbc-core/1.5.4/7e492aa1539378da8ccc46d521b103a76e1ec3f6/sharding-jdbc-core-1.5.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,88 @@
+package com.xzsd.pc.order.service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.xzsd.pc.order.dao.OrderDao;
+import com.xzsd.pc.order.entity.OrderDetails;
+import com.xzsd.pc.order.entity.OrderInfo;
+import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.util.AppResponse;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+@Service
+public class OrderService {
+    @Resource
+    private OrderDao orderDao;
+
+    /**
+     * 查询订单列表
+     * @param orderInfo
+     * @return
+     * @throws ParseException
+     */
+    public AppResponse listOrder(OrderInfo orderInfo) throws ParseException {
+        //获取当前登录人的角色
+        UserInfo userInfo = orderDao.getUser(orderInfo.getOperator());
+        if (userInfo != null && userInfo.getRole()!=0){
+            orderInfo.setRole(userInfo.getRole());
+        }
+        System.out.println(orderInfo.getRole());
+        //设置查询时间条件的值
+        if (!("".equals(orderInfo.getTime())) && orderInfo.getTime()!=null){
+            List<String> list = Arrays.asList(orderInfo.getTime().split(","));
+            SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+            Date start = formatter.parse(list.get(0));
+            Date over = formatter.parse(list.get(1));
+            orderInfo.setPayTimeStart(start);
+            orderInfo.setPayTimeOver(over);
+        }
+        PageHelper.startPage(orderInfo.getPageNum(),orderInfo.getPageSize());
+        List<OrderInfo> orderInfoList = orderDao.listOrder(orderInfo);
+        PageInfo<OrderInfo> pageData = new PageInfo<>(orderInfoList);
+
+        return AppResponse.success("查询订单列表成功！",pageData);
+    }
+
+    /**
+     * 查询订单详情
+     * @param orderCode
+     * @return
+     */
+    public AppResponse getOrderDetails(String orderCode){
+        OrderDetails orderDetails = orderDao.getOrderDetails(orderCode);
+        return AppResponse.success("查询订单详情成功！",orderDetails);
+    }
+
+    /**
+     * 修改订单状态
+     * @param orderCode
+     * @param operation
+     * @param updater
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public AppResponse updateOrderState(String orderCode ,int operation,String updater){
+        int orderStatus = 0;
+        switch (operation){
+            case 1: orderStatus = 1;break;
+            case 2: orderStatus = 2;break;
+            case 3: orderStatus = 0;break;
+            case 4: orderStatus = 1;break;
+            case 5: orderStatus = 5;break;
+        }
+        List<String> orderCodeList = Arrays.asList(orderCode.split(","));
+        int result = orderDao.updateOrderState(orderCodeList,orderStatus,updater);
+        if (0 == result){
+            return AppResponse.bizError("修改订单状态失败!");
+        }
+        return AppResponse.success("修改订单状态成功!");
+    }
+}

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.driver.dao.DriverDao">
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code as userCode,
+            role,
+            version
+        from t_sys_user
+        where user_code = #{userCode}
+        and is_delete = 0
+    </select>
+    <!--统计用户账号数量 计算删除了的账号-->
+    <select id="countUserAcct" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int">
+        select count(user_acco)
+        from t_sys_user
+        where user_acco = #{driverAccount}
+        <if test="driverCode != null and driverCode != ''">
+            AND user_code != #{driverCode}
+        </if>
+    </select>
+    <!--统计用户账号数量 不计算删除了的账号-->
+    <select id="findUserAcct" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
+        select count(user_acco)
+        from t_sys_user
+        where is_delete = 0
+        and user_acco = #{driverAccount}
+        <if test="driverCode != null and driverCode != ''">
+            AND user_code != #{driverCode}
+        </if>
+    </select>
+    <!--    查询手机号是否存在-->
+    <select id="countPhone" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int">
+        select count(phone)
+        from t_sys_user
+        where is_delete = 0
+        and phone = #{phone}
+        <if test="driverCode != null and driverCode != ''">
+            AND user_code != #{driverCode}
+        </if>
+    </select>
+    <!--    新增司机信息-->
+    <insert id="addUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+       insert into t_sys_user
+        (user_code,
+         user_name,
+         user_acco,
+         user_pwd,
+         role,
+         idcard,
+         sex,
+         phone,
+         email,
+         user_img,
+         is_delete,
+         creater,
+         create_time,
+         updater,
+         update_time,
+         version)
+        values
+           (#{driverCode},
+            #{driverName},
+            #{driverAccount},
+            #{driverPassword},
+            4,
+            #{idCard},
+            #{sex},
+            #{phone},
+            #{email},
+            #{image},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0)
+    </insert>
+    <insert id="addDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        insert into t_sys_driver(
+            driver_code,
+            province_code,
+            city_code,
+            area_code,
+            province,
+            city,
+            area,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values (
+            #{driverCode},
+            #{provinceCode},
+            #{cityCode},
+            #{areaCode},
+            #{province},
+            #{city},
+            #{area},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0)
+        )
+    </insert>
+<!--    查询司机详情-->
+    <select id="getDriver" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.DriverVO">
+        select
+            `user`.user_code as driverCode,
+            `user`.user_name as driverName,
+            `user`.user_acco as driverAccount,
+            `user`.user_pwd as driverPassword,
+            `user`.idcard as idCard,
+            `user`.sex,
+            `user`.phone,
+            `user`.email,
+            `user`.user_img as image,
+            driver.province_code as provinceCode,
+            driver.city_code as cityCode,
+            driver.area_code as areaCode,
+            driver.province,
+            driver.city,
+            driver.area,
+            `user`.is_delete as isDelete,
+            `user`.creater,
+            `user`.create_time as createTime,
+            `user`.updater,
+            `user`.update_time as updateTime,
+            `user`.version
+        from t_sys_user `user`
+        left join t_sys_driver driver on (`user`.user_code = driver.driver_code)
+        where `user`.is_delete = 0 and `user`.user_code = #{driverCode} and `user`.role = 4
+    </select>
+<!--    修改司机信息-->
+    <update id="updateUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update t_sys_user set
+            user_name = #{driverName},
+            user_acco = #{driverAccount},
+            user_pwd = #{driverPassword},
+            idcard = #{idCard},
+            sex = #{sex},
+            phone = #{phone},
+            email = #{email},
+            user_img = #{image},
+            updater = #{updater},
+            update_time = now(),
+            version = #{version} + 1
+        where is_delete = 0 and user_code = #{driverCode} and version = #{version}
+    </update>
+    <update id="updateDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update t_sys_driver set
+            province_code = #{provinceCode},
+            city_code = #{cityCode},
+            area_code = #{areaCode},
+            province = #{province},
+            city = #{city},
+            area = #{area},
+            updater = #{updater},
+            update_time = now(),
+            version = #{version} + 1
+        where is_delete = 0 and driver_code = #{driverCode} and version = #{version}
+    </update>
+
+    <select id="listDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverVO">
+        select
+            `user`.user_code as driverCode,
+            `user`.user_name as driverName,
+            `user`.user_acco as driverAccount,
+            `user`.user_pwd as driverPassword,
+            `user`.idcard as idCard,
+            `user`.sex,
+            `user`.phone,
+            `user`.email,
+            `user`.user_img as image,
+            driver.province_code as provinceCode,
+            driver.city_code as cityCode,
+            driver.area_code as areaCode,
+            driver.province,
+            driver.city,
+            driver.area,
+            `user`.is_delete as isDelete,
+            `user`.creater,
+            `user`.create_time as createTime,
+            `user`.updater,
+            `user`.update_time as updateTime,
+            `user`.version
+        from t_sys_user `user`
+        left join t_sys_driver driver on (`user`.user_code = driver.driver_code)
+        where `user`.is_delete = 0 and `user`.role = 4
+        <if test="role != null and role !='' and role == 2">
+            AND driver.area_code in (select area_code from t_sys_store where user_code = #{operator})
+        </if>
+        <if test="city !=null and city !=''">
+            AND driver.city like concat ('%',#{city},'%')
+        </if>
+        <if test="area !=null and area !=''">
+            AND driver.area like concat ('%',#{area},'%')
+        </if>
+        order by driver.create_time desc
+    </select>
+<!--    删除司机信息-->
+    <update id="deleteUser" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_user set
+            is_delete = 1,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where user_code in
+        <foreach collection="codeList" item="userCode" index="index" open="(" separator="," close=")">
+            #{userCode}
+        </foreach>
+    </update>
+    <update id="deleteDriver" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_driver set
+        is_delete = 1,
+        updater = #{updater},
+        update_time = now(),
+        version = version + 1
+        where driver_code in
+        <foreach collection="codeList" item="driverCode" index="index" open="(" separator="," close=")">
+            #{driverCode}
+        </foreach>
+    </update>
+</mapper>

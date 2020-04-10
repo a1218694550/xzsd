@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.rotationchart.dao.RotationChartDao">
+<!--查询该序号和商品编号的轮播图条数-->
+    <select id="countSortOrdinal" parameterType="java.lang.String" resultType="int">
+        select count(*)
+        from t_sys_rotationchart
+        where  is_delete = 0 and ( sort_ordinal = #{sortOrdinal} or goods_code = #{goodsCode} )
+    </select>
+    <!--    新增轮播图-->
+    <insert id="addRotationChart" parameterType="com.xzsd.pc.rotationchart.entity.RotationChartInfo">
+        insert t_sys_rotationchart (
+            rotationchart_code,
+            img_url,
+            sort_ordinal,
+            status,
+            goods_code,
+            valperiod_start,
+            valperiod_over,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values(
+            #{rotationChartCode},
+            #{image},
+            #{sortOrdinal},
+            #{status},
+            #{goodsCode},
+            #{valPeriodStart},
+            #{valPeriodOver},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+<!--    查询商品列表-->
+    <select id="listGoods" parameterType="com.xzsd.pc.rotationchart.entity.RCGoodsVO" resultType="com.xzsd.pc.rotationchart.entity.RCGoodsVO">
+        select
+        goods.goods_code as goodsCode,
+        goods.goods_name as goodsName,
+        goodsclassA.goodsclass_code as classOneCode,
+        goodsclassA.class_name as classOneName,
+        goodsclassB.goodsclass_code as classSecondCode,
+        goodsclassB.class_name as classSecondName,
+        goods.goods_status as goodsStatus,
+        goods.version as version
+        from t_sys_goods goods
+        LEFT JOIN t_sys_goodsclassification goodsclassB on (goods.goodsclass_code = goodsclassB.goodsclass_code)
+        LEFT JOIN t_sys_goodsclassification goodsclassA on (goodsclassB.parent_code = goodsclassA.goodsclass_code)
+        where goods.is_delete = 0
+        <if test="goodsName != null and goodsName!=''">
+            AND goods.goods_name like concat ('%',#{goodsName},'%')
+        </if>
+        <if test="goodsCode != null and goodsCode!=''">
+            AND goods.goods_code like concat ('%',#{goodsCode},'%')
+        </if>
+        order by create_time desc
+    </select>
+<!--    查询轮播图详情-->
+    <select id="getRotationChart" parameterType="java.lang.String" resultType="com.xzsd.pc.rotationchart.entity.RotationChartVO">
+        select
+            rotationchart_code as rotationChartCode,
+            img_url as image,
+            sort_ordinal as sortOrdinal,
+            status,
+            goods_code as goodsCode,
+            valperiod_start as valperiodStart,
+            valperiod_over as valperiodOver,
+            version
+        from t_sys_rotationchart
+        where is_delete = 0 and rotationchart_code = #{rotationChartCode}
+    </select>
+<!--    查询轮播图列表-->
+    <select id="listRotationChart" parameterType="java.lang.String" resultType="com.xzsd.pc.rotationchart.entity.RotationChartVO">
+        select
+            rotationchart_code as rotationChartCode,
+            img_url as image,
+            sort_ordinal as sortOrdinal,
+            status,
+            goods_code as goodsCode,
+            valperiod_start as valperiodStart,
+            valperiod_over as valperiodOver,
+            version
+        from t_sys_rotationchart
+        where is_delete = 0
+        order by sort_ordinal asc
+    </select>
+<!--    删除轮播图-->
+    <update id="deleteRotationChart" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_rotationchart set
+            is_delete = 1,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where rotationchart_code in
+        <foreach collection="codeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+<!--    修改轮播图状态-->
+    <update id="updateRotationChartState" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_rotationchart set
+            status = #{status},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and rotationchart_code in
+        <foreach collection="codeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

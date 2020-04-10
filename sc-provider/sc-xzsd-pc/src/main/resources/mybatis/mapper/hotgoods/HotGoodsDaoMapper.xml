@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.hotgoods.dao.HotGoodsDao">
+<!--    设置热门商品展示数量-->
+    <update id="setDisplayCount" parameterType="java.lang.String">
+        update t_sys_word set
+            `value` = #{displayCount},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where entry_code = '123456' and is_delete = 0 and pub_class = 'hotgoods' and class = 'displaycount' and version = #{version}
+    </update>
+    <select id="countSort" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*)
+        from t_sys_hotgoods
+        where is_delete = 0 and sort_ordinal = #{sortOrdinal}
+    </select>
+    <select id="countGoods" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*)
+        from t_sys_hotgoods
+        where is_delete = 0 and goods_code = #{goodsCode}
+    </select>
+<!--    新增热门商品-->
+    <insert id="addHotGoods" parameterType="com.xzsd.pc.hotgoods.entity.HotGoodsInfo">
+        insert into t_sys_hotgoods(
+            hotgoods_code,
+            sort_ordinal,
+            goods_code,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values (
+            #{hotGoodsCode},
+            #{sortOrdinal},
+            #{goodsCode},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+<!--    查询热门商品详情-->
+    <select id="getHotGoods" parameterType="java.lang.String" resultType="com.xzsd.pc.hotgoods.entity.HotGoodsVO">
+        select
+            hotgoods.hotgoods_code as hotGoodsCode,
+            hotgoods.sort_ordinal as sortOrdinal,
+            hotgoods.goods_code as goodsCode,
+            goods.goods_name as goodsName
+        from t_sys_hotgoods hotgoods
+        left join t_sys_goods goods on (hotgoods.goods_code = goods.goods_code)
+        where hotgoods.is_delete = 0 and hotgoods.hotgoods_code = #{hotGoodsCode}
+    </select>
+<!--    修改热门商品-->
+    <update id="updateHotGoods" parameterType="com.xzsd.pc.hotgoods.entity.HotGoodsInfo">
+        update t_sys_hotgoods set
+            sort_ordinal = #{sortOrdinal},
+            goods_code = #{goodsCode},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and hotgoods_code = #{hotGoodsCode} and version = #{version}
+    </update>
+<!--查询热门商品列表-->
+    <select id="listHotGoods" parameterType="com.xzsd.pc.hotgoods.entity.HotGoodsInfo" resultType="com.xzsd.pc.hotgoods.entity.HotGoodsVO">
+        select
+            hotgoods.hotgoods_code as hotGoodsCode,
+            hotgoods.sort_ordinal as sortOrdinal,
+            hotgoods.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            goods.sellprice as sellPrice,
+            goods.goods_intro as goodsIntro
+        from t_sys_hotgoods hotgoods
+        left join t_sys_goods goods on (hotgoods.goods_code = goods.goods_code)
+        where hotgoods.is_delete = 0
+        <if test="goodsName != null and goodsName != ''">
+            AND goods.goods_name like concat ('%',#{goodsName},'%')
+        </if>
+        <if test="goodsCode != null and goodsCode != ''">
+            AND goods.goods_code like concat ('%',#{goodsCode},'%')
+        </if>
+        order by hotgoods.sort_ordinal asc
+    </select>
+<!--    删除热门商品-->
+    <update id="deleteHotGoods" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_hotgoods set
+            is_delete = 1 ,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and hotgoods_code in
+        <foreach collection="codeList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

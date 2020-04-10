@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.goods.dao.GoodsDao">
+<!--    查询商品一级分类-->
+    <select id="listGoodsClassOne" resultType="com.xzsd.pc.goodsclass.entity.GoodsClassOne">
+        select
+            goodsclass_code as classOneCode,
+            class_name as classOneName,
+            is_delete as isDelete,
+            creater,
+            create_time as createTime,
+            updater,
+            update_time as updateTime,
+            version
+        from t_sys_goodsclassification
+        where is_delete = 0 and class_level = 1
+        order by create_time desc
+    </select>
+<!--    查询商品二级分类-->
+    <select id="listGoodsClassSecond" parameterType="java.lang.String" resultType="com.xzsd.pc.goodsclass.entity.GoodsClassSecond">
+        select
+            goodsclass_code as classSecondCode,
+            class_name as classSecondName,
+            is_delete as isDelete,
+            creater,
+            create_time as createTime,
+            updater,
+            update_time as updateTime,
+            version
+        from t_sys_goodsclassification
+        where is_delete = 0 and class_level = 2 and parent_code = #{classOneCode}
+        order by create_time desc
+    </select>
+<!--    新增商品-->
+    <insert id="addGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfo">
+        insert into t_sys_goods(
+            goods_code,
+            goods_name,
+            price,
+            sellprice,
+            stock,
+            monthsales_volume,
+            sumsales_volume,
+            goodsclass_code,
+            advwords,
+            goods_intro,
+            goods_status,
+            shelf_time,
+            browse_volume,
+            merchant,
+            book_code,
+            press,
+            author,
+            image_url,
+            star_class,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values (
+            #{goodsCode},
+            #{goodsName},
+            #{price},
+            #{sellPrice},
+            #{stock},
+            0,
+            0,
+            #{classSecondCode},
+            #{advWords},
+            #{goodsIntro},
+            1,
+            now(),
+            0,
+            #{merchant},
+            #{bookCode},
+            #{press},
+            #{author},
+            #{image},
+            #{starClass},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+<!--查询商品详情-->
+    <select id="getGoods" parameterType="java.lang.String" resultType="com.xzsd.pc.goods.entity.GoodsVO">
+        select
+            goods.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            goods.price,
+            goods.sellprice,
+            goods.stock,
+            goods.sumsales_volume as salesVolume,
+            goodsclassA.goodsclass_code as classOneCode,
+            goodsclassA.class_name as classOneName,
+            goodsclassB.goodsclass_code as classSecondCode,
+            goodsclassB.class_name as classSecondName,
+            goods.advwords,
+            goods.goods_intro as goodsIntro,
+            goods.goods_status as goodsStatus,
+            goods.shelf_time as shelfTime,
+            goods.browse_volume as browseVolume,
+            goods.merchant,
+            goods.book_code as bookCode,
+            goods.press,
+            goods.author,
+            goods.image_url as image,
+            goods.version as version
+        from t_sys_goods goods
+        LEFT JOIN t_sys_goodsclassification goodsclassB on (goods.goodsclass_code = goodsclassB.goodsclass_code)
+        LEFT JOIN t_sys_goodsclassification goodsclassA on (goodsclassB.parent_code = goodsclassA.goodsclass_code)
+        where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
+    </select>
+<!--修改商品信息-->
+    <update id="updateGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfo">
+        update t_sys_goods set
+            goods_name = #{goodsName},
+            price = #{price},
+            sellprice = #{sellPrice},
+            stock = #{stock},
+            goodsclass_code = #{classSecondCode},
+            advwords = #{advWords},
+            goods_intro = #{goodsIntro},
+            goods_status = #{goodsStatus},
+            shelf_time = #{shelfTime},
+            browse_volume = #{browseVolume},
+            merchant = #{merchant},
+            book_code = #{bookCode},
+            press = #{press},
+            author = #{author},
+            image_url = #{image},
+            is_delete = #{isDelete},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and goods_code = #{goodsCode} and version = #{version}
+    </update>
+<!--查询商品列表-->
+    <select id="listGoods" parameterType="com.xzsd.pc.goods.entity.GoodsInfo" resultType="com.xzsd.pc.goods.entity.GoodsVO">
+         select
+            goods.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            goods.price,
+            goods.sellprice,
+            goods.stock,
+            goods.sumsales_volume as salesVolume,
+            goodsclassA.goodsclass_code as classOneCode,
+            goodsclassA.class_name as classOneName,
+            goodsclassB.goodsclass_code as classSecondCode,
+            goodsclassB.class_name as classSecondName,
+            goods.advwords,
+            goods.goods_intro as goodsIntro,
+            goods.goods_status as goodsStatus,
+            goods.shelf_time as shelfTime,
+            goods.browse_volume as browseVolume,
+            goods.merchant,
+            goods.book_code as bookCode,
+            goods.press,
+            goods.author,
+            goods.image_url as image,
+            goods.version as version
+        from t_sys_goods goods
+        LEFT JOIN t_sys_goodsclassification goodsclassB on (goods.goodsclass_code = goodsclassB.goodsclass_code)
+        LEFT JOIN t_sys_goodsclassification goodsclassA on (goodsclassB.parent_code = goodsclassA.goodsclass_code)
+        where goods.is_delete = 0
+        <if test="goodsName != null and goodsName!=''">
+            AND goods.goods_name like concat ('%',#{goodsName},'%')
+        </if>
+        <if test="goodsStatus != null and goodsStatus!=''">
+            AND goods.goods_status like concat ('%',#{goodsStatus},'%')
+        </if>
+        <if test="advWords != null and advWords!=''">
+            AND goods.advwords like concat ('%',#{advWords},'%')
+        </if>
+        <if test="press != null and press!=''">
+            AND goods.press like concat ('%',#{press},'%')
+        </if>
+        <if test="author != null and author!=''">
+            AND goods.author like concat ('%',#{author},'%')
+        </if>
+        order by goods.create_time desc
+    </select>
+<!--    删除商品-->
+    <update id="deleteGoods" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_goods set
+            is_delete = 1,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where goods_code in
+        <foreach collection="codeList" item="code" open="(" separator="," close=")" index="index">
+            #{code}
+        </foreach>
+    </update>
+<!--    修改商品状态-->
+    <update id="updateGoodsStatus" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_goods set
+            goods_status = #{status},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and goods_code in
+        <foreach collection="codeList" item="code" open="(" separator="," close=")" index="index">
+            #{code}
+        </foreach>
+    </update>
+</mapper>

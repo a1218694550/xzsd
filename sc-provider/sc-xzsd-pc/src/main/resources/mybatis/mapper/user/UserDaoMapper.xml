@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.user.dao.UserDao">
+    <!--统计用户账号数量-->
+    <select id="countUserAcct" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
+        select count(user_acco)
+        from t_sys_user
+        where user_acco = #{userAccount}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+    <select id="findUserAcct" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
+        select count(user_acco)
+        from t_sys_user
+        where is_delete = 0
+            and user_acco = #{userAccount}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+<!--    查询手机号是否存在-->
+    <select id="countPhone" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
+        select count(phone)
+        from t_sys_user
+        where is_delete = 0
+            and phone = #{phone}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+<!--    登录-->
+    <select id="login" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code as userCode,
+            user_name as userName,
+            user_img as userImg,
+            role
+        from t_sys_user
+        where user_acco = #{userAccount} and user_pwd = #{userPwd} and is_delete = 0
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+    <!--新增用户-->
+    <insert id="addUser" parameterType="com.xzsd.pc.user.entity.UserInfo">
+        insert into t_sys_user
+        (user_code,
+         user_name,
+         user_acco,
+         user_pwd,
+         role,
+         idcard,
+         sex,
+         phone,
+         email,
+         user_img,
+         is_delete,
+         creater,
+         create_time,
+         updater,
+         update_time,
+         version)
+        values
+           (#{userCode},
+            #{userName},
+            #{userAccount},
+            #{userPwd},
+            #{role},
+            #{idCard},
+            #{sex},
+            #{phone},
+            #{email},
+            #{userImg},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0)
+    </insert>
+<!--    修改用户-->
+    <update id="updateUser" parameterType="com.xzsd.pc.user.entity.UserInfo" >
+        update t_sys_user
+        set
+        user_acco = #{userAccount},
+        user_pwd = #{userPwd},
+        user_name = #{userName},
+        sex = #{sex},
+        phone = #{phone},
+        email = #{email},
+        idcard = #{idCard},
+        updater = #{updater},
+        update_time = now(),
+        version = version + 1
+        where user_code = #{userCode} and #{userAccount}!=null and #{userPwd}!=null and #{userName}!=null and version = #{version}
+    </update>
+<!--    查询用户详情-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code as userCode,
+            user_acco as userAccount,
+            user_name as userName,
+            sex,
+            phone,
+            email,
+            idcard,
+            user_pwd as userPwd,
+            role,
+            user_img as userImg,
+            version
+        from t_sys_user
+        where user_code = #{userCode}
+        and is_delete = 0
+    </select>
+<!--删除用户-->
+    <update id="deleteUser" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_user
+        set is_delete = 1,
+        updater = #{updater},
+        update_time = now(),
+        version = version + 1
+        where is_delete = 0 and user_code in
+        <foreach collection="codeList" item="userCode" index="index" open="(" separator="," close=")">
+            #{userCode}
+        </foreach>
+    </update>
+<!--查询用户列表-->
+    <select id="listUser" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code as userCode,
+            user_name as userName,
+            user_acco as userAccount,
+            user_pwd as userPwd,
+            sex,
+            phone,
+            email,
+            idcard,
+            role,
+            is_delete as isDelete,
+            creater,
+            create_time as createTime,
+            updater,
+            update_time as updateTime,
+            version
+        from t_sys_user
+        where is_delete = 0
+
+            <if test="userAccount != null and userAccount !='' ">
+                AND user_acco like concat ('%',#{userAccount},'%')
+            </if>
+            <if test="userName != null and userName !='' ">
+                AND user_Name like concat ('%',#{userName},'%')
+            </if>
+        order by create_time desc
+    </select>
+<!--    <resultMap id="Order" type="com.order">-->
+<!--&lt;!&ndash;        collection：对关联查询到多条记录映射到集合对象中&ndash;&gt;-->
+<!--&lt;!&ndash;        property：将关联查询到多条记录映射到com.order哪个属性&ndash;&gt;-->
+<!--&lt;!&ndash;        ofType：指定映射到list集合属性中pojo的类型 ，即集合的泛型&ndash;&gt;-->
+<!--        <id column="order_code" property="orderCode" jdbcType="VARCHAR"/>-->
+<!--        <result column="customer_code" property="customerCode" jdbcType="VARCHAR"/>-->
+<!--        <collection property="goods" ofType="Goods" javaType="ArrayList">-->
+
+<!--        </collection>-->
+<!--    </resultMap>-->
+</mapper>

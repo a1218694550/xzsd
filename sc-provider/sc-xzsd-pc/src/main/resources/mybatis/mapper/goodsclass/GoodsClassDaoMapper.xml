@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.goodsclass.dao.GoodsClassDao">
+    <select id="getGoodsClassCount" parameterType="com.xzsd.pc.goodsclass.entity.GoodsClassInfo" resultType="int">
+        select count(goodsclass_code)
+        from t_sys_goodsclassification
+        where goodsclass_code=#{classOneCode}
+    </select>
+<!--    新增商品分类-->
+    <insert id="addGoodsClass" parameterType="com.xzsd.pc.goodsclass.entity.GoodsClassInfo">
+        insert into t_sys_goodsclassification(
+            goodsclass_code,
+            class_level,
+            class_name,
+            parent_code,
+            comment,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values(
+            #{classCode},
+            <if test="classOneCode==null or classOneCode==''">
+                1,
+            </if>
+            <if test="classOneCode!=null and classOneCode!=''">
+                2,
+            </if>
+            #{className},
+            #{classOneCode},
+            #{comment},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+<!--    查询商品分类详情-->
+    <select id="getGoodsClass" parameterType="com.xzsd.pc.goodsclass.entity.GoodsClassInfo" resultType="com.xzsd.pc.goodsclass.entity.GoodsClassInfo">
+        select
+            goodsclass_code as classCode,
+            class_level as classLevel,
+            class_name as className,
+            parent_code as parentCode,
+            comment,
+            is_delete as isDelete,
+            creater,
+            create_time as createTime,
+            updater,
+            update_time as updateTime,
+            version
+        from t_sys_goodsclassification
+        where is_delete = 0
+            and goodsclass_code = #{classCode}
+    </select>
+<!--    修改商品分类-->
+    <update id="updateGoodsClass" parameterType="com.xzsd.pc.goodsclass.entity.GoodsClassInfo">
+        update t_sys_goodsclassification set
+            class_name = #{className},
+            comment = #{comment},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where version = #{version} and goodsclass_code = #{classCode} and is_delete = 0
+    </update>
+<!--查询商品分类列表-->
+    <resultMap id="goodsClassListMap" type="com.xzsd.pc.goodsclass.entity.GoodsClassOne">
+        <id property="classOneCode" column="goodsclass_code" jdbcType="VARCHAR"/>
+        <id property="classOneName" column="class_name" jdbcType="VARCHAR"/>
+        <collection property="ificationSecondList" ofType="com.xzsd.pc.goodsclass.entity.GoodsClassSecond">
+            <id property="classSecondCode" column="goodsClassSecondCode" jdbcType="VARCHAR"/>
+            <id property="classSecondName" column="classSecondName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <select id="listGoodsClass" resultMap="goodsClassListMap">
+        select
+            a.goodsclass_code,
+            a.class_name,
+            b.goodsclass_code as goodsClassSecondCode,
+            b.class_name as classSecondName
+        from t_sys_goodsclassification a
+        LEFT JOIN t_sys_goodsclassification b on (b.parent_code = a.goodsclass_code)
+        where a.class_level=1 and b.class_level=2 and b.is_delete=0
+        order by a.create_time desc
+    </select>
+<!--查询该一级分类下二级分类的数量-->
+    <select id="countChildClass" parameterType="java.lang.String" resultType="int">
+        select count(goodsclass_code)
+        from t_sys_goodsclassification
+        where parent_code = #{classCode} and is_delete = 0
+    </select>
+    <!--删除商品分类-->
+    <update id="deleteGoodsClass" parameterType="com.xzsd.pc.goodsclass.entity.GoodsClassInfo">
+        update t_sys_goodsclassification set
+            is_delete = 1,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where version = #{version} and goodsclass_code = #{classCode} and is_delete = 0
+    </update>
+</mapper>

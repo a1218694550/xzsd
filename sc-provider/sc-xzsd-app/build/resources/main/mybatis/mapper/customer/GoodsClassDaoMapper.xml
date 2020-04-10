@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.customer.goodsclass.dao.GoodsClassDao">
+<!--    查询一级商品分类列表-->
+    <select id="listGoodsClassOne" parameterType="com.xzsd.app.customer.goodsclass.entity.GoodsClassOne" resultType="com.xzsd.app.customer.goodsclass.entity.GoodsClassOne">
+        select
+            goodsclass_code as classOneCode,
+            class_name as classOneName,
+            comment,
+            version
+        from t_sys_goodsclassification
+        where is_delete = 0 and class_level = 1
+        order by create_time desc
+    </select>
+    <resultMap id="goodsMap" type="com.xzsd.app.customer.goodsclass.entity.GoodsClassSecond">
+        <id property="classSecondCode" column="goodsclass_code"/>
+        <result property="classSecondName" column="class_name"/>
+        <collection property="goodsList" ofType="com.xzsd.app.customer.goodsDetail.entity.GoodsVO">
+            <id property="goodsCode" column="goods_code"/>
+            <result property="goodsImg" column="image_url"/>
+            <result property="goodsName" column="goods_name"/>
+            <result property="sellPrice" column="sellprice"/>
+            <result property="sumSalesVolume" column="sumsales_volume"/>
+            <result property="version" column="version"/>
+        </collection>
+    </resultMap>
+    <select id="listGoodsSecondAndGoods" parameterType="java.lang.String" resultMap="goodsMap">
+        select
+            goodsclass.goodsclass_code,
+            goodsclass.class_name,
+            goods.goods_code,
+            goods.image_url,
+            goods.goods_name,
+            goods.sellprice,
+            goods.sumsales_volume,
+            goods.version
+        from t_sys_goodsclassification goodsclass
+        left join t_sys_goods goods on (goods.goodsclass_code = goodsclass.goodsclass_code and goods.is_delete = 0)
+        where goodsclass.is_delete = 0 and goodsclass.parent_code = #{classOneCode}
+    </select>
+</mapper>

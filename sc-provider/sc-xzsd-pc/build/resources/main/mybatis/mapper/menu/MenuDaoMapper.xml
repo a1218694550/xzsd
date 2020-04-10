@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.menu.dao.MenuDao">
+<!--    新增菜单-->
+    <insert id="addMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo">
+        insert into t_sys_menu(
+            menu_code,
+            `name`,
+            ismenu,
+            remarks,
+            is_delete,
+            creater,
+            create_time,
+            updater,
+            update_time,
+            version
+        )values (
+            #{menuCode},
+            #{name},
+            #{isMenu},
+            #{remarks},
+            #{isDelete},
+            #{creater},
+            now(),
+            #{updater},
+            now(),
+            0
+        )
+    </insert>
+<!--    查询菜单详情-->
+    <select id="getMenu" parameterType="java.lang.String" resultType="com.xzsd.pc.menu.entity.MenuVO">
+       select
+            menu_code as menuCode,
+            `name`,
+            ismenu as isMenu,
+            remarks,
+            version
+        from t_sys_menu
+        where is_delete = 0 AND menu_code = #{menuCode}
+    </select>
+<!--    修改菜单-->
+    <update id="updateMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo">
+        update t_sys_menu set
+            `name` = #{name},
+            ismenu = #{isMenu},
+            remarks = #{remarks},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and version = #{version} and menu_code = #{menuCode}
+    </update>
+<!--    查询菜单列表-->
+    <select id="listMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo" resultType="com.xzsd.pc.menu.entity.MenuVO">
+        select
+            menu_code as menuCode,
+            `name`,
+            ismenu as isMenu,
+            remarks,
+            version
+        from t_sys_menu
+        where is_delete = 0
+        order by create_time asc
+    </select>
+<!--    删除菜单-->
+    <update id="deleteMenu" parameterType="com.xzsd.pc.util.CodeList">
+        update t_sys_Menu set
+            is_delete = 1,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and menu_code in
+        <foreach collection="codeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
