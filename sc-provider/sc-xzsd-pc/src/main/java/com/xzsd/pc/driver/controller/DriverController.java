@@ -14,6 +14,9 @@ import org.slf4j.Logger;
 
 import javax.annotation.Resource;
 
+/**
+ * 热门商品模块
+ */
 @RestController
 @RequestMapping("/manage/driver")
 public class DriverController {

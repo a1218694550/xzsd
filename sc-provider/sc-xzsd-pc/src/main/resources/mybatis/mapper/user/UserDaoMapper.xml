@@ -3,9 +3,11 @@
 <mapper namespace="com.xzsd.pc.user.dao.UserDao">
     <!--统计用户账号数量-->
     <select id="countUserAcct" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
-        select count(user_acco)
+        select count(*)
         from t_sys_user
-        where user_acco = #{userAccount}
+        where
+            is_delete = 0
+            and (user_acco = #{userAccount} or phone = #{phone})
         <if test="userCode != null and userCode != ''">
             and user_code != #{userCode}
         </if>
@@ -144,8 +146,7 @@
             update_time as updateTime,
             version
         from t_sys_user
-        where is_delete = 0
-
+        where is_delete = 0 and (role = 1 or role = 2)
             <if test="userAccount != null and userAccount !='' ">
                 AND user_acco like concat ('%',#{userAccount},'%')
             </if>

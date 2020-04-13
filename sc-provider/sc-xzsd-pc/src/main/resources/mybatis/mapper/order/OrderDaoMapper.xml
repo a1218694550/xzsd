@@ -10,6 +10,7 @@
         where user_code = #{userCode}
         and is_delete = 0
     </select>
+    <!-- 查询订单列表-->
     <select id="listOrder" parameterType="com.xzsd.pc.order.entity.OrderInfo" resultType="com.xzsd.pc.order.entity.OrderVO">
         select
             od.order_code as orderCode,
@@ -39,8 +40,11 @@
         <if test="orderCode != null and orderCode != ''">
             AND od.order_code like concat ('%',#{orderCode},'%')
         </if>
-        <if test="time != null and time != ''">
-            AND od.pay_time between #{payTimeStart} and #{payTimeOver}
+        <if test="payTimeStart != null and payTimeStart != ''">
+            AND od.pay_time &gt;= #{payTimeStart}
+        </if>
+        <if test="payTimeOver != null and payTimeOver != ''">
+            AND od.pay_time &lt;= #{payTimeOver}
         </if>
         <if test="phone != null and phone != ''">
             AND us.phone like concat ('%',#{phone},'%')

@@ -17,6 +17,9 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 热门商品模块
+ */
 @Service
 public class HotGoodsService {
     @Resource
@@ -47,15 +50,14 @@ public class HotGoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addHotGoods(HotGoodsInfo hotGoodsInfo){
         //校验序号跟商品编号是否已存在
-        int res = hotGoodsDao.countGoods(hotGoodsInfo.getGoodsCode());
-        if(0 != res){
+        int countGoods = hotGoodsDao.countGoods(hotGoodsInfo.getGoodsCode());
+        if(0 != countGoods){
             return AppResponse.bizError("新增热门商品失败，该商品已存在！");
         }
-        int res2 = hotGoodsDao.countSort(hotGoodsInfo.getSortOrdinal());
-        if(0 != res2){
+        int countSort = hotGoodsDao.countSort(hotGoodsInfo.getSortOrdinal());
+        if(0 != countSort){
             return AppResponse.bizError("新增热门商品失败，该序号已存在！");
         }
-
         hotGoodsInfo.setHotGoodsCode(StringUtil.getCommonCode(6));
         hotGoodsInfo.setIsDelete(0);
         int result = hotGoodsDao.addHotGoods(hotGoodsInfo);
@@ -74,7 +76,6 @@ public class HotGoodsService {
         HotGoodsVO hotGoodsVO = hotGoodsDao.getHotGoods(hotGoodsCode);
         return AppResponse.success("查询热门商品详情成功",hotGoodsVO);
     }
-
     /**
      * 修改热门商品信息
      * @param hotGoodsInfo
@@ -86,15 +87,15 @@ public class HotGoodsService {
         HotGoodsVO hotGoodsVO = hotGoodsDao.getHotGoods(hotGoodsInfo.getHotGoodsCode()); //获取原序号跟商品编号
         //如果序号改了
         if (hotGoodsVO.getSortOrdinal()!=hotGoodsInfo.getSortOrdinal()){
-            int res = hotGoodsDao.countSort(hotGoodsInfo.getSortOrdinal());
-            if (0 != res){
+            int countSort = hotGoodsDao.countSort(hotGoodsInfo.getSortOrdinal());
+            if (0 != countSort){
                 return AppResponse.bizError("修改热门商品失败，该序号已存在！");
             }
         }
         //如果商品改了
         if (!hotGoodsVO.getGoodsCode().equals(hotGoodsInfo.getGoodsCode())){
-            int res = hotGoodsDao.countGoods(hotGoodsInfo.getGoodsCode());
-            if (0 != res){
+            int countGoods = hotGoodsDao.countGoods(hotGoodsInfo.getGoodsCode());
+            if (0 != countGoods){
                 return AppResponse.bizError("修改热门商品失败，该商品已存在！");
             }
         }
@@ -117,6 +118,13 @@ public class HotGoodsService {
 
         return AppResponse.success("查询热门商品列表成功",pageData);
     }
+
+    /**
+     * 删除热门商品信息
+     * @param hotGoodsCode
+     * @param updater
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteHotGoods(String hotGoodsCode,String updater){
         List<String> hotGoodsCodeList = Arrays.asList(hotGoodsCode.split(","));

@@ -13,8 +13,6 @@ public class DriverInfo {
      * 页数
      */
     private int pageNum;
-
-
     /**
      * 操作者编号
      */
@@ -23,7 +21,6 @@ public class DriverInfo {
      * 操作者角色
      */
     private int role;
-
     /**
      * 司机编号
      */

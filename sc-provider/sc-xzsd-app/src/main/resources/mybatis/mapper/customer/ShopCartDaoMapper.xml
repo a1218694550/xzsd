@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.customer.shopcart.dao.ShopCartDao">
+    <select id="listGoodsByPage" parameterType="java.lang.String" resultType="com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo">
+        select
+            shopcart.shopcart_code as shopCartCode,
+            shopcart.cus_code as userCode,
+            shopcart.goods_code as goodsCode,
+            goods.image_url as goodsImg,
+            goods.goods_name as goodsName,
+            goods.sellprice as sellPrice,
+            shopcart.buy_count as goodsCount,
+            shopcart.sum_price as sumPrice
+        from t_sys_shopcart shopcart
+        left join t_sys_goods goods on (shopcart.goods_code = goods.goods_code and goods.is_delete = 0)
+        where shopcart.is_delete = 0 and shopcart.cus_code = #{userCode}
+    </select>
+<!--    修改商品数量-->
+    <update id="updateGoodsCount" parameterType="com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo">
+        update t_sys_shopcart set
+            buy_count = #{goodsCount},
+            sum_price = #{sumPrice},
+            updater = #{userCode},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and shopcart_code = #{shopCartCode}
+    </update>
+<!--    将商品移出购物车-->
+    <update id="deleteGoods" parameterType="java.lang.String">
+        update t_sys_shopcart set
+            is_delete = 1 ,
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where shopcart_code in
+        <foreach collection="shopCartCodeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

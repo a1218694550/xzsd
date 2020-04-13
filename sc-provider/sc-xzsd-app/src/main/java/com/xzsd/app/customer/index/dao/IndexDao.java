@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface IndexDao {
     /**
-     * 校验验证码
+     * 校验邀请码
      * @param invCode
      * @return
      */

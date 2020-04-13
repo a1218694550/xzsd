@@ -192,7 +192,7 @@
             updater = #{updater},
             update_time = now(),
             version = version + 1
-        where goods_code in
+        where  goods_code in
         <foreach collection="codeList" item="code" open="(" separator="," close=")" index="index">
             #{code}
         </foreach>

@@ -17,7 +17,10 @@ public class AddOrderInfo {
      * 商品数量
      */
     private String count;
-
+    /**
+     * 购物车编号
+     */
+    private String shopCartCode;
     /**
      * 订单编号
      */
@@ -86,6 +89,14 @@ public class AddOrderInfo {
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getShopCartCode() {
+        return shopCartCode;
+    }
+
+    public void setShopCartCode(String shopCartCode) {
+        this.shopCartCode = shopCartCode;
     }
 
     public String getOrderCode() {

@@ -34,16 +34,6 @@ public class OrderService {
         if (userInfo != null && userInfo.getRole()!=0){
             orderInfo.setRole(userInfo.getRole());
         }
-        System.out.println(orderInfo.getRole());
-        //设置查询时间条件的值
-        if (!("".equals(orderInfo.getTime())) && orderInfo.getTime()!=null){
-            List<String> list = Arrays.asList(orderInfo.getTime().split(","));
-            SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
-            Date start = formatter.parse(list.get(0));
-            Date over = formatter.parse(list.get(1));
-            orderInfo.setPayTimeStart(start);
-            orderInfo.setPayTimeOver(over);
-        }
         PageHelper.startPage(orderInfo.getPageNum(),orderInfo.getPageSize());
         List<OrderInfo> orderInfoList = orderDao.listOrder(orderInfo);
         PageInfo<OrderInfo> pageData = new PageInfo<>(orderInfoList);
@@ -70,16 +60,8 @@ public class OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateOrderState(String orderCode ,int operation,String updater){
-        int orderStatus = 0;
-        switch (operation){
-            case 1: orderStatus = 1;break;
-            case 2: orderStatus = 2;break;
-            case 3: orderStatus = 0;break;
-            case 4: orderStatus = 1;break;
-            case 5: orderStatus = 5;break;
-        }
         List<String> orderCodeList = Arrays.asList(orderCode.split(","));
-        int result = orderDao.updateOrderState(orderCodeList,orderStatus,updater);
+        int result = orderDao.updateOrderState(orderCodeList,operation,updater);
         if (0 == result){
             return AppResponse.bizError("修改订单状态失败!");
         }

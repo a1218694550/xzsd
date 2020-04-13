@@ -46,21 +46,16 @@ public class UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addUser(UserInfo userInfo){
-        //检查账户是否存在
+        //检查账户和手机号是否存在
         int countUserAcct = userDao.countUserAcct(userInfo); //就算该账户已经给了删除标记也不能加入一样的账户
         if (0 != countUserAcct){
-            return AppResponse.bizError("用户账户已存在！");
-        }
-        //检查手机号绑定账户的个数
-        int countPhone = userDao.countPhone(userInfo);
-        if (0 != countPhone){
-            return AppResponse.bizError("该手机号已达绑定上限，请更换绑定手机号！");
+            return AppResponse.bizError("用户账户已存在，或该手机号已达绑定上限!");
         }
         userInfo.setUserCode(StringUtil.getCommonCode(6));
         userInfo.setUserPwd(PasswordUtils.generatePassword(userInfo.getUserPwd()));
         userInfo.setIsDelete(0);
         if(userInfo.getUserImg()==null || userInfo.getUserImg()==""){
-            userInfo.setUserImg("");
+            userInfo.setUserImg("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
         // 新增用户
         int count = userDao.addUser(userInfo);
@@ -81,12 +76,10 @@ public class UserService {
         //检查账户是否存在
         int countUserAcct = userDao.countUserAcct(userInfo);
         if (0 != countUserAcct){
-            return AppResponse.bizError("用户账户已存在");
+            return AppResponse.bizError("用户账户已存在，或该手机号已达绑定上限!");
         }
-        //检查手机号绑定账户的个数
-        int countPhone = userDao.countPhone(userInfo);
-        if (0 != countPhone){
-            return AppResponse.bizError("该手机号已达绑定上限，请更换绑定手机号！");
+        if(userInfo.getUserImg()==null || userInfo.getUserImg()==""){
+            userInfo.setUserImg("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
         // 修改用户
         int count = userDao.updateUser(userInfo);
@@ -102,7 +95,6 @@ public class UserService {
      * @param  userCode
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
     public AppResponse getUser(String userCode){
         // 查询用户
         UserInfo userInfo = userDao.getUser(userCode);
@@ -132,7 +124,6 @@ public class UserService {
      * @param  userInfo
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
     public AppResponse listUser(UserInfo userInfo){
         // 查询用户列表
         //分页

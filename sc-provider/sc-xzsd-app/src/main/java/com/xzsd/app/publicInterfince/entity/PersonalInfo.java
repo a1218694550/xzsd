@@ -1,14 +1,41 @@
 package com.xzsd.app.publicInterfince.entity;
 
 public class PersonalInfo {
+    /**
+     * 用户编号
+     */
     private String userCode;
+    /**
+     * 用户名
+     */
     private String userName;
+    /**
+     * 头像
+     */
     private String userImg;
-    private String role;
+    /**
+     * 用户角色
+     */
+    private int role;
+    /**
+     * 手机号
+     */
     private String phone;
+    /**
+     * 邀请码
+     */
     private String invCode;
+    /**
+     * 门店编号
+     */
     private String storeCode;
+    /**
+     * 门店名
+     */
     private String storeName;
+    /**
+     * 门店地址
+     */
     private String address;
 
     public String getUserCode() {
@@ -35,11 +62,11 @@ public class PersonalInfo {
         this.userImg = userImg;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(int role) {
         this.role = role;
     }
 

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 客户管理模块控制层
+ */
 @RestController
 @RequestMapping("/manage/customer")
 public class CustomerController {
@@ -18,6 +21,11 @@ public class CustomerController {
     @Resource
     private CustomerService customerService;
 
+    /**
+     * 查询客户列表
+     * @param customerInfo
+     * @return
+     */
     @RequestMapping("listCustomer")
     public AppResponse listCustomer(CustomerInfo customerInfo){
         try {

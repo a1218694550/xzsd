@@ -23,7 +23,13 @@ public class OrderInfo {
      * 顾客编号
      */
     private String cusCode;
+    /**
+     * 顾客姓名
+     */
     private String cusName;
+    /**
+     * 顾客手机号
+     */
     private String phone;
     /**
      * 订单总价

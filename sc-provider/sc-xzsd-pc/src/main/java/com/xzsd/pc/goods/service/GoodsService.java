@@ -8,6 +8,8 @@ import com.xzsd.pc.goods.entity.GoodsInfo;
 import com.xzsd.pc.goods.entity.GoodsVO;
 import com.xzsd.pc.goodsclass.entity.GoodsClassOne;
 import com.xzsd.pc.goodsclass.entity.GoodsClassSecond;
+import com.xzsd.pc.hotgoods.dao.HotGoodsDao;
+import com.xzsd.pc.rotationchart.dao.RotationChartDao;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.CodeList;
 import com.xzsd.pc.util.RedisUtil;
@@ -24,6 +26,10 @@ import java.util.List;
 public class GoodsService {
     @Resource
     private GoodsDao goodsDao;
+    @Resource
+    private RotationChartDao rotationChartDao;
+    @Resource
+    private HotGoodsDao hotGoodsDao;
     @Autowired
     private RedisUtil redisUtil;
     /**
@@ -110,8 +116,8 @@ public class GoodsService {
      * @return
      */
     public AppResponse listGoods(GoodsInfo goods){
-        String key =goods.getGoodsName()+"-"+goods.getGoodsStatus()+"-"+goods.getAdvWords()+goods.getPress()
-                +"-"+goods.getAuthor()+"-"+goods.getPageNum()+"-"+goods.getPageSize();
+//        String key =goods.getGoodsName()+"-"+goods.getGoodsStatus()+"-"+goods.getAdvWords()+goods.getPress()
+//                +"-"+goods.getAuthor()+"-"+goods.getPageNum()+"-"+goods.getPageSize();
         PageInfo<GoodsVO> pageData;
         PageHelper.startPage(goods.getPageNum(), goods.getPageSize());
         //查询

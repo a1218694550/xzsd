@@ -28,22 +28,16 @@ public class DriverService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addDriver(DriverInfo driverInfo){
-        //检查账户是否存在
-        int countUserAcct = driverDao.countUserAcct(driverInfo); //就算该账户已经给了删除标记也不能加入一样的账户
+        //检查账户和手机号是否存在
+        int countUserAcct = driverDao.countUserAcct(driverInfo);
         if (0 != countUserAcct){
-            return AppResponse.bizError("用户账户已存在！");
-        }
-        //检查手机号绑定账户的个数
-        int countPhone = driverDao.countPhone(driverInfo);
-        if (0 != countPhone){
-            return AppResponse.bizError("该手机号已达绑定上限，请更换绑定手机号！");
+            return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
         driverInfo.setDriverCode(StringUtil.getCommonCode(6));
         driverInfo.setIsDelete(0);
-
-        int result1 = driverDao.addUser(driverInfo);
-        int result2 =  driverDao.addDriver(driverInfo);
-        if (0 == result1 || 0 == result2){
+        int resultUser = driverDao.addUser(driverInfo);
+        int resultDriver =  driverDao.addDriver(driverInfo);
+        if (0 == resultUser || 0 == resultDriver){
             return AppResponse.bizError("新增司机失败！");
         }
         return AppResponse.success("新增司机成功",driverInfo.getDriverCode());
@@ -66,20 +60,14 @@ public class DriverService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateDriver(DriverInfo driverInfo){
-        //检查账户是否存在
-        int countUserAcct = driverDao.countUserAcct(driverInfo); //就算该账户已经给了删除标记也不能加入一样的账户
+        //检查账户和手机号是否存在
+        int countUserAcct = driverDao.countUserAcct(driverInfo);
         if (0 != countUserAcct){
-            return AppResponse.bizError("用户账户已存在！");
+            return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
-        //检查手机号绑定账户的个数
-        int countPhone = driverDao.countPhone(driverInfo);
-        if (0 != countPhone){
-            return AppResponse.bizError("该手机号已达绑定上限，请更换绑定手机号！");
-        }
-        int res0 = driverDao.updateUser(driverInfo);
-        int res1 = driverDao.updateDriver(driverInfo);
-
-        if (0 == res0 || 0 == res1){
+        int resUser = driverDao.updateUser(driverInfo);
+        int resDriver = driverDao.updateDriver(driverInfo);
+        if (0 == resUser || 0 == resDriver){
             return AppResponse.bizError("修改司机信息失败");
         }
         return AppResponse.success("修改司机信息成功",driverInfo.getDriverCode());
@@ -91,7 +79,7 @@ public class DriverService {
      */
     public AppResponse listDriver(DriverInfo driverInfo){
         UserInfo userInfo = driverDao.getUser(driverInfo.getOperator());
-        if (userInfo!=null && userInfo.getRole()!=0){
+        if (userInfo != null && userInfo.getRole() != 0){
             driverInfo.setRole(userInfo.getRole());
         }
         PageHelper.startPage(driverInfo.getPageNum(),driverInfo.getPageSize());

@@ -4,6 +4,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.app.customer.goodsDetail.dao.GoodsDetailDao;
 import com.xzsd.app.customer.goodsDetail.entity.*;
+import com.xzsd.app.customer.shopcart.dao.ShopCartDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,8 @@ import java.util.List;
 public class GoodsDetailService {
     @Resource
     private GoodsDetailDao goodsDetailDao;
-
+    @Resource
+    private ShopCartDao shopCartDao;
     /**
      * 查询商品详情
      * @param goodsCode
@@ -97,11 +99,19 @@ public class GoodsDetailService {
         if ( goodsList.size() != resAddOrderDetails){
             return AppResponse.bizError("购买失败！");
         }
-
+        //修改商品库存跟销量
         int resUpdateGoods = goodsDetailDao.updateGoods(orderDetailsList);
         System.out.println("result-----> "+resUpdateGoods);
         if (0 == resUpdateGoods){
             return AppResponse.bizError("购买失败！");
+        }
+        //如果是在购物车点的结算 ， 则需要将商品移除购物车
+        if (addOrderInfo.getShopCartCode()!=null && !"".equals(addOrderInfo.getShopCartCode())){
+            List<String> shopCartCodeList = Arrays.asList(addOrderInfo.getShopCartCode().split(","));
+            int resultDelete = shopCartDao.deleteGoods(shopCartCodeList,addOrderInfo.getUserCode());
+            if (0 == resultDelete){
+                return AppResponse.bizError("移除购物车失败，购买失败！");
+            }
         }
         return AppResponse.success("购买商品成功！");
     }

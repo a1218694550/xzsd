@@ -63,6 +63,12 @@ public class GoodsDetailController {
             throw e;
         }
     }
+
+    /**
+     * 购买商品 生成订单
+     * @param addOrderInfo
+     * @return
+     */
     @PostMapping("buyGoods")
     public AppResponse addOrder(AddOrderInfo addOrderInfo){
         try {

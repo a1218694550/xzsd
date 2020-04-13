@@ -80,11 +80,11 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         filterChain.doFilter(request, response);
     }
 
-    /**
-     * 初始化要拦截的url配置信息
+   /* *//**
+     * 初始化要拦截的url配置信息 验证码
      *
      * @throws ServletException the servlet exception
-     */
+     *//*
     @Override
     public void afterPropertiesSet() throws ServletException {
 
@@ -94,7 +94,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 //        addUrlToMap(securityProperties.getCode().getImage().getUrl(), ValidateCodeType.IMAGE);
 
 
-    }
+    }*/
 
     /**
      * 讲系统中配置的需要校验验证码的URL根据校验的类型放入map

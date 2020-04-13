@@ -8,6 +8,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * 热门商品模块
+ */
 @Mapper
 public interface DriverDao {
     UserInfo getUser(String userCode);
@@ -24,7 +27,6 @@ public interface DriverDao {
      * @return
      */
     int countPhone(DriverInfo driverInfo);
-
     /**
      * 新增司机信息
      * @param driverInfo
@@ -32,14 +34,12 @@ public interface DriverDao {
      */
     int addUser(DriverInfo driverInfo);
     int addDriver(DriverInfo driverInfo);
-
     /**
      * 查询司机详情
      * @param driverCode
      * @return
      */
     DriverVO getDriver(String driverCode);
-
     /**
      * 修改司机信息
      * @param driverInfo
@@ -47,14 +47,12 @@ public interface DriverDao {
      */
     int updateUser(DriverInfo driverInfo);
     int updateDriver(DriverInfo driverInfo);
-
     /**
      * 查询司机列表
      * @param driverInfo
      * @return
      */
     List<DriverVO> listDriver(DriverInfo driverInfo);
-
     /**
      * 删除司机信息
      * @param codeList
