@@ -3,6 +3,7 @@ package com.xzsd.pc.order.dao;
 import com.xzsd.pc.order.entity.OrderDetails;
 import com.xzsd.pc.order.entity.OrderInfo;
 import com.xzsd.pc.user.entity.UserInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @author asus
  */
 public interface OrderDao {
-    UserInfo getUser(String userCode);
+    UserInfo getUser(@Param("userCode") String userCode);
     /**
      * 查询订单列表
      * @param orderInfo
@@ -23,7 +24,7 @@ public interface OrderDao {
      * @param orderCode
      * @return
      */
-    OrderDetails getOrderDetails(String orderCode);
+    OrderDetails getOrderDetails(@Param("orderCode") String orderCode);
 
     /**
      * 修改订单状态
@@ -32,5 +33,5 @@ public interface OrderDao {
      * @param updater
      * @return
      */
-    int updateOrderState(List<String> orderCodeList, int orderStatus, String updater);
+    int updateOrderState(@Param("orderCodeList") List<String> orderCodeList,@Param("orderStatus") int orderStatus,@Param("updater") String updater);
 }

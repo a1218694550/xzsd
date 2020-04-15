@@ -1,5 +1,7 @@
 package com.xzsd.app.publicInterfince.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class PasswordInfo {
     /**
      * 用户编号
@@ -8,10 +10,12 @@ public class PasswordInfo {
     /**
      * 原密码
      */
+    @JsonIgnore
     private String password;
     /**
      * 新密码
      */
+    @JsonIgnore
     private String newPassword;
 
     public String getUserCode() {

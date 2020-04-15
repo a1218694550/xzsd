@@ -5,6 +5,7 @@ import com.xzsd.pc.driver.entity.DriverVO;
 import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.util.CodeList;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public interface DriverDao {
      * @param driverCode
      * @return
      */
-    DriverVO getDriver(String driverCode);
+    DriverVO getDriver(@Param("driverCode") String driverCode);
     /**
      * 修改司机信息
      * @param driverInfo

@@ -13,14 +13,14 @@ public interface GoodsDetailDao {
      * @param userCode
      * @return
      */
-    StoreVO getStoreOfUser(String userCode);
+    StoreVO getStoreOfUser(@Param("userCode") String userCode);
 
     /**
      * 查询商品详情信息
      * @param goodsCode
      * @return
      */
-    GoodsVO getGoods(String goodsCode);
+    GoodsVO getGoods(@Param("goodsCode") String goodsCode);
 
     /**
      * 加入购物车
@@ -50,5 +50,11 @@ public interface GoodsDetailDao {
      */
     int addOrderDetail(@Param("orderDetailsList") List<OrderDetails> orderDetailsList);
 
+    /**
+     * 查询评价列表
+     * @param goodsEvaluateInfo
+     * @return
+     */
     List<GoodsEvaluateVO> listGoodsEvaluateByPage(GoodsEvaluateInfo goodsEvaluateInfo);
+    List<ImageInfo> listGoodsEvaluateImage(@Param("evaluateCode") String  evaluateCode);
 }

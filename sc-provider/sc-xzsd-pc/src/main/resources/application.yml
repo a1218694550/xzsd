@@ -21,6 +21,10 @@ spring:
     bucketName: book-store-1300963863
     path: https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com
     qianzui: book-store
+  http:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   redis:
     host: 127.0.0.1
     password:
@@ -66,7 +70,7 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
 sc:
   cloud:
-    #debug: true
+#    debug: true
     dev: true
     task:
       core-pool-size: 20

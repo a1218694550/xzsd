@@ -186,16 +186,49 @@
         order by goods.create_time desc
     </select>
 <!--    删除商品-->
+    <select id="repeatHotGoodsCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
+        select distinct goods_code
+        from t_sys_hotgoods
+        where is_delete = 0
+        and goods_code in
+        <foreach collection="codeList" index="index" item="goodsCode" open="(" separator="," close=")">
+            #{goodsCode}
+        </foreach>
+    </select>
+    <select id="repeatRotationChartCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
+        select distinct goods_code
+        from t_sys_rotationchart
+        where is_delete = 0
+        and goods_code in
+        <foreach collection="codeList" index="index" item="goodsCode" open="(" separator="," close=")">
+            #{goodsCode}
+        </foreach>
+    </select>
     <update id="deleteGoods" parameterType="com.xzsd.pc.util.CodeList">
         update t_sys_goods set
             is_delete = 1,
             updater = #{updater},
             update_time = now(),
             version = version + 1
-        where goods_code in
+        where  goods_code in
         <foreach collection="codeList" item="code" open="(" separator="," close=")" index="index">
             #{code}
         </foreach>
+        <if test="repeatHGCodeList !=null">
+            and
+            (goods_code not in
+            <foreach collection="repeatHGCodeList" item="code" open="(" separator="," close=")" index="index">
+                #{code}
+            </foreach>
+            <if test="repeatRCCodeList !=null">
+                or goods_code not in
+                <foreach collection="repeatRCCodeList" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+            </if>
+            )
+        </if>
+
     </update>
 <!--    修改商品状态-->
     <update id="updateGoodsStatus" parameterType="com.xzsd.pc.util.CodeList">

@@ -26,18 +26,6 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @RequestMapping("login")
-    public AppResponse login(UserInfo userInfo){
-        try{
-            //登录
-            AppResponse appResponse = userService.login(userInfo) ;
-            return appResponse;
-        }catch (Exception e){
-            logger.error("登录失败");
-            System.out.println(e.toString());
-            throw e;
-        }
-    }
     /**
      * 新增用户
      * @param userInfo

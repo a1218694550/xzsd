@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.storer.order.dao.StorerOrderDao">
+    <!--    查询门店详情-->
+    <select id="getStore" parameterType="java.lang.String" resultType="com.xzsd.app.storer.order.entity.StoreVO">
+        select
+            store_code as storeCode
+        from t_sys_store
+        where is_delete =  0 and user_code = #{storerCode}
+    </select>
+    <resultMap id="orderMap" type="com.xzsd.app.customer.order.entity.OrderDetails">
+        <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="orderSumPrice" column="sum_price"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="customerCode" column="cus_code"/>
+        <result property="customerName" column="user_name"/>
+        <result property="phone" column="phone"/>
+        <result property="createTime" column="create_time"/>
+        <result property="storeName" column="store_name"/>
+        <result property="address" column="address"/>
+        <result property="version" column="version"/>
+        <collection property="goodsList" ofType="com.xzsd.app.customer.order.entity.Goods" select="orderGoods" column="{orderCode=order_code}">
+            <id property="ordDetailsCode" column="ord_details_code"/>
+            <result property="goodsCode" column="goods_code"/>
+            <result property="goodsImg" column="image_url"/>
+            <result property="goodsName" column="goods_name"/>
+            <result property="goodsIntro" column="goods_intro"/>
+            <result property="sellPrice" column="sellprice"/>
+            <result property="buyCount" column="buy_count"/>
+        </collection>
+    </resultMap>
+    <!--    查询订单列表-->
+    <select id="listOrderByPage" parameterType="com.xzsd.app.customer.order.entity.OrderInfo" resultMap="orderMap">
+        select
+        `order`.order_code,
+        `order`.sum_price,
+        `order`.order_status,
+        `order`.cus_code,
+        `user`.user_name,
+        `user`.phone,
+        `order`.version
+        from t_sys_order `order`
+        left join t_sys_user `user` on (`order`.cus_code = `user`.user_code and `user`.is_delete = 0)
+        where `order`.is_delete = 0 and `order`.store_code = #{storeCode}
+        <if test="orderStatus != null and orderStatus != ''">
+            AND `order`.order_status = #{orderStatus}
+        </if>
+        order by `order`.create_time desc
+    </select>
+    <select id="orderGoods" parameterType="com.xzsd.app.customer.order.entity.OrderInfo" resultType="com.xzsd.app.customer.order.entity.Goods">
+        select
+            orderDetails.ord_details_code,
+            orderDetails.buy_count,
+            orderDetails.goods_code,
+            goods.image_url,
+            goods.goods_name,
+            goods.goods_intro,
+            goods.sellprice
+        from t_sys_order_details orderDetails
+        left join t_sys_goods goods on (orderDetails.goods_code = goods.goods_code and goods.is_delete = 0)
+        where orderDetails.is_delete = 0  and orderDetails.order_code = #{orderCode}
+        order by orderDetails.create_time desc , goods.create_time desc
+    </select>
+    <!--    查询订单详情-->
+    <select id="getOrder" parameterType="java.lang.String" resultMap="orderMap">
+        select
+            `order`.order_code,
+            `order`.sum_price,
+            `order`.order_status,
+            `order`.create_time,
+            store.store_name,
+            CONCAT_WS('-',store.province,store.city,store.area,store.detailed_addr) as address,
+            `order`.cus_code,
+            `user`.user_name,
+            `user`.phone,
+            orderDetails.ord_details_code,
+            orderDetails.goods_code,
+            goods.image_url,
+            goods.goods_name,
+            goods.goods_intro,
+            goods.sellprice,
+            orderDetails.buy_count,
+            `order`.version
+        from t_sys_order `order`
+        left join t_sys_user `user` on (`order`.cus_code = `user`.user_code and `user`.is_delete = 0)
+        left join t_sys_store store on (`order`.store_code = store.store_code and store.is_delete = 0)
+        left join t_sys_order_details orderDetails on (`order`.order_code = orderDetails.order_code and orderDetails.is_delete = 0)
+        left join t_sys_goods goods on (orderDetails.goods_code = goods.goods_code and goods.is_delete = 0)
+        where `order`.is_delete = 0 and `order`.order_code = #{orderCode}
+        order by `order`.create_time desc , orderDetails.create_time desc , goods.create_time desc
+    </select>
+    <!--    修改订单状态-->
+    <update id="updateOrderStatus" parameterType="com.xzsd.app.customer.order.entity.OrderInfo">
+        update t_sys_order set
+            order_status = #{orderStatus},
+            updater = #{updater},
+            update_time = now(),
+            version = version + 1
+        where is_delete = 0 and order_code = #{orderCode} and version = #{version}
+    </update>
+</mapper>

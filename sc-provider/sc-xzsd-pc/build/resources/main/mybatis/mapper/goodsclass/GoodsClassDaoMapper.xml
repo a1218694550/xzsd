@@ -70,10 +70,10 @@
 <!--查询商品分类列表-->
     <resultMap id="goodsClassListMap" type="com.xzsd.pc.goodsclass.entity.GoodsClassOne">
         <id property="classOneCode" column="goodsclass_code" jdbcType="VARCHAR"/>
-        <id property="classOneName" column="class_name" jdbcType="VARCHAR"/>
+        <result property="classOneName" column="class_name" jdbcType="VARCHAR"/>
         <collection property="ificationSecondList" ofType="com.xzsd.pc.goodsclass.entity.GoodsClassSecond">
             <id property="classSecondCode" column="goodsClassSecondCode" jdbcType="VARCHAR"/>
-            <id property="classSecondName" column="classSecondName" jdbcType="VARCHAR"/>
+            <result property="classSecondName" column="classSecondName" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
     <select id="listGoodsClass" resultMap="goodsClassListMap">
@@ -83,8 +83,8 @@
             b.goodsclass_code as goodsClassSecondCode,
             b.class_name as classSecondName
         from t_sys_goodsclassification a
-        LEFT JOIN t_sys_goodsclassification b on (b.parent_code = a.goodsclass_code)
-        where a.class_level=1 and b.class_level=2 and b.is_delete=0
+        LEFT JOIN t_sys_goodsclassification b on (b.parent_code = a.goodsclass_code and b.class_level=2 and b.is_delete=0)
+        where a.is_delete = 0 and a.class_level=1
         order by a.create_time desc
     </select>
 <!--查询该一级分类下二级分类的数量-->

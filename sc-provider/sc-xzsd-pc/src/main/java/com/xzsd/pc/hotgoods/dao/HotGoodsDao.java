@@ -4,6 +4,7 @@ import com.xzsd.pc.hotgoods.entity.HotGoodsInfo;
 import com.xzsd.pc.hotgoods.entity.HotGoodsVO;
 import com.xzsd.pc.util.CodeList;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface HotGoodsDao {
      * @param displayCount
      * @return
      */
-    int setDisplayCount(String updater, String displayCount, int version);
+    int setDisplayCount(@Param("updater") String updater,@Param("displayCount") String displayCount,@Param("version") int version);
     int countSort(int sortOrdinal);
     int countGoods(String goodsCode);
     /**
@@ -29,7 +30,7 @@ public interface HotGoodsDao {
      * @param hotGoodsCode
      * @return
      */
-    HotGoodsVO getHotGoods(String hotGoodsCode);
+    HotGoodsVO getHotGoods(@Param("hotGoodsCode") String hotGoodsCode);
 
     /**
      * 修改热门商品

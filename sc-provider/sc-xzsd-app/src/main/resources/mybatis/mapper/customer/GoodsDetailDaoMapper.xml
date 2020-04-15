@@ -142,7 +142,8 @@
         <result property="evaluateClass" column="evaluate_class"/>
         <result property="content" column="content"/>
         <result property="time" column="create_time"/>
-        <collection property="listImgUrl" ofType="com.xzsd.app.customer.goodsDetail.entity.ImageInfo">
+        <collection property="listImgUrl" ofType="com.xzsd.app.customer.goodsDetail.entity.ImageInfo" select="listGoodsEvaluateImage" column="evaluate_code">
+            <result property="evaluateCode" column="evaluate_code"/>
             <result property="imgUrl" column="image_url"/>
             <result property="sortOrdinal" column="sort_ordinal"/>
         </collection>
@@ -155,22 +156,89 @@
             `user`.user_name,
             evaluate.evaluate_class,
             evaluate.content,
-            evaluate.create_time,
-            img.image_url,
-            img.sort_ordinal
+            evaluate.create_time
         from t_sys_goods_evaluate evaluate
         left join t_sys_user `user` on (evaluate.creater = `user`.user_code)
-        left join t_sys_evaluate_img img on (evaluate.evaluate_code = img.evaluate_code and img.is_delete = 0)
         where evaluate.is_delete = 0 and evaluate.goods_code = #{goodsCode}
-        <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 1">
+        <if test="evaluateClass == 1">
             AND evaluate.evaluate_class in (4,5)
         </if>
-        <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 2">
+        <if test="evaluateClass == 2">
             AND evaluate.evaluate_class in (2,3)
         </if>
-        <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 3">
+        <if test="evaluateClass == 3">
             AND evaluate.evaluate_class = 1
         </if>
-        order by evaluate.create_time desc,img.sort_ordinal asc
+        order by evaluate.create_time desc
     </select>
+    <select id="listGoodsEvaluateImage" parameterType="java.lang.String" resultType="com.xzsd.app.customer.goodsDetail.entity.ImageInfo">
+        select
+        img.evaluate_code as evaluateCode,
+        img.image_url as imgUrl,
+        img.sort_ordinal as sortOrdinal
+        from t_sys_evaluate_img img
+        where img.is_delete = 0 and img.evaluate_code = #{evaluateCode}
+        order by img.sort_ordinal asc
+    </select>
+<!--    <select id="listGoodsEvaluateByPage" parameterType="com.xzsd.app.customer.goodsDetail.entity.GoodsEvaluateInfo" resultType="com.xzsd.app.customer.goodsDetail.entity.GoodsEvaluateVO">-->
+<!--        select-->
+<!--        evaluate.evaluate_code as evaluateCode,-->
+<!--        `user`.user_code as customerCode,-->
+<!--        evaluate.goods_code as goodsCode,-->
+<!--        `user`.user_name as customerName,-->
+<!--        evaluate.evaluate_class as evaluateClass,-->
+<!--        evaluate.content as content,-->
+<!--        evaluate.create_time as time-->
+<!--        from t_sys_goods_evaluate evaluate-->
+<!--        left join t_sys_user `user` on (evaluate.creater = `user`.user_code)-->
+<!--        where evaluate.is_delete = 0 and evaluate.goods_code = #{goodsCode}-->
+<!--        <if test="evaluateClass == 1">-->
+<!--            AND evaluate.evaluate_class in (4,5)-->
+<!--        </if>-->
+<!--        <if test="evaluateClass == 2">-->
+<!--            AND evaluate.evaluate_class in (2,3)-->
+<!--        </if>-->
+<!--        <if test="evaluateClass == 3">-->
+<!--            AND evaluate.evaluate_class = 1-->
+<!--        </if>-->
+<!--        order by evaluate.create_time desc-->
+<!--    </select>-->
+<!--    <select id="listGoodsEvaluateImage" parameterType="java.util.List" resultType="com.xzsd.app.customer.goodsDetail.entity.ImageInfo">-->
+<!--        select-->
+<!--            img.evaluate_code as evaluateCode,-->
+<!--            img.image_url as imgUrl,-->
+<!--            img.sort_ordinal as sortOrdinal-->
+<!--        from t_sys_evaluate_img img-->
+<!--        where img.is_delete = 0 and img.evaluate_code in-->
+<!--        <foreach collection="goodsEvaluateVOList" index="index" item="item" open="(" separator="," close=")">-->
+<!--            #{item.evaluateCode}-->
+<!--        </foreach>-->
+<!--        order by img.evaluate_code,img.sort_ordinal asc-->
+<!--    </select>-->
+<!--    <select id="listGoodsEvaluateByPage" parameterType="com.xzsd.app.customer.goodsDetail.entity.GoodsEvaluateInfo" resultMap="com.xzsd.app.customer.goodsDetail.entity.GoodsEvaluateVO">-->
+<!--        select-->
+<!--            evaluate.evaluate_code,-->
+<!--            `user`.user_code,-->
+<!--            evaluate.goods_code,-->
+<!--            `user`.user_name,-->
+<!--            evaluate.evaluate_class,-->
+<!--            evaluate.content,-->
+<!--            evaluate.create_time,-->
+<!--            img.image_url,-->
+<!--            img.sort_ordinal-->
+<!--        from t_sys_goods_evaluate evaluate-->
+<!--        left join t_sys_user `user` on (evaluate.creater = `user`.user_code)-->
+<!--        left join t_sys_evaluate_img img on (evaluate.evaluate_code = img.evaluate_code and img.is_delete = 0)-->
+<!--        where evaluate.is_delete = 0 and evaluate.goods_code = #{goodsCode}-->
+<!--        <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 1">-->
+<!--            AND evaluate.evaluate_class in (4,5)-->
+<!--        </if>-->
+<!--        <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 2">-->
+<!--            AND evaluate.evaluate_class in (2,3)-->
+<!--        </if>-->
+<!--        <if test="evaluateClass != null and evaluateClass != '' and evaluateClass == 3">-->
+<!--            AND evaluate.evaluate_class = 1-->
+<!--        </if>-->
+<!--        order by evaluate.create_time desc,img.sort_ordinal asc-->
+<!--    </select>-->
 </mapper>

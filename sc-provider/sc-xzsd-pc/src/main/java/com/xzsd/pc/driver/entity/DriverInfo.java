@@ -1,6 +1,7 @@
 package com.xzsd.pc.driver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
@@ -36,6 +37,7 @@ public class DriverInfo {
     /**
      * 司机密码
      */
+    @JsonIgnore
     private String driverPassword;
     /**
      * 性别

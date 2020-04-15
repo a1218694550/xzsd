@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 public class CusPersonalController {
     private static final Logger logger = LoggerFactory.getLogger(CusPersonalController.class);
     @Resource
-    private CusPersonalService personalService;
+    private CusPersonalService cusPersonalService;
 
     /**
      * 修改邀请码
@@ -35,7 +35,7 @@ public class CusPersonalController {
     public AppResponse updateInvCode(PersonalInfo personalInfo){
         try{
             personalInfo.setUserCode(SecurityUtils.getCurrentUserId());
-            AppResponse appResponse = personalService.updateInvCode(personalInfo);
+            AppResponse appResponse = cusPersonalService.updateInvCode(personalInfo);
             return appResponse;
         } catch (Exception e){
             logger.error("修改失败");

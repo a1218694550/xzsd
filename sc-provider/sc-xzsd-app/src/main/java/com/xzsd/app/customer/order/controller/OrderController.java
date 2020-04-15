@@ -5,6 +5,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.app.customer.order.entity.OrderEvaluate;
 import com.xzsd.app.customer.order.entity.OrderInfo;
+
 import com.xzsd.app.customer.order.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +76,12 @@ public class OrderController {
             throw e;
         }
     }
+
+    /**
+     * 商品评价
+     * @param orderEvaluate
+     * @return
+     */
     @PostMapping("goodsEvaluate")
     public AppResponse goodsEvaluate(@RequestBody OrderEvaluate orderEvaluate){
         try{

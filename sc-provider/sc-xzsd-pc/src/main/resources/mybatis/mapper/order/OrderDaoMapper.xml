@@ -41,10 +41,10 @@
             AND od.order_code like concat ('%',#{orderCode},'%')
         </if>
         <if test="payTimeStart != null and payTimeStart != ''">
-            AND od.pay_time &gt;= #{payTimeStart}
+            AND od.pay_time &gt;= DATE_FORMAT( #{payTimeStart} ,'%Y-%m-%d %h:%i:%S')
         </if>
         <if test="payTimeOver != null and payTimeOver != ''">
-            AND od.pay_time &lt;= #{payTimeOver}
+            AND od.pay_time &lt;= DATE_FORMAT( #{payTimeOver} ,'%Y-%m-%d %h:%i:%S')
         </if>
         <if test="phone != null and phone != ''">
             AND us.phone like concat ('%',#{phone},'%')

@@ -53,7 +53,7 @@
         from t_sys_goods goods
         LEFT JOIN t_sys_goodsclassification goodsclassB on (goods.goodsclass_code = goodsclassB.goodsclass_code)
         LEFT JOIN t_sys_goodsclassification goodsclassA on (goodsclassB.parent_code = goodsclassA.goodsclass_code)
-        where goods.is_delete = 0
+        where goods.is_delete = 0 and goods.goods_status = 2
         <if test="goodsName != null and goodsName!=''">
             AND goods.goods_name like concat ('%',#{goodsName},'%')
         </if>

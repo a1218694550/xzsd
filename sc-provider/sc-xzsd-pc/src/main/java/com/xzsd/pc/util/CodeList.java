@@ -5,6 +5,8 @@ import java.util.List;
 public class CodeList {
     private String updater;
     private List<String> codeList;
+    private List<String> repeatHGCodeList;
+    private List<String> repeatRCCodeList;
     private String status;
 
     public CodeList() {
@@ -35,6 +37,22 @@ public class CodeList {
 
     public void setCodeList(List<String> codeList) {
         this.codeList = codeList;
+    }
+
+    public List<String> getRepeatHGCodeList() {
+        return repeatHGCodeList;
+    }
+
+    public void setRepeatHGCodeList(List<String> repeatHGCodeList) {
+        this.repeatHGCodeList = repeatHGCodeList;
+    }
+
+    public List<String> getRepeatRCCodeList() {
+        return repeatRCCodeList;
+    }
+
+    public void setRepeatRCCodeList(List<String> repeatRCCodeList) {
+        this.repeatRCCodeList = repeatRCCodeList;
     }
 
     public String getStatus() {

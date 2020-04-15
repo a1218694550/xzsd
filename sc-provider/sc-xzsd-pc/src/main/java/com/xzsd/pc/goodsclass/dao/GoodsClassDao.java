@@ -3,6 +3,7 @@ package com.xzsd.pc.goodsclass.dao;
 import com.xzsd.pc.goodsclass.entity.GoodsClassInfo;
 import com.xzsd.pc.goodsclass.entity.GoodsClassOne;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 @Mapper
@@ -41,7 +42,7 @@ public interface GoodsClassDao {
      * @param classCode
      * @return
      */
-    int countChildClass(String classCode);
+    int countChildClass(@Param("classCode") String classCode);
     /**
      * 删除商品分类
      * @param goodsClassInfo

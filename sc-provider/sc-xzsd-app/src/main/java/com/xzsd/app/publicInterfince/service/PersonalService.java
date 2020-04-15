@@ -39,13 +39,16 @@ public class PersonalService {
     public AppResponse updatePassword(PasswordInfo passwordInfo){
         //校验原密码
         if(null != passwordInfo.getPassword() && !"".equals(passwordInfo.getPassword())) {
-            String oldPwd = PasswordUtils.generatePassword(passwordInfo.getPassword());
+            //获取输入的原密码
+            String oldPwd = passwordInfo.getPassword();
             // 获取用户信息
             UserInfo userDetail = personalDao.getUser(passwordInfo.getUserCode());
             if (null == userDetail) {
                 return AppResponse.bizError("用户不存在或已被删除！");
             } else {
-                if (!oldPwd.equals(userDetail.getUserPwd())) {
+                if (!PasswordUtils.PasswordMacth(oldPwd,userDetail.getUserPwd())) {
+                    System.out.println("  输入的原密码："+ oldPwd);
+                    System.out.println("数据库加密过的原密码："+ userDetail.getUserPwd());
                     return AppResponse.bizError("原密码不匹配，请重新输入！");
                 }
             }

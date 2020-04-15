@@ -8,13 +8,15 @@
             updater = #{updater},
             update_time = now(),
             version = version + 1
-        where entry_code = '123456' and is_delete = 0 and pub_class = 'hotgoods' and class = 'displaycount' and version = #{version}
+        where is_delete = 0 and pub_class = 'hotgoods' and class = 'displaycount' and version = #{version}
     </update>
+<!--    统计序号数量-->
     <select id="countSort" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(*)
         from t_sys_hotgoods
         where is_delete = 0 and sort_ordinal = #{sortOrdinal}
     </select>
+<!--    统计商品数量-->
     <select id="countGoods" parameterType="java.lang.String" resultType="java.lang.Integer">
         select count(*)
         from t_sys_hotgoods

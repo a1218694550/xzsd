@@ -1,6 +1,7 @@
 package com.xzsd.app.customer.index.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
@@ -28,6 +29,7 @@ public class UserInfo {
     /**
      * 用户密码
      */
+    @JsonIgnore
     private String userPwd;
     /**
      * 角色 （1管理员，2店长）

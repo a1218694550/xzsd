@@ -45,10 +45,8 @@ public class OrderInfo {
     private String time;
     @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
     private Date payTime;
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date payTimeStart;
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date payTimeOver;
+    private String payTimeStart;
+    private String payTimeOver;
     /**
      * 门店编码
      */
@@ -180,19 +178,19 @@ public class OrderInfo {
         this.payTime = payTime;
     }
 
-    public Date getPayTimeStart() {
+    public String getPayTimeStart() {
         return payTimeStart;
     }
 
-    public void setPayTimeStart(Date payTimeStart) {
+    public void setPayTimeStart(String payTimeStart) {
         this.payTimeStart = payTimeStart;
     }
 
-    public Date getPayTimeOver() {
+    public String getPayTimeOver() {
         return payTimeOver;
     }
 
-    public void setPayTimeOver(Date payTimeOver) {
+    public void setPayTimeOver(String payTimeOver) {
         this.payTimeOver = payTimeOver;
     }
 

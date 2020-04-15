@@ -95,8 +95,8 @@
             now(),
             #{updater},
             now(),
-            0)
-        )
+            0
+            )
     </insert>
 <!--    查询司机详情-->
     <select id="getDriver" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.DriverVO">
@@ -183,7 +183,7 @@
         left join t_sys_driver driver on (`user`.user_code = driver.driver_code)
         where `user`.is_delete = 0 and `user`.role = 4
         <if test="role != null and role !='' and role == 2">
-            AND driver.area_code in (select area_code from t_sys_store where user_code = #{operator})
+            AND driver.area_code in (select area_code from t_sys_store where user_code = #{operator} and is_delete = 0)
         </if>
         <if test="driverCode !=null and driverCode !=''">
             AND driver.driver_code like concat ('%',#{driverCode},'%')

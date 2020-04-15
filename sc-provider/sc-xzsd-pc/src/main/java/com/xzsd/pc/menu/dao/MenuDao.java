@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MenuDao {
     int addMenu(MenuInfo menuInfo);
-    MenuVO getMenu(String menuCode);
+    MenuVO getMenu(@Param("menuCode") String menuCode);
     int updateMenu(MenuInfo menuInfo);
     /**
      * 查询菜单列表接口

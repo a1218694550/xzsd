@@ -8,6 +8,7 @@ import com.xzsd.pc.driver.entity.DriverVO;
 import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.CodeList;
+import com.xzsd.pc.util.PasswordUtils;
 import com.xzsd.pc.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ public class DriverService {
             return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
         driverInfo.setDriverCode(StringUtil.getCommonCode(6));
+        driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
         driverInfo.setIsDelete(0);
         int resultUser = driverDao.addUser(driverInfo);
         int resultDriver =  driverDao.addDriver(driverInfo);
@@ -65,6 +67,7 @@ public class DriverService {
         if (0 != countUserAcct){
             return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
+        driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
         int resUser = driverDao.updateUser(driverInfo);
         int resDriver = driverDao.updateDriver(driverInfo);
         if (0 == resUser || 0 == resDriver){

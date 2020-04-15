@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.neusoft.core.page.PageUtils.getPageInfo;
+
 @Service
 public class GoodsDetailService {
     @Resource
@@ -123,6 +125,26 @@ public class GoodsDetailService {
      */
     public AppResponse listGoodsEvaluateByPage(GoodsEvaluateInfo goodsEvaluateInfo){
         List<GoodsEvaluateVO> goodsEvaluateVOList = goodsDetailDao.listGoodsEvaluateByPage(goodsEvaluateInfo);
-        return AppResponse.success("查询商品评价列表成功！",goodsEvaluateVOList);
+//        List<ImageInfo> imageInfoList = goodsDetailDao.listGoodsEvaluateImage(goodsEvaluateVOList);
+//        int start;
+//        for (int i = 0; i < goodsEvaluateVOList.size(); i++) {
+//            String evaluateCode = goodsEvaluateVOList.get(i).getEvaluateCode();
+//            List<ImageInfo> list = new ArrayList<>();
+//            start = 0 ;
+//            for (int j = 0 ; j < imageInfoList.size() ; j ++){
+//                if (evaluateCode.equals(imageInfoList.get(j).getEvaluateCode())){
+//                    list.add(imageInfoList.get(j));
+//                    if (start == 0){
+//                        start = 1;
+//                    }
+//                }else {
+//                    if (start == 1){
+//                        break;
+//                    }
+//                }
+//            }
+//            goodsEvaluateVOList.get(i).setListImgUrl(list);
+//        }
+        return AppResponse.success("查询商品评价列表成功！",getPageInfo(goodsEvaluateVOList));
     }
 }

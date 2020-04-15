@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.driver.index.dao.DriverIndexDao">
+    <select id="listStoreByPage" parameterType="com.xzsd.app.driver.index.entity.StoreInfo" resultType="com.xzsd.app.driver.index.entity.StoreInfo">
+        select
+            store.store_code as storeCode,
+            store.store_name as storeName,
+            store.inv_code as invCode,
+            CONCAT_WS('-',store.province,store.city,store.area,store.detailed_addr) as address,
+            `user`.user_name as userName,
+            `user`.phone as phone
+        from (select driver.area_code as area_code
+              from t_sys_driver driver
+              where driver.is_delete = 0
+                    and driver.driver_code = #{driverCode}
+             ) driverAddress
+        left join t_sys_store store on (store.area_code = driverAddress.area_code)
+        left join t_sys_user `user` on (store.user_code = `user`.user_code and `user`.is_delete = 0)
+        where store.is_delete = 0
+        <if test="keyWord != null and keyWord != ''">
+            AND (
+                store.store_name like concat ('%',#{keyWord},'%')
+                or store.inv_code like concat ('%',#{keyWord},'%')
+                or CONCAT_WS('-',store.province,store.city,store.area,store.detailed_addr) like concat ('%',#{keyWord},'%')
+                or `user`.user_name like concat ('%',#{keyWord},'%')
+                or `user`.phone like concat ('%',#{keyWord},'%')
+            )
+        </if>
+        order by store.create_time desc
+    </select>
+</mapper>

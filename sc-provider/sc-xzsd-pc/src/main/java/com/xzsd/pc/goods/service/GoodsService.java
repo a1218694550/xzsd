@@ -6,6 +6,7 @@ import com.xzsd.pc.goods.dao.GoodsDao;
 
 import com.xzsd.pc.goods.entity.GoodsInfo;
 import com.xzsd.pc.goods.entity.GoodsVO;
+import com.xzsd.pc.goods.entity.RepeatCode;
 import com.xzsd.pc.goodsclass.entity.GoodsClassOne;
 import com.xzsd.pc.goodsclass.entity.GoodsClassSecond;
 import com.xzsd.pc.hotgoods.dao.HotGoodsDao;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -157,12 +159,45 @@ public class GoodsService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteGoods(String goodsCode , String updater){
-        List<String> goodsCodeList = Arrays.asList(goodsCode.split(","));
-        int result = goodsDao.deleteGoods(new CodeList(updater,goodsCodeList));
-        if ( 0 == result){
-            return AppResponse.bizError("删除商品失败");
+        List<String> list = Arrays.asList(goodsCode.split(","));
+        List<String> goodsCodeList = new ArrayList<>(list);
+        int oldCount = goodsCodeList.size();
+        //校验商品编号是否在轮播图和热门商品里面
+        CodeList codeList = new CodeList();
+        codeList.setCodeList(goodsCodeList);
+        List<String> repeatHGCodeList = goodsDao.repeatHotGoodsCount(codeList);
+        List<String> repeatRCCodeList = goodsDao.repeatRotationChartCount(codeList);
+//        if (repeatHGCodeList != null && repeatHGCodeList.size() != 0 || (repeatRCCodeList != null && repeatRCCodeList.size() != 0)){
+//            for (int i = 0 ; i < goodsCodeList.size(); i++) {
+//                for (int j = 0 , k = 0; j < repeatHGCodeList.size() || k < repeatRCCodeList.size();){
+//                    if (j <= repeatHGCodeList.size() && goodsCodeList.get(i).equals(repeatHGCodeList.get(j))){
+//                        System.out.println(goodsCodeList.get(i));
+//                        goodsCodeList.remove(i--);
+//                        j++;
+//                        break;
+//                    }
+//                    if (k <= repeatHGCodeList.size() && goodsCodeList.get(i).equals(repeatRCCodeList.get(k))){
+//                        goodsCodeList.remove(i--);
+//                        k++;
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+        //删除商品
+        if (repeatHGCodeList != null && repeatHGCodeList.size() != 0){
+            codeList.setRepeatHGCodeList(repeatHGCodeList);
         }
-        return AppResponse.success("删除商品成功");
+        if (repeatRCCodeList != null && repeatRCCodeList.size() != 0){
+            codeList.setRepeatRCCodeList(repeatRCCodeList);
+        }
+        int result = goodsDao.deleteGoods(codeList);
+        if ( 0 == result){
+            return AppResponse.bizError("删除商品失败！");
+        }else if (oldCount != result){
+            return AppResponse.success("删除商品成功，但部分商品在存在轮播图或热门商品，无法删除！");
+        }
+        return AppResponse.success("删除商品成功！");
     }
 
     /**

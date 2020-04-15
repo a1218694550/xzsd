@@ -2,10 +2,12 @@ package com.xzsd.pc.goods.dao;
 
 import com.xzsd.pc.goods.entity.GoodsInfo;
 import com.xzsd.pc.goods.entity.GoodsVO;
+import com.xzsd.pc.goods.entity.RepeatCode;
 import com.xzsd.pc.goodsclass.entity.GoodsClassOne;
 import com.xzsd.pc.goodsclass.entity.GoodsClassSecond;
 import com.xzsd.pc.util.CodeList;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 @Mapper
@@ -21,7 +23,7 @@ public interface GoodsDao {
      * @param classOneCode
      * @return
      */
-    List<GoodsClassSecond> listGoodsClassSecond(String classOneCode);
+    List<GoodsClassSecond> listGoodsClassSecond(@Param("classOneCode") String classOneCode);
 
     /**
      * 新增商品
@@ -35,7 +37,7 @@ public interface GoodsDao {
      * @param goodsCode
      * @return
      */
-    GoodsVO getGoods(String goodsCode);
+    GoodsVO getGoods(@Param("goodsCode") String goodsCode);
 
     /**
      * 修改商品信息
@@ -64,4 +66,7 @@ public interface GoodsDao {
      * @return
      */
     int updateGoodsStatus(CodeList codeList);
+
+    List<String> repeatHotGoodsCount(CodeList codeList);
+    List<String> repeatRotationChartCount(CodeList codeList);
 }

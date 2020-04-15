@@ -4,6 +4,7 @@ import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.store.entity.*;
 import com.xzsd.pc.util.CodeList;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,14 +15,14 @@ public interface StoreDao {
      * @param userCode
      * @return
      */
-    UserInfo getUser(String userCode);
+    UserInfo getUser(@Param("userCode")String userCode);
     /**
      * 统计店长编号数量
      * @param storeInfo
      * @return
      */
     int countUserCode(StoreInfo storeInfo);
-    int countInvCode(String invCode);
+    int countInvCode(@Param("invCode") String invCode);
 
     /**
      * 校验营业执照编号
@@ -42,7 +43,7 @@ public interface StoreDao {
      * @param storeCode
      * @return
      */
-    StoreVO getStore(String storeCode);
+    StoreVO getStore(@Param("storeCode") String storeCode);
 
     int updateStore(StoreInfo storeInfo);
 
@@ -51,8 +52,8 @@ public interface StoreDao {
      * @return
      */
     List<ProvinceInfo> listProvince();
-    List<CityInfo> listCity(String provinceCode);
-    List<AreaInfo> listArea(String cityCode);
+    List<CityInfo> listCity(@Param("provinceCode") String provinceCode);
+    List<AreaInfo> listArea(@Param("cityCode") String cityCode);
 
     /**
      * 查询门店列表

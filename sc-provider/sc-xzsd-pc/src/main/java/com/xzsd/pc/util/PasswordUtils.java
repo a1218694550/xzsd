@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author 杨洲 yangzhou@neusoft.com
  */
 public class PasswordUtils {
-
     /**
      * 生成加密后的密码
      *
@@ -21,4 +20,14 @@ public class PasswordUtils {
         return bCryptPasswordEncoder.encode(rawPassword);
     }
 
+    /**
+     * 校验两个密码是否相同
+     * @param rawPassword 未加密的原密码
+     * @param nowPassword 加密后的密码
+     * @return
+     */
+    public static boolean PasswordMacth(String rawPassword , String nowPassword){
+        BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+        return encode.matches(rawPassword,nowPassword);
+    }
 }

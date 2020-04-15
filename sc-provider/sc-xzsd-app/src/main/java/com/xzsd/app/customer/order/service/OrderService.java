@@ -19,6 +19,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.neusoft.core.page.PageUtils.getPageInfo;
+
 @Service
 public class OrderService {
     @Resource
@@ -34,7 +36,7 @@ public class OrderService {
         for (int i = 0 ; i <orderDetailsList.size() ; i++ ){
             orderDetailsList.get(i).setClassCount(orderDetailsList.get(i).getGoodsList().size());
         }
-        return AppResponse.success("查询订单列表成功",orderDetailsList);
+        return AppResponse.success("查询订单列表成功",getPageInfo(orderDetailsList));
     }
 
     /**

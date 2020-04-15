@@ -21,19 +21,6 @@ public interface UserDao{
      * @return
      */
     int countUserAcct(UserInfo userInfo);
-    int findUserAcct(UserInfo userInfo);
-    /**
-     * 统计手机号数量
-     * @param userInfo
-     * @return
-     */
-    int countPhone(UserInfo userInfo);
-    /**
-     * 登录
-     * @param userInfo
-     * @return
-     */
-    UserInfo login(UserInfo userInfo);
 
     /**
      * 新增用户

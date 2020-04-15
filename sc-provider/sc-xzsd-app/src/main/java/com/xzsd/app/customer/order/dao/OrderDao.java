@@ -1,9 +1,6 @@
 package com.xzsd.app.customer.order.dao;
 
-import com.xzsd.app.customer.order.entity.EvaluateImg;
-import com.xzsd.app.customer.order.entity.OrderDetails;
-import com.xzsd.app.customer.order.entity.OrderEvaluate;
-import com.xzsd.app.customer.order.entity.OrderInfo;
+import com.xzsd.app.customer.order.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,13 +14,13 @@ public interface OrderDao {
      * @return
      */
     List<OrderDetails> listOrderByPage(OrderInfo orderInfo);
-
+    List<Goods> orderGoods(OrderInfo orderInfo);
     /**
      * 查询订单详情
      * @param orderCode
      * @return
      */
-    OrderDetails getOrder(String orderCode);
+    OrderDetails getOrder(@Param("orderCode") String orderCode);
 
     /**
      * 修改订单状态

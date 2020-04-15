@@ -5,6 +5,7 @@ import com.xzsd.pc.rotationchart.entity.RotationChartInfo;
 import com.xzsd.pc.rotationchart.entity.RotationChartVO;
 import com.xzsd.pc.util.CodeList;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface RotationChartDao {
      * @param sortOrdinal
      * @return
      */
-    int countSortOrdinal(String goodsCodeint , int sortOrdinal);
+    int countSortOrdinal(@Param("goodsCodeint")String goodsCodeint ,@Param("sortOrdinal") int sortOrdinal);
     /**
      * 新增轮播图
      * @param rotationChartInfo
@@ -38,7 +39,7 @@ public interface RotationChartDao {
      * @param rotationChartCode
      * @return
      */
-    RotationChartVO getRotationChart(String rotationChartCode);
+    RotationChartVO getRotationChart(@Param("rotationChartCode") String rotationChartCode);
 
     /**
      * 查询轮播图列表

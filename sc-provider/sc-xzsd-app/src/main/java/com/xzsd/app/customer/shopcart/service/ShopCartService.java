@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.neusoft.core.page.PageUtils.getPageInfo;
+
 /**
  * 购物车管理模块
  */
@@ -33,7 +35,7 @@ public class ShopCartService {
      */
     public AppResponse listGoodsByPage(String userCode){
         List<ShopCartGoodsInfo> goodsInfoList = shopCartDao.listGoodsByPage(userCode);
-        return AppResponse.success("查询购物车内商品列表成功！",goodsInfoList);
+        return AppResponse.success("查询购物车内商品列表成功！",getPageInfo(goodsInfoList));
     }
 
     /**

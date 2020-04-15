@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.driver.dao.DriverDao">
+<!--    查询用户角色-->
     <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
             user_code as userCode,
@@ -10,21 +11,11 @@
         where user_code = #{userCode}
         and is_delete = 0
     </select>
-    <!--统计用户账号数量 计算删除了的账号-->
+    <!--校验手机号和账号是否存在 -->
     <select id="countUserAcct" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int">
         select count(user_acco)
         from t_sys_user
-        where user_acco = #{driverAccount}
-        <if test="driverCode != null and driverCode != ''">
-            AND user_code != #{driverCode}
-        </if>
-    </select>
-    <!--统计用户账号数量 不计算删除了的账号-->
-    <select id="findUserAcct" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
-        select count(user_acco)
-        from t_sys_user
-        where is_delete = 0
-        and user_acco = #{driverAccount}
+        where is_delete = 0 and (user_acco = #{driverAccount} or phone = #{phone})
         <if test="driverCode != null and driverCode != ''">
             AND user_code != #{driverCode}
         </if>
@@ -104,8 +95,8 @@
             now(),
             #{updater},
             now(),
-            0)
-        )
+            0
+            )
     </insert>
 <!--    查询司机详情-->
     <select id="getDriver" parameterType="java.lang.String" resultType="com.xzsd.pc.driver.entity.DriverVO">
@@ -164,7 +155,7 @@
             version = #{version} + 1
         where is_delete = 0 and driver_code = #{driverCode} and version = #{version}
     </update>
-
+<!--    查询司机列表-->
     <select id="listDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverVO">
         select
             `user`.user_code as driverCode,
@@ -192,13 +183,22 @@
         left join t_sys_driver driver on (`user`.user_code = driver.driver_code)
         where `user`.is_delete = 0 and `user`.role = 4
         <if test="role != null and role !='' and role == 2">
-            AND driver.area_code in (select area_code from t_sys_store where user_code = #{operator})
+            AND driver.area_code in (select area_code from t_sys_store where user_code = #{operator} and is_delete = 0)
         </if>
-        <if test="city !=null and city !=''">
-            AND driver.city like concat ('%',#{city},'%')
+        <if test="driverCode !=null and driverCode !=''">
+            AND driver.driver_code like concat ('%',#{driverCode},'%')
+        </if>
+        <if test="driverName !=null and driverName !=''">
+            AND driver.driver_name like concat ('%',#{driverName},'%')
+        </if>
+        <if test="provinceCode !=null and provinceCode !=''">
+            AND driver.province_code = #{provinceCode}
+        </if>
+        <if test="cityCode !=null and cityCode !=''">
+            AND driver.city_code = #{cityCode}
         </if>
         <if test="area !=null and area !=''">
-            AND driver.area like concat ('%',#{area},'%')
+            AND driver.area_code = #{areaCode}
         </if>
         order by driver.create_time desc
     </select>

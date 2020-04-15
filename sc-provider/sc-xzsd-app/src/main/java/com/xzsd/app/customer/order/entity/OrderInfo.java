@@ -13,6 +13,14 @@ public class OrderInfo {
      */
     private String orderCode;
     /**
+     * 店长编号
+     */
+    private String storerCode;
+    /**
+     * 门店编号
+     */
+    private String storeCode;
+    /**
      * 顾客编号
      */
     private String customerCode;
@@ -94,6 +102,22 @@ public class OrderInfo {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public String getStorerCode() {
+        return storerCode;
+    }
+
+    public void setStorerCode(String storerCode) {
+        this.storerCode = storerCode;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
     }
 
     public String getCustomerCode() {
