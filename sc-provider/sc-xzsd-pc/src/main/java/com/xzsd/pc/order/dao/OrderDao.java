@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
+ * 订单管理模块
  * @author asus
  */
 public interface OrderDao {

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 热门商品管理模块
+ * @author zehong
+ */
 @RestController
 @RequestMapping("/manage/hotGoods")
 public class HotGoodsController {

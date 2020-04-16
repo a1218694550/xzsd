@@ -11,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * 商品分类管理模块
+ * @author zehong
+ */
 @Service
 public class GoodsClassService {
     @Resource
@@ -23,9 +27,10 @@ public class GoodsClassService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addGoodsClass(GoodsClassInfo goodsClassInfo){
+        //设置分类信息
         goodsClassInfo.setClassCode(StringUtil.getCommonCode(6));
         goodsClassInfo.setIsDelete(0);
-
+        //新增商品分类
         int result = goodsClassDao.addGoodsClass(goodsClassInfo);
         if (0 == result){
             return AppResponse.bizError("新增商品分类失败!");
@@ -51,7 +56,6 @@ public class GoodsClassService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateGoodsClass(GoodsClassInfo goodsClassInfo){
-
         int result = goodsClassDao.updateGoodsClass(goodsClassInfo);
         if (0 == result){
             return AppResponse.bizError("修改商品分类失败!");
@@ -75,10 +79,12 @@ public class GoodsClassService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteGoodsClass(GoodsClassInfo goodsClassInfo){
+        //检查该分类下是否有二级分类
         int count = goodsClassDao.countChildClass(goodsClassInfo.getClassCode());
         if (0 != count){
             return AppResponse.bizError("删除商品一级分类失败，该一级分类下有二级分类！");
         }
+        //删除商品分类
         int result = goodsClassDao.deleteGoodsClass(goodsClassInfo);
         if (0 == result){
             return AppResponse.bizError("删除商品分类失败,该商品分类不存在！");

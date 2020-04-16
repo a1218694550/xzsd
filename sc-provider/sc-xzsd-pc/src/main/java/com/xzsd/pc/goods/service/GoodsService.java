@@ -24,6 +24,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 商品管理模块
+ * @author zehong
+ * @time 2020/4/16
+ */
 @Service
 public class GoodsService {
     @Resource

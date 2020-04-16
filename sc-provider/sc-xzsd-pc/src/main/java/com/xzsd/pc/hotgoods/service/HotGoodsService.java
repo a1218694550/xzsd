@@ -18,7 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 热门商品模块
+ * 热门商品管理模块
+ * @author zehong
  */
 @Service
 public class HotGoodsService {
@@ -35,7 +36,6 @@ public class HotGoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse setDisplayCount(String updater,String displayCount,int version){
        int result =  hotGoodsDao.setDisplayCount(updater,displayCount,version);
-
        if(0 == result){
            return AppResponse.bizError("设置失败");
        }
@@ -58,8 +58,10 @@ public class HotGoodsService {
         if(0 != countSort){
             return AppResponse.bizError("新增热门商品失败，该序号已存在！");
         }
+        //设置热门商品信息
         hotGoodsInfo.setHotGoodsCode(StringUtil.getCommonCode(6));
         hotGoodsInfo.setIsDelete(0);
+        //新增热门商品
         int result = hotGoodsDao.addHotGoods(hotGoodsInfo);
         if(0 == result){
             return AppResponse.bizError("新增热门商品失败！");
@@ -84,7 +86,8 @@ public class HotGoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateHotGoods(HotGoodsInfo hotGoodsInfo){
         //校验序号跟商品编号是否已存在
-        HotGoodsVO hotGoodsVO = hotGoodsDao.getHotGoods(hotGoodsInfo.getHotGoodsCode()); //获取原序号跟商品编号
+        //获取原序号跟商品编号
+        HotGoodsVO hotGoodsVO = hotGoodsDao.getHotGoods(hotGoodsInfo.getHotGoodsCode());
         //如果序号改了
         if (hotGoodsVO.getSortOrdinal()!=hotGoodsInfo.getSortOrdinal()){
             int countSort = hotGoodsDao.countSort(hotGoodsInfo.getSortOrdinal());

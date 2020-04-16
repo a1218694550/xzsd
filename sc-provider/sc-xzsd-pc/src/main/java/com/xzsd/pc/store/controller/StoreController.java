@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * 门店
+ * 门店管理模块
  * @author asus
  */
 @RestController
@@ -68,6 +68,7 @@ public class StoreController {
     @PostMapping("updateStore")
     public AppResponse updateStore(StoreInfo storeInfo){
         try{
+            storeInfo.setUpdater(SecurityUtils.getCurrentUserId());
             AppResponse appResponse = storeService.updateStore(storeInfo);
             return appResponse;
         }catch (Exception e){

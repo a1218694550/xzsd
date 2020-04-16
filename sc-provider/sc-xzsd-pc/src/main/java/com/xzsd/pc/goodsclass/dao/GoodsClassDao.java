@@ -6,6 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+/**
+ * 商品分类管理模块
+ * @author zehong
+ */
 @Mapper
 public interface GoodsClassDao {
     int getGoodsClassCount(GoodsClassInfo goodsClassInfo);

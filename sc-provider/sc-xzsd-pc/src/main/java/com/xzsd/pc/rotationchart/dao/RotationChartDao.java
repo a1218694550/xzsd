@@ -10,12 +10,13 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
+ * 轮播图管理模块
  * @author asus
  */
 @Mapper
 public interface RotationChartDao {
     /**
-     * 查询相同序号的轮播图信息条数
+     * 查询相同序号或商品编号的轮播图信息条数
      * @param sortOrdinal
      * @return
      */

@@ -8,6 +8,10 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 热门商品管理模块
+ * @author zehong
+ */
 @Mapper
 public interface HotGoodsDao {
     /**
@@ -16,8 +20,20 @@ public interface HotGoodsDao {
      * @return
      */
     int setDisplayCount(@Param("updater") String updater,@Param("displayCount") String displayCount,@Param("version") int version);
-    int countSort(int sortOrdinal);
-    int countGoods(String goodsCode);
+
+    /**
+     * 统计序号数量
+     * @param sortOrdinal
+     * @return
+     */
+    int countSort(@Param("sortOrdinal") int sortOrdinal);
+
+    /**
+     * 统计商品数量
+     * @param goodsCode
+     * @return
+     */
+    int countGoods(@Param("goodsCode") String goodsCode);
     /**
      * 新增热门商品
      * @param hotGoodsInfo

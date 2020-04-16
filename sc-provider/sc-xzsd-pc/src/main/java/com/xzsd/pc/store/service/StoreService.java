@@ -16,6 +16,10 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 门店管理模块
+ * @author asus
+ */
 @Service
 public class StoreService {
     @Resource

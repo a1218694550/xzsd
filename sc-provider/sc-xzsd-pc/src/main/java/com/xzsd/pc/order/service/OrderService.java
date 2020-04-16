@@ -17,6 +17,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 订单管理模块
+ * @author zehong
+ */
 @Service
 public class OrderService {
     @Resource

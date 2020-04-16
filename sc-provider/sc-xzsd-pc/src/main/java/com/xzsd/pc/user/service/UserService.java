@@ -15,6 +15,10 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 用户管理模块
+ * @author asus
+ */
 @Service
 public class UserService {
     @Resource
@@ -29,7 +33,7 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addUser(UserInfo userInfo){
         //检查账户和手机号是否存在
-        int countUserAcct = userDao.countUserAcct(userInfo); //就算该账户已经给了删除标记也不能加入一样的账户
+        int countUserAcct = userDao.countUserAcct(userInfo);
         if (0 != countUserAcct){
             return AppResponse.bizError("用户账户已存在，或该手机号已达绑定上限!");
         }
@@ -55,7 +59,7 @@ public class UserService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateUser(UserInfo userInfo){
-        //检查账户是否存在
+        //检查账户和手机号是否存在
         int countUserAcct = userDao.countUserAcct(userInfo);
         if (0 != countUserAcct){
             return AppResponse.bizError("用户账户已存在，或该手机号已达绑定上限!");
@@ -112,6 +116,9 @@ public class UserService {
      */
     public AppResponse listUser(UserInfo userInfo){
         // 查询用户列表
+        if (userInfo.getRole() != 0 && userInfo.getRole() != 1 && userInfo.getRole() != 2){
+            return AppResponse.bizError("参数错误！");
+        }
         //分页
         PageHelper.startPage(userInfo.getPageNum(), userInfo.getPageSize());
         //查询

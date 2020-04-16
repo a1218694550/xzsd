@@ -10,6 +10,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
+/**
+ * 商品管理模块
+ * @author zehong
+ * @time 2020/4/16
+ */
 @Mapper
 public interface GoodsDao {
     /**

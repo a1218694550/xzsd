@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 商品分类管理模块
+ * @author zehong
+ */
 @RestController
 @RequestMapping("/manage/goodsclassification")
 public class GoodsClassController {

@@ -15,7 +15,9 @@ import org.slf4j.Logger;
 import javax.annotation.Resource;
 
 /**
- * 热门商品模块
+ * 司机管理模块
+ * @author zehong
+ * @time 2020/4/16
  */
 @RestController
 @RequestMapping("/manage/driver")

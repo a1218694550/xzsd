@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 轮播图管理模块
  * @author asus
  */
 @Service
@@ -31,18 +32,19 @@ public class RotationChartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addRotationChart(RotationChartInfo rotationChartInfo){
+        //校验序号跟商品编号
         int count = rotationChartDao.countSortOrdinal(rotationChartInfo.getGoodsCode(),rotationChartInfo.getSortOrdinal());
         if(0 != count){
             return AppResponse.bizError("新增轮播图失败,该序号已存在,或该商品编号的轮播图已存在");
         }
-
-
+        //设置轮播图信息
         rotationChartInfo.setStatus(0);
         rotationChartInfo.setRotationChartCode(StringUtil.getCommonCode(6));
         rotationChartInfo.setIsDelete(0);
         if (rotationChartInfo.getImgUrl() == null || rotationChartInfo.getImgUrl() == ""){
             rotationChartInfo.setImgUrl("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
+        //新增轮播图
         int result = rotationChartDao.addRotationChart(rotationChartInfo);
         if ( 0 == result){
             return AppResponse.bizError("新增轮播图失败");
@@ -90,7 +92,7 @@ public class RotationChartService {
      * @param updater
      * @return
      */
-    @Transactional(rollbackFor = Exception.class) //回滚注解
+    @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteRotationChart(String rotationChartCode , String updater){
         List<String> rotationChartCodeList = Arrays.asList(rotationChartCode.split(","));
         int result = rotationChartDao.deleteRotationChart(new CodeList(updater,rotationChartCodeList));

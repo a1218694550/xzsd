@@ -112,13 +112,19 @@
             update_time as updateTime,
             version
         from t_sys_user
-        where is_delete = 0 and (role = 1 or role = 2)
-            <if test="userAccount != null and userAccount !='' ">
-                AND user_acco like concat ('%',#{userAccount},'%')
-            </if>
-            <if test="userName != null and userName !='' ">
-                AND user_Name like concat ('%',#{userName},'%')
-            </if>
+        where is_delete = 0
+        <if test="userAccount != null and userAccount !='' ">
+            AND user_acco like concat ('%',#{userAccount},'%')
+        </if>
+        <if test="userName != null and userName !='' ">
+            AND user_Name like concat ('%',#{userName},'%')
+        </if>
+        <if test="role == 0">
+            AND (role = 1 or role = 2)
+        </if>
+        <if test="role == 1 or role == 2">
+            AND role = #{role}
+        </if>
         order by create_time desc
     </select>
 <!--    <resultMap id="Order" type="com.order">-->

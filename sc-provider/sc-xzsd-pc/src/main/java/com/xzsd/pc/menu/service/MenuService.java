@@ -76,13 +76,13 @@ public class MenuService {
             }
         }else if (SystemValue.SYSTEM_VALUE_STORER == userInfo.getRole()){//店长只有固定模块
             List<MenuInfo> menuInfoList = new ArrayList<>();
-            menuInfoList.add(new MenuInfo("123456","客户管理",1,null));
-            menuInfoList.add(new MenuInfo("123456","订单管理",1,null));
-            menuInfoList.add(new MenuInfo("123456","门店管理",1,null));
-            menuInfoList.add(new MenuInfo("123456","司机管理",1,null));
+            menuInfoList.add(new MenuInfo("555555","客户管理",1,null));
+            menuInfoList.add(new MenuInfo("666666","订单管理",1,null));
+            menuInfoList.add(new MenuInfo("888888","门店管理",1,null));
+            menuInfoList.add(new MenuInfo("999999","司机管理",1,null));
             return AppResponse.success("查询菜单列表成功!",menuInfoList);
         }
-        return AppResponse.bizError("查询菜单列表失败!");
+        return AppResponse.bizError("查询菜单列表失败，您没有权限获取菜单列表!");
     }
 
     /**

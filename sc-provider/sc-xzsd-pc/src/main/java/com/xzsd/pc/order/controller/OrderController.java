@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.text.ParseException;
 
+/**
+ * 订单管理模块
+ * @author zehong
+ */
 @RestController
 @RequestMapping("/manage/order")
 public class OrderController {
@@ -21,6 +25,12 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
+    /**
+     * 查询订单列表
+     * @param orderInfo
+     * @return
+     * @throws ParseException
+     */
     @RequestMapping("listOrder")
     public AppResponse listOrder(OrderInfo orderInfo) throws ParseException {
         try{

@@ -10,10 +10,16 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 热门商品模块
+ * 司机管理模块
+ * @author zehong
  */
 @Mapper
 public interface DriverDao {
+    /**
+     * 查询用户角色
+     * @param userCode
+     * @return
+     */
     UserInfo getUser(String userCode);
     /**
      * 统计用户账号数量 计算删除了的

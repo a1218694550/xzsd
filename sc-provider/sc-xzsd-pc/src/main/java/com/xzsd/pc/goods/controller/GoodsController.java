@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 商品管理模块
+ * @author zehong
+ * @time 2020/4/16
+ */
 @RestController
 @RequestMapping("/manage/goods")
 public class GoodsController {
@@ -21,6 +26,10 @@ public class GoodsController {
     @Resource
     private GoodsService goodsService;
 
+    /**
+     * 查询商品一级分类列表
+     * @return
+     */
     @RequestMapping("listClassOne")
     public AppResponse listGoodsClassOne(){
         try{
@@ -34,6 +43,11 @@ public class GoodsController {
         }
     }
 
+    /**
+     * 查询商品二级分类列表
+     * @param classOneCode
+     * @return
+     */
     @RequestMapping("listClassSecond")
     public AppResponse listGoodsClassSecond(String classOneCode){
         try{

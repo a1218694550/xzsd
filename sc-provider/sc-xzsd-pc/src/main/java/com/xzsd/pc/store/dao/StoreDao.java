@@ -8,6 +8,10 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 门店管理模块
+ * @author zehong
+ */
 @Mapper
 public interface StoreDao {
     /**
@@ -45,6 +49,11 @@ public interface StoreDao {
      */
     StoreVO getStore(@Param("storeCode") String storeCode);
 
+    /**
+     * 修改门店信息
+     * @param storeInfo
+     * @return
+     */
     int updateStore(StoreInfo storeInfo);
 
     /**
@@ -62,5 +71,10 @@ public interface StoreDao {
      */
     List<StoreVO> listStore(StoreInfo storeInfo);
 
+    /**
+     * 删除门店
+     * @param codeList
+     * @return
+     */
     int deleteStore(CodeList codeList);
 }
