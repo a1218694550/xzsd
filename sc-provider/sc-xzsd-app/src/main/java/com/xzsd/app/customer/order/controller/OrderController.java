@@ -85,6 +85,10 @@ public class OrderController {
     @PostMapping("goodsEvaluate")
     public AppResponse goodsEvaluate(@RequestBody OrderEvaluate orderEvaluate){
         try{
+            String userCode = SecurityUtils.getCurrentUserId();
+            orderEvaluate.setCustomerCode(userCode);
+            orderEvaluate.setUpdater(userCode);
+            orderEvaluate.setCreater(userCode);
             AppResponse appResponse = orderService.goodsEvaluate(orderEvaluate);
             return appResponse;
         }catch (Exception e){

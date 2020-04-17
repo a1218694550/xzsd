@@ -18,7 +18,7 @@ public class RotationChartVO {
      */
     private int sortOrdinal;
     /**
-     * 轮播图状态 1：启用 0：禁用
+     * 轮播图状态 1：启用 -1：禁用
      */
     private int status;
     /**

@@ -77,7 +77,7 @@
         where is_delete = 0 and rotationchart_code = #{rotationChartCode}
     </select>
 <!--    查询轮播图列表-->
-    <select id="listRotationChart" parameterType="java.lang.String" resultType="com.xzsd.pc.rotationchart.entity.RotationChartVO">
+    <select id="listRotationChart" parameterType="com.xzsd.pc.rotationchart.entity.RotationChartInfo" resultType="com.xzsd.pc.rotationchart.entity.RotationChartVO">
         select
             rotationchart_code as rotationChartCode,
             img_url as image,
@@ -89,6 +89,9 @@
             version
         from t_sys_rotationchart
         where is_delete = 0
+        <if test="status != 0">
+            AND status = #{status}
+        </if>
         order by sort_ordinal asc
     </select>
 <!--    删除轮播图-->

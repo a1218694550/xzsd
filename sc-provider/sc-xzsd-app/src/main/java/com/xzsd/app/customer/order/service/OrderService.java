@@ -11,6 +11,7 @@ import com.xzsd.app.customer.order.dao.OrderDao;
 import com.xzsd.app.customer.order.entity.*;
 import com.xzsd.app.util.JsonUtils;
 import com.xzsd.app.util.StringUtil;
+import com.xzsd.app.util.SystemValue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springfox.documentation.spring.web.json.Json;
@@ -70,9 +71,6 @@ public class OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse goodsEvaluate(OrderEvaluate orderEvaluate){
-        // 创建一个包含原始json串的json对象
-//        OrderEvaluate orderEvaluate = JsonUtils.fromJson(jsonStr,OrderEvaluate.class);
-//        System.out.println(jsonStr);
         String userCode = orderEvaluate.getCustomerCode();
         if (orderEvaluate==null){
             return AppResponse.bizError("评价失败！错误原因：Json转化失败!");
@@ -98,9 +96,16 @@ public class OrderService {
                 evaluateImgList.add(evaluateImg);
             }
         }
+        //新增评价信息跟评价图片
         int addGEResult = orderDao.addGoodsEvaluate(orderEvaluate);
         int addEIResult = orderDao.addEvaluateImg(evaluateImgList);
         if (orderEvaluate.getEvaluateList().size() != addGEResult && evaluateImgList.size() != addEIResult){
+            return AppResponse.bizError("评价失败！请稍后重试！");
+        }
+        //设置订单状态为已评价
+        OrderInfo orderInfo = new OrderInfo(orderEvaluate.getOrderCode(), SystemValue.ORDER_STATUS_EVALUETED_VALUE,orderEvaluate.getUpdater());
+        int updateStatus = orderDao.updateOrderStatus(orderInfo);
+        if (0 == updateStatus){
             return AppResponse.bizError("评价失败！请稍后重试！");
         }
         return AppResponse.success("评价成功！");

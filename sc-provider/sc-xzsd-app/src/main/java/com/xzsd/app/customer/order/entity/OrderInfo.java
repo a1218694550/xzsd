@@ -72,6 +72,15 @@ public class OrderInfo {
      */
     private int version;
 
+    public OrderInfo() {
+    }
+
+    public OrderInfo(String orderCode, int orderStatus, String updater) {
+        this.orderCode = orderCode;
+        this.orderStatus = orderStatus;
+        this.updater = updater;
+    }
+
     public String getOperator() {
         return operator;
     }
