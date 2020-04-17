@@ -52,7 +52,6 @@
             press,
             author,
             image_url,
-            star_class,
             is_delete,
             creater,
             create_time,
@@ -78,7 +77,6 @@
             #{press},
             #{author},
             #{image},
-            #{starClass},
             #{isDelete},
             #{creater},
             now(),
@@ -214,14 +212,20 @@
         <foreach collection="codeList" item="code" open="(" separator="," close=")" index="index">
             #{code}
         </foreach>
-        <if test="repeatHGCodeList !=null">
+        <if test="repeatHGCodeList !=null or repeatRCCodeList != null">
             and
-            (goods_code not in
-            <foreach collection="repeatHGCodeList" item="code" open="(" separator="," close=")" index="index">
-                #{code}
-            </foreach>
+            (
+            <if test="repeatHGCodeList !=null">
+                goods_code not in
+                <foreach collection="repeatHGCodeList" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+            </if>
             <if test="repeatRCCodeList !=null">
-                or goods_code not in
+                <if test="repeatHGCodeList !=null">
+                    or
+                </if>
+                goods_code not in
                 <foreach collection="repeatRCCodeList" item="code" open="(" separator="," close=")" index="index">
                     #{code}
                 </foreach>

@@ -71,6 +71,16 @@ public class OrderService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse goodsEvaluate(OrderEvaluate orderEvaluate){
+        //查询订单状态
+        OrderDetails orderDetails = orderDao.getOrder(orderEvaluate.getOrderCode());
+        if (orderDetails.getOrderStatus() != SystemValue.ORDER_STATUS_SUCCESS_VALUE){
+            if (orderDetails.getOrderStatus() < SystemValue.ORDER_STATUS_SUCCESS_VALUE){
+                return AppResponse.bizError("评价失败！错误原因：订单未完成");
+            }
+            else if (orderDetails.getOrderStatus() == SystemValue.ORDER_STATUS_EVALUETED_VALUE){
+                return AppResponse.bizError("评价失败！错误原因：订单已评价");
+            }
+        }
         String userCode = orderEvaluate.getCustomerCode();
         if (orderEvaluate==null){
             return AppResponse.bizError("评价失败！错误原因：Json转化失败!");
