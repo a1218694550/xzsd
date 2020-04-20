@@ -81,7 +81,7 @@ public class DriverService {
         int resUser = driverDao.updateUser(driverInfo);
         int resDriver = driverDao.updateDriver(driverInfo);
         if (0 == resUser || 0 == resDriver){
-            return AppResponse.bizError("修改司机信息失败");
+            return AppResponse.bizError("修改司机信息失败,版本已更新");
         }
         return AppResponse.success("修改司机信息成功",driverInfo.getDriverCode());
     }

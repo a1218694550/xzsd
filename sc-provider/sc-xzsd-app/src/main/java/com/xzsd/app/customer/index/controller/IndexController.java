@@ -28,8 +28,6 @@ public class IndexController {
     @PostMapping("addCustomer")
     public AppResponse addCustomer(CustomerInfo customerInfo){
         try{
-            String creater = SecurityUtils.getCurrentUserId();
-            customerInfo.setCreater(creater);
             AppResponse appResponse = indexService.addCustomer(customerInfo);
             return appResponse;
         }catch (Exception e){

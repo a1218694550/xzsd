@@ -38,10 +38,12 @@ public class IndexService {
         //新增账号
         customerInfo.setUserCode(StringUtil.getCommonCode(6));
         customerInfo.setIsDelete(0);
-        if (customerInfo.getUserImg() == null || customerInfo.getUserImg() == ""){ //设置默认图片
+        //设置默认图片
+        if (customerInfo.getUserImg() == null || "".equals(customerInfo.getUserImg())){
             customerInfo.setUserImg("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
-        customerInfo.setPassword(PasswordUtils.generatePassword(customerInfo.getPassword())); //密码加密
+        //密码加密
+        customerInfo.setPassword(PasswordUtils.generatePassword(customerInfo.getPassword()));
 
         int addUserRes = indexDao.addUser(customerInfo);
         int addCustRes = indexDao.addCustomer(customerInfo);

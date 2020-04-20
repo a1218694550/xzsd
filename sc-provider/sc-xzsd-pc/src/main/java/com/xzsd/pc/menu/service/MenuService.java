@@ -61,7 +61,7 @@ public class MenuService {
     public AppResponse updateMenu(MenuInfo menuInfo){
         int result = menuDao.updateMenu(menuInfo);
         if ( 0 == result){
-            return AppResponse.bizError("修改菜单失败！");
+            return AppResponse.bizError("修改菜单失败,版本已更新！");
         }
         return AppResponse.success("修改菜单成功！");
     }

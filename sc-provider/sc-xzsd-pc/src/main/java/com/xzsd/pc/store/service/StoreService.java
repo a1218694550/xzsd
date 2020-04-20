@@ -98,7 +98,7 @@ public class StoreService {
         }
         int result = storeDao.updateStore(storeInfo);
         if( 0 == result){
-            return AppResponse.bizError("修改门店失败!");
+            return AppResponse.bizError("修改门店失败,版本已更新!");
         }
         return AppResponse.success("修改门店成功!");
     }

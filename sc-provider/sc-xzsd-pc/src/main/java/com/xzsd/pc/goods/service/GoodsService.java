@@ -115,7 +115,7 @@ public class GoodsService {
         }
         int result = goodsDao.updateGoods(goods);
         if ( 0 == result){
-            return AppResponse.bizError("修改失败");
+            return AppResponse.bizError("修改失败,版本已更新!");
         }
         return AppResponse.success("修改成功");
     }

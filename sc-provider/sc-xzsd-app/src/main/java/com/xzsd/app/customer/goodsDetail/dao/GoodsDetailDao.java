@@ -3,6 +3,7 @@ package com.xzsd.app.customer.goodsDetail.dao;
 import com.xzsd.app.customer.goodsDetail.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.access.method.P;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ public interface GoodsDetailDao {
      * @return
      */
     GoodsVO getGoods(@Param("goodsCode") String goodsCode);
-
     /**
      * 加入购物车
      * @param opeGoods

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.app.customer.shopcart.dao.ShopCartDao">
+<!--    获取购物车内商品详情-->
+    <select id="getGoodsForCart" parameterType="java.lang.String" resultType="com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo">
+        select
+            shopcart.shopcart_code as shopCartCode,
+            shopcart.cus_code as userCode,
+            shopcart.goods_code as goodsCode,
+            goods.image_url as goodsImg,
+            goods.goods_name as goodsName,
+            goods.sellprice as sellPrice,
+            shopcart.buy_count as goodsCount,
+            shopcart.sum_price as sumPrice
+        from t_sys_shopcart shopcart
+        left join t_sys_goods goods on (shopcart.goods_code = goods.goods_code and goods.is_delete = 0)
+        where shopcart.is_delete = 0 and shopcart.goods_code = #{goodsCode}
+    </select>
+<!--    查询购物车内商品列表-->
     <select id="listGoodsByPage" parameterType="java.lang.String" resultType="com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo">
         select
             shopcart.shopcart_code as shopCartCode,
@@ -15,7 +31,7 @@
         left join t_sys_goods goods on (shopcart.goods_code = goods.goods_code and goods.is_delete = 0)
         where shopcart.is_delete = 0 and shopcart.cus_code = #{userCode}
     </select>
-<!--    修改商品数量-->
+    <!--    修改商品数量-->
     <update id="updateGoodsCount" parameterType="com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo">
         update t_sys_shopcart set
             buy_count = #{goodsCount},

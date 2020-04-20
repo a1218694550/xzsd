@@ -7,6 +7,7 @@ import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.AuthUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +52,7 @@ public class OrderController {
      * @param orderCode
      * @return
      */
-    @RequestMapping(value = "getOrderDetails",method = RequestMethod.GET)
+    @RequestMapping(value = "getOrderDetails")
     public AppResponse getOrderDetails(String orderCode){
         try{
             //查询
@@ -70,7 +71,7 @@ public class OrderController {
      * @param operation
      * @return
      */
-    @RequestMapping("updateOrderState")
+    @PostMapping("updateOrderState")
     public AppResponse updateOrderState(String orderCode ,int operation){
         try{
             String updater = SecurityUtils.getCurrentUserId();

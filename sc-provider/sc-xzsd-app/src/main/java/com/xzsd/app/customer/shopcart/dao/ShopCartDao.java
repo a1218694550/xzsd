@@ -12,12 +12,18 @@ import java.util.List;
 @Mapper
 public interface ShopCartDao {
     /**
-     * 查询购物车内商品列表成功
+     * 查询购物车内商品列表
      * @param userCode
      * @return
      */
-    List<ShopCartGoodsInfo> listGoodsByPage(String userCode);
+    List<ShopCartGoodsInfo> listGoodsByPage(@Param("userCode") String userCode);
 
+    /**
+     * 查询购物车内商品信息
+     * @param goodsCode
+     * @return
+     */
+    ShopCartGoodsInfo getGoodsForCart(@Param("goodsCode") String goodsCode);
     /**
      * 修改商品数量
      * @param shopCartGoodsInfo

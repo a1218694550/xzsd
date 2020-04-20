@@ -75,7 +75,8 @@
             hotgoods.goods_code as goodsCode,
             goods.goods_name as goodsName,
             goods.sellprice as sellPrice,
-            goods.goods_intro as goodsIntro
+            goods.goods_intro as goodsIntro,
+            hotgoods.version as version
         from t_sys_hotgoods hotgoods
         left join t_sys_goods goods on (hotgoods.goods_code = goods.goods_code)
         where hotgoods.is_delete = 0

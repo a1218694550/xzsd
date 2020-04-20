@@ -58,7 +58,7 @@ public class GoodsClassService {
     public AppResponse updateGoodsClass(GoodsClassInfo goodsClassInfo){
         int result = goodsClassDao.updateGoodsClass(goodsClassInfo);
         if (0 == result){
-            return AppResponse.bizError("修改商品分类失败!");
+            return AppResponse.bizError("修改商品分类失败,版本已更新!");
         }
         return AppResponse.success("修改商品分类成功");
     }

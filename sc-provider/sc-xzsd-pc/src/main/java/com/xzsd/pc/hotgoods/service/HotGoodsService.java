@@ -89,7 +89,7 @@ public class HotGoodsService {
         //获取原序号跟商品编号
         HotGoodsVO hotGoodsVO = hotGoodsDao.getHotGoods(hotGoodsInfo.getHotGoodsCode());
         //如果序号改了
-        if (hotGoodsVO.getSortOrdinal()!=hotGoodsInfo.getSortOrdinal()){
+        if (hotGoodsVO.getSortOrdinal() != hotGoodsInfo.getSortOrdinal()){
             int countSort = hotGoodsDao.countSort(hotGoodsInfo.getSortOrdinal());
             if (0 != countSort){
                 return AppResponse.bizError("修改热门商品失败，该序号已存在！");
@@ -104,7 +104,7 @@ public class HotGoodsService {
         }
         int result = hotGoodsDao.updateHotGoods(hotGoodsInfo);
         if(0 == result){
-            return AppResponse.bizError("修改热门商品失败");
+            return AppResponse.bizError("修改热门商品失败,版本已更新");
         }
         return AppResponse.success("修改热门商品成功");
     }

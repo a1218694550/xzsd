@@ -5,6 +5,7 @@ import com.neusoft.util.StringUtil;
 import com.xzsd.app.customer.goodsDetail.dao.GoodsDetailDao;
 import com.xzsd.app.customer.goodsDetail.entity.*;
 import com.xzsd.app.customer.shopcart.dao.ShopCartDao;
+import com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,21 @@ public class GoodsDetailService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addGoodsToCart(OpeGoods opeGoods){
+        //查询商品是否已在购物车内，如果已存在直接修改商品数量
+        ShopCartGoodsInfo shopCartGoodsInfo = shopCartDao.getGoodsForCart(opeGoods.getGoodsCode());
+        if (shopCartGoodsInfo != null){
+            ShopCartGoodsInfo goodsData = new ShopCartGoodsInfo();
+            goodsData.setShopCartCode(shopCartGoodsInfo.getShopCartCode());
+            goodsData.setGoodsCode(opeGoods.getGoodsCode());
+            goodsData.setUserCode(opeGoods.getUserCode());
+            goodsData.setGoodsCount(shopCartGoodsInfo.getGoodsCount() + opeGoods.getCount());
+            goodsData.setSumPrice(shopCartGoodsInfo.getSellPrice() * goodsData.getGoodsCount());
+            int resultUpdate = shopCartDao.updateGoodsCount(goodsData);
+            if ( 0 == resultUpdate){
+                return AppResponse.bizError("非常抱歉，添加失败!");
+            }
+            return AppResponse.success("添加商品至购物车成功！");
+        }
         //生成购物车编号
         opeGoods.setShopCartCode(StringUtil.getCommonCode(6));
         //获取购买的商品信息
