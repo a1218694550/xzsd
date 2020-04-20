@@ -14,6 +14,10 @@ public class MenuVO {
      */
     private int isMenu;
     /**
+     * 菜单路由
+     */
+    private String menuRouting;
+    /**
      * 备注
      */
     private String remarks;
@@ -45,6 +49,14 @@ public class MenuVO {
 
     public void setIsMenu(int isMenu) {
         this.isMenu = isMenu;
+    }
+
+    public String getMenuRouting() {
+        return menuRouting;
+    }
+
+    public void setMenuRouting(String menuRouting) {
+        this.menuRouting = menuRouting;
     }
 
     public String getRemarks() {

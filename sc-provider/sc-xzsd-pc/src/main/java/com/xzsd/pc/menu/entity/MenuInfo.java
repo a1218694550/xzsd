@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class MenuInfo {
+    private int role;
     /**
      * 菜单编号
      */
@@ -17,6 +18,10 @@ public class MenuInfo {
      * 是否菜单 0 不是 1是
      */
     private int isMenu;
+    /**
+     * 菜单路由
+     */
+    private String menuRouting;
     /**
      * 备注
      */
@@ -59,6 +64,14 @@ public class MenuInfo {
         this.remarks = remarks;
     }
 
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
     public String getMenuCode() {
         return menuCode;
     }
@@ -81,6 +94,14 @@ public class MenuInfo {
 
     public void setIsMenu(int isMenu) {
         this.isMenu = isMenu;
+    }
+
+    public String getMenuRouting() {
+        return menuRouting;
+    }
+
+    public void setMenuRouting(String menuRouting) {
+        this.menuRouting = menuRouting;
     }
 
     public String getRemarks() {

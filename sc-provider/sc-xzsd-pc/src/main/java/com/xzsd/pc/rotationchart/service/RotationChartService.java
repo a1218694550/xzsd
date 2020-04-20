@@ -33,7 +33,7 @@ public class RotationChartService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addRotationChart(RotationChartInfo rotationChartInfo){
         //校验序号跟商品编号
-        int count = rotationChartDao.countSortOrdinal(rotationChartInfo.getGoodsCode(),rotationChartInfo.getSortOrdinal());
+        int count = rotationChartDao.countSortOrdinal(rotationChartInfo);
         if(0 != count){
             return AppResponse.bizError("新增轮播图失败,该序号已存在,或该商品编号的轮播图已存在");
         }
@@ -41,8 +41,9 @@ public class RotationChartService {
         rotationChartInfo.setStatus(-1);
         rotationChartInfo.setRotationChartCode(StringUtil.getCommonCode(6));
         rotationChartInfo.setIsDelete(0);
-        if (rotationChartInfo.getImgUrl() == null || rotationChartInfo.getImgUrl() == ""){
-            rotationChartInfo.setImgUrl("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
+        if (rotationChartInfo.getImage() == null || "".equals(rotationChartInfo.getImage())){
+
+            rotationChartInfo.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
         //新增轮播图
         int result = rotationChartDao.addRotationChart(rotationChartInfo);
@@ -110,7 +111,7 @@ public class RotationChartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateRotationChartState(String rotationChartCode , String status , String updater){
-        if (Integer.valueOf(status) != -1 || Integer.valueOf(status) != 1){
+        if (Integer.valueOf(status) != -1 && Integer.valueOf(status) != 1){
             return AppResponse.bizError("修改轮播图状态失败,参数 status 错误,1 启用 -1禁用");
         }
         List<String> rotationChartCodeList = Arrays.asList(rotationChartCode.split(","));

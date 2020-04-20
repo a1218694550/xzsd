@@ -75,7 +75,7 @@ public class GoodsService {
     public AppResponse addGoods(GoodsInfo goods){
         goods.setGoodsCode(StringUtil.getCommonCode(6));
         goods.setIsDelete(0);
-        if (goods.getImage() == null || goods.getImage() == ""){
+        if (goods.getImage() == null || "".equals(goods.getImage())){
             goods.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
         int result = goodsDao.addGoods(goods);
@@ -110,6 +110,9 @@ public class GoodsService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateGoods(GoodsInfo goods){
+        if (goods.getImage() == null || "".equals(goods.getImage())){
+            goods.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
+        }
         int result = goodsDao.updateGoods(goods);
         if ( 0 == result){
             return AppResponse.bizError("修改失败");
@@ -215,13 +218,20 @@ public class GoodsService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateGoodsStatus(String goodsCode , String goodsStatus, String updater){
         List<String> goodsCodeList = Arrays.asList(goodsCode.split(","));
-        if (Integer.valueOf(goodsStatus) == 1 || Integer.valueOf(goodsStatus) == 2 || Integer.valueOf(goodsStatus) == 3){
+        if (Integer.parseInt(goodsStatus) != 1 && Integer.parseInt(goodsStatus) != 2 && Integer.parseInt(goodsStatus) != 3){
             return AppResponse.bizError("修改商品状态失败,参数 goodsStatus 错误，2上架 3下架 1未发布");
         }
         int result = goodsDao.updateGoodsStatus(new CodeList(updater,goodsCodeList,goodsStatus));
         if ( 0 == result){
             return AppResponse.bizError("修改商品状态失败");
         }
-        return AppResponse.success("修改商品状态成功");
+        String msg = null;
+        switch(Integer.parseInt(goodsStatus)){
+            case 1: msg = "商品状态更改为未发布！";break;
+            case 2: msg = "商品上架成功！";break;
+            case 3: msg = "商品下架成功！";break;
+            default:
+        }
+        return AppResponse.success("修改商品状态成功,"+msg);
     }
 }

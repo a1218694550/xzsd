@@ -76,9 +76,7 @@ public class UploadController {
             // 指定要上传到 COS 上的路径
             String key = "/" + this.qianzui + "/" + year + "/" + month + "/" + day + "/" + newFileName;
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key, localFile);
-            System.out.println(key);
             PutObjectResult putObjectResult = cosclient.putObject(putObjectRequest);
-            System.out.println(putObjectRequest.getKey());
             return AppResponse.success("上传成功",path + key);
         } catch (IOException e) {
             return AppResponse.bizError("上传失败");

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 菜单管理模块
+ * @author 泽宏
+ */
 @RestController
 @RequestMapping("/manage/menu")
 public class MenuController {

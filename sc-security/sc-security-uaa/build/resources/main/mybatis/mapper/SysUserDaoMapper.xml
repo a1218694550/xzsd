@@ -12,7 +12,8 @@
             t.user_name as name,
             t.is_delete as locked
         FROM t_sys_user t
-        WHERE t.user_acco = #{username}
+        WHERE t.is_delete = 0 and
+        t.user_acco = #{username}
     </select>
 
 </mapper>

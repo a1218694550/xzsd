@@ -52,7 +52,6 @@
             press,
             author,
             image_url,
-            star_class,
             is_delete,
             creater,
             create_time,
@@ -78,7 +77,6 @@
             #{press},
             #{author},
             #{image},
-            #{starClass},
             #{isDelete},
             #{creater},
             now(),
@@ -146,14 +144,14 @@
             goods.goods_code as goodsCode,
             goods.goods_name as goodsName,
             goods.price,
-            goods.sellprice,
+            goods.sellprice as sellPrice,
             goods.stock,
             goods.sumsales_volume as salesVolume,
             goodsclassA.goodsclass_code as classOneCode,
             goodsclassA.class_name as classOneName,
             goodsclassB.goodsclass_code as classSecondCode,
             goodsclassB.class_name as classSecondName,
-            goods.advwords,
+            goods.advwords as advWords,
             goods.goods_intro as goodsIntro,
             goods.goods_status as goodsStatus,
             goods.shelf_time as shelfTime,
@@ -214,14 +212,20 @@
         <foreach collection="codeList" item="code" open="(" separator="," close=")" index="index">
             #{code}
         </foreach>
-        <if test="repeatHGCodeList !=null">
+        <if test="repeatHGCodeList !=null or repeatRCCodeList != null">
             and
-            (goods_code not in
-            <foreach collection="repeatHGCodeList" item="code" open="(" separator="," close=")" index="index">
-                #{code}
-            </foreach>
+            (
+            <if test="repeatHGCodeList !=null">
+                goods_code not in
+                <foreach collection="repeatHGCodeList" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+            </if>
             <if test="repeatRCCodeList !=null">
-                or goods_code not in
+                <if test="repeatHGCodeList !=null">
+                    or
+                </if>
+                goods_code not in
                 <foreach collection="repeatRCCodeList" item="code" open="(" separator="," close=")" index="index">
                     #{code}
                 </foreach>

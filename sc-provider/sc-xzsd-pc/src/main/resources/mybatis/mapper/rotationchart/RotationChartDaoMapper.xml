@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.rotationchart.dao.RotationChartDao">
 <!--查询该序号和商品编号的轮播图条数-->
-    <select id="countSortOrdinal" parameterType="java.lang.String" resultType="int">
+    <select id="countSortOrdinal" parameterType="com.xzsd.pc.rotationchart.entity.RotationChartInfo" resultType="int">
         select count(*)
         from t_sys_rotationchart
         where  is_delete = 0 and ( sort_ordinal = #{sortOrdinal} or goods_code = #{goodsCode} )
@@ -60,7 +60,7 @@
         <if test="goodsCode != null and goodsCode!=''">
             AND goods.goods_code like concat ('%',#{goodsCode},'%')
         </if>
-        order by create_time desc
+        order by goods.create_time desc
     </select>
 <!--    查询轮播图详情-->
     <select id="getRotationChart" parameterType="java.lang.String" resultType="com.xzsd.pc.rotationchart.entity.RotationChartVO">

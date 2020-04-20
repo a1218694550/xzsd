@@ -40,10 +40,10 @@ public class UserService {
         userInfo.setUserCode(StringUtil.getCommonCode(6));
         userInfo.setUserPwd(PasswordUtils.generatePassword(userInfo.getUserPwd()));
         userInfo.setIsDelete(0);
+        //新增用户
         if(userInfo.getUserImg()==null || "".equals(userInfo.getUserImg())){
             userInfo.setUserImg("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }
-        // 新增用户
         int count = userDao.addUser(userInfo);
         if(0 == count) {
             return AppResponse.bizError("新增失败，请重试！");

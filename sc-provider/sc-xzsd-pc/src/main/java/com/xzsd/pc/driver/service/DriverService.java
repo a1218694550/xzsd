@@ -41,6 +41,9 @@ public class DriverService {
         driverInfo.setDriverCode(StringUtil.getCommonCode(6));
         driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
         driverInfo.setIsDelete(0);
+        if (driverInfo.getImage() == null || "".equals(driverInfo.getImage())){
+            driverInfo.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
+        }
         int resultUser = driverDao.addUser(driverInfo);
         int resultDriver =  driverDao.addDriver(driverInfo);
         if (0 == resultUser || 0 == resultDriver){
@@ -72,6 +75,9 @@ public class DriverService {
             return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
         driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
+        if (driverInfo.getImage() == null || "".equals(driverInfo.getImage())){
+            driverInfo.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
+        }
         int resUser = driverDao.updateUser(driverInfo);
         int resDriver = driverDao.updateDriver(driverInfo);
         if (0 == resUser || 0 == resDriver){

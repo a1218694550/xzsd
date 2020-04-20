@@ -100,12 +100,12 @@ public class RotationChartInfo {
         this.rotationChartCode = rotationChartCode;
     }
 
-    public String getImgUrl() {
+    public String getImage() {
         return image;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.image = imgUrl;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public int getSortOrdinal() {

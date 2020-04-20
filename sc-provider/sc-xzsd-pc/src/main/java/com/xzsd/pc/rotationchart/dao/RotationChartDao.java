@@ -17,10 +17,10 @@ import java.util.List;
 public interface RotationChartDao {
     /**
      * 查询相同序号或商品编号的轮播图信息条数
-     * @param sortOrdinal
+     * @param rotationChartInfo
      * @return
      */
-    int countSortOrdinal(@Param("goodsCodeint")String goodsCodeint ,@Param("sortOrdinal") int sortOrdinal);
+    int countSortOrdinal(RotationChartInfo rotationChartInfo);
     /**
      * 新增轮播图
      * @param rotationChartInfo

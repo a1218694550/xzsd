@@ -20,7 +20,7 @@ public class RCGoodsVO {
     /**
      * 商品状态
      */
-    private int goodsState;
+    private int goodsStatus;
     /**
      * 分类一级编号
      */
@@ -74,12 +74,12 @@ public class RCGoodsVO {
         this.goodsName = goodsName;
     }
 
-    public int getGoodsState() {
-        return goodsState;
+    public int getGoodsStatus() {
+        return goodsStatus;
     }
 
-    public void setGoodsState(int goodsState) {
-        this.goodsState = goodsState;
+    public void setGoodsStatus(int goodsStatus) {
+        this.goodsStatus = goodsStatus;
     }
 
     public String getClassOneCode() {

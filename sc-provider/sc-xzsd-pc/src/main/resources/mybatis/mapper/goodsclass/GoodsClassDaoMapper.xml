@@ -71,17 +71,21 @@
     <resultMap id="goodsClassListMap" type="com.xzsd.pc.goodsclass.entity.GoodsClassOne">
         <id property="classOneCode" column="goodsclass_code" jdbcType="VARCHAR"/>
         <result property="classOneName" column="class_name" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
         <collection property="ificationSecondList" ofType="com.xzsd.pc.goodsclass.entity.GoodsClassSecond">
             <id property="classSecondCode" column="goodsClassSecondCode" jdbcType="VARCHAR"/>
             <result property="classSecondName" column="classSecondName" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
     <select id="listGoodsClass" resultMap="goodsClassListMap">
         select
             a.goodsclass_code,
             a.class_name,
+            a.version,
             b.goodsclass_code as goodsClassSecondCode,
-            b.class_name as classSecondName
+            b.class_name as classSecondName,
+            b.version
         from t_sys_goodsclassification a
         LEFT JOIN t_sys_goodsclassification b on (b.parent_code = a.goodsclass_code and b.class_level=2 and b.is_delete=0)
         where a.is_delete = 0 and a.class_level=1

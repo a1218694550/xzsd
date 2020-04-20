@@ -26,9 +26,15 @@ public class GoodsClassController {
     @Resource
     private GoodsClassService goodsClassService;
 
+    /**
+     * 新增商品分类
+     * @param goodsClassInfo
+     * @return
+     */
     @PostMapping("addGoodsClass")
     public AppResponse addGoodsClass(GoodsClassInfo goodsClassInfo){
         try{
+            goodsClassInfo.setCreater(SecurityUtils.getCurrentUserId());
             //新增商品分类
             AppResponse appResponse = goodsClassService.addGoodsClass(goodsClassInfo);
             return appResponse;
@@ -38,6 +44,12 @@ public class GoodsClassController {
             throw e;
         }
     }
+
+    /**
+     * 查询商品分类详情
+     * @param goodsClassInfo
+     * @return
+     */
     @RequestMapping("getGoodsClass")
     public AppResponse getGoodsClass(GoodsClassInfo goodsClassInfo){
         try{
@@ -51,9 +63,15 @@ public class GoodsClassController {
         }
     }
 
+    /**
+     * 修改商品分类
+     * @param goodsClassInfo
+     * @return
+     */
     @PostMapping("updateGoodsClass")
     public AppResponse updateGoodsClass(GoodsClassInfo goodsClassInfo){
         try{
+            goodsClassInfo.setUpdater(SecurityUtils.getCurrentUserId());
             //修改商品分类
             AppResponse appResponse = goodsClassService.updateGoodsClass(goodsClassInfo);
             return appResponse;
@@ -64,6 +82,10 @@ public class GoodsClassController {
         }
     }
 
+    /**
+     * 查询商品分类列表
+     * @return
+     */
     @RequestMapping("listGoodsClass")
     public AppResponse listGoodsClass(){
         try{
@@ -85,6 +107,7 @@ public class GoodsClassController {
     public AppResponse deleteGoodsClass(GoodsClassInfo goodsClassInfo){
         try{
             String updater = SecurityUtils.getCurrentUserId();
+            goodsClassInfo.setUpdater(updater);
             //删除商品分类
             AppResponse appResponse = goodsClassService.deleteGoodsClass(goodsClassInfo);
             return appResponse;
