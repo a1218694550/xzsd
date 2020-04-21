@@ -13,7 +13,13 @@ public class OrderInfo {
      * 页数
      */
     private int pageNum;
+    /**
+     * 操作人
+     */
     private String operator;
+    /**
+     * 角色
+     */
     private int role;
     /**
      * 订单编号

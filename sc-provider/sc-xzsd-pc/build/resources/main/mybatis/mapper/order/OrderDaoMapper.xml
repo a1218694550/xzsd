@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.order.dao.OrderDao">
+<!--    获取用户角色-->
     <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
             user_code as userCode,
@@ -66,8 +67,8 @@
             <result property="sellPrice" column="sellPrice"/>
         </collection>
     </resultMap>
-
-    <select id="getOrderDetails" parameterType="java.lang.String" resultMap="orderDetailsMap">
+<!--    查询订单详情-->
+    <select id="getOrderDetails" parameterType="java.lang.String" resultType="com.xzsd.pc.order.entity.Goods">
         select
             od.cus_code as cusCode,
             od.order_code as orderCode,
@@ -83,7 +84,7 @@
         where od.is_delete = 0 and od.order_code = #{orderCode}
         order by odd.create_time desc
     </select>
-
+<!--    修改订单状态-->
     <update id="updateOrderState" parameterType="java.lang.String">
         update t_sys_order set
             order_status = #{orderStatus},

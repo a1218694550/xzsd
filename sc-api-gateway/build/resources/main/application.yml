@@ -30,10 +30,10 @@ zuul:
       path: /job/**
       serviceId: sc-job
       sensitiveHeaders:
-    project:
-      path: /project/**
-      serviceId: sc-project
-      sensitiveHeaders:
+#    project:
+#      path: /project/**
+#      serviceId: sc-project
+#      sensitiveHeaders:
     pc:
       path: /pc/**
       serviceId: sc-xzsd-pc

@@ -1,5 +1,6 @@
 package com.xzsd.pc.order.dao;
 
+import com.xzsd.pc.order.entity.Goods;
 import com.xzsd.pc.order.entity.OrderDetails;
 import com.xzsd.pc.order.entity.OrderInfo;
 import com.xzsd.pc.user.entity.UserInfo;
@@ -12,6 +13,11 @@ import java.util.List;
  * @author asus
  */
 public interface OrderDao {
+    /**
+     * 查询用户角色
+     * @param userCode
+     * @return
+     */
     UserInfo getUser(@Param("userCode") String userCode);
     /**
      * 查询订单列表
@@ -25,7 +31,7 @@ public interface OrderDao {
      * @param orderCode
      * @return
      */
-    OrderDetails getOrderDetails(@Param("orderCode") String orderCode);
+    List<Goods> getOrderDetails(@Param("orderCode") String orderCode);
 
     /**
      * 修改订单状态

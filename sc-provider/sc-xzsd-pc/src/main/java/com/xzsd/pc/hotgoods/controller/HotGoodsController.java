@@ -24,10 +24,10 @@ public class HotGoodsController {
     @Resource
     private HotGoodsService hotGoodsService;
     @PostMapping("setDisplayCount")
-    public AppResponse setDisplayCount(String displayCount,int version) {
+    public AppResponse setDisplayCount(String displayCount) {
         try {
             String updater = SecurityUtils.getCurrentUserId();
-            AppResponse appResponse = hotGoodsService.setDisplayCount(updater,displayCount,version);
+            AppResponse appResponse = hotGoodsService.setDisplayCount(updater,displayCount);
             return appResponse;
         } catch (Exception e) {
             logger.error("修改失败");

@@ -15,13 +15,12 @@ import java.util.List;
 
 /**
  * 客户管理模块
+ * @author zehong
  */
 @Service
 public class CustomerService {
     @Resource
     private CustomerDao customerDao;
-    @Resource
-    private UserDao userDao;
     /**
      * 查询客户列表
      * @param customerInfo
@@ -29,10 +28,12 @@ public class CustomerService {
      */
     public AppResponse listCustomer(CustomerInfo customerInfo){
         /**
-         * 获取查询人的角色
+         * 如果查询人是店长-->获取查询人的门店邀请码
          */
-        UserInfo userInfo = userDao.getUser(customerInfo.getOperator());
-        customerInfo.setRole(userInfo.getRole());
+        String storeInvCode = customerDao.getInvCode(customerInfo.getOperator());
+        if (storeInvCode != null){
+            customerInfo.setInvCode(storeInvCode);
+        }
         /**
          * 根据角色查询客户列表
          */

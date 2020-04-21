@@ -64,13 +64,12 @@ public class UserService {
         if (0 != countUserAcct){
             return AppResponse.bizError("用户账户已存在，或该手机号已达绑定上限!");
         }
-        if(userInfo.getUserImg()==null || "".equals(userInfo.getUserImg())){
-            userInfo.setUserImg("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
-        }
         if (userInfo.getUserAccount() == null || "".equals(userInfo.getUserAccount()) || userInfo.getUserPwd() == null || "".equals(userInfo.getUserPwd())){
             return AppResponse.serverError("修改失败，账号密码为空！");
         }
-        userInfo.setUserPwd(PasswordUtils.generatePassword(userInfo.getUserPwd()));
+        if (userInfo.getUserPwd() != null && "".equals(userInfo.getUserPwd())){
+            userInfo.setUserPwd(PasswordUtils.generatePassword(userInfo.getUserPwd()));
+        }
         // 修改用户
         int count = userDao.updateUser(userInfo);
         if(0 == count) {

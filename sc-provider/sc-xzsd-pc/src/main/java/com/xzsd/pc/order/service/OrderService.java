@@ -3,6 +3,7 @@ package com.xzsd.pc.order.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xzsd.pc.order.dao.OrderDao;
+import com.xzsd.pc.order.entity.Goods;
 import com.xzsd.pc.order.entity.OrderDetails;
 import com.xzsd.pc.order.entity.OrderInfo;
 import com.xzsd.pc.user.entity.UserInfo;
@@ -51,8 +52,8 @@ public class OrderService {
      * @return
      */
     public AppResponse getOrderDetails(String orderCode){
-        OrderDetails orderDetails = orderDao.getOrderDetails(orderCode);
-        return AppResponse.success("查询订单详情成功！",orderDetails);
+        List<Goods> orderDetailsList = orderDao.getOrderDetails(orderCode);
+        return AppResponse.success("查询订单详情成功！",orderDetailsList);
     }
 
     /**

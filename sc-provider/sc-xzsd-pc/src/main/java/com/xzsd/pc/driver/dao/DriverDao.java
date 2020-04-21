@@ -27,13 +27,6 @@ public interface DriverDao {
      * @return
      */
     int countUserAcct(DriverInfo driverInfo);
-    int findUserAcct(DriverInfo driverInfo);
-    /**
-     * 统计手机号数量
-     * @param driverInfo
-     * @return
-     */
-    int countPhone(DriverInfo driverInfo);
     /**
      * 新增司机信息
      * @param driverInfo

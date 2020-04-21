@@ -20,16 +20,6 @@
             AND user_code != #{driverCode}
         </if>
     </select>
-    <!--    查询手机号是否存在-->
-    <select id="countPhone" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int">
-        select count(phone)
-        from t_sys_user
-        where is_delete = 0
-        and phone = #{phone}
-        <if test="driverCode != null and driverCode != ''">
-            AND user_code != #{driverCode}
-        </if>
-    </select>
     <!--    新增司机信息-->
     <insert id="addUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
        insert into t_sys_user
@@ -189,7 +179,7 @@
             AND driver.driver_code like concat ('%',#{driverCode},'%')
         </if>
         <if test="driverName !=null and driverName !=''">
-            AND driver.driver_name like concat ('%',#{driverName},'%')
+            AND `user`.user_name like concat ('%',#{driverName},'%')
         </if>
         <if test="provinceCode !=null and provinceCode !=''">
             AND driver.province_code = #{provinceCode}

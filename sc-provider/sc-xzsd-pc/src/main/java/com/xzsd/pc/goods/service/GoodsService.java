@@ -201,7 +201,7 @@ public class GoodsService {
         }
         int result = goodsDao.deleteGoods(codeList);
         if ( 0 == result){
-            return AppResponse.bizError("删除商品失败！");
+            return AppResponse.bizError("删除商品失败，选中的商品存在轮播图或热门商品，请先删除对应的轮播图或热门商品！");
         }else if (oldCount != result){
             return AppResponse.success("删除商品成功，但部分商品在存在轮播图或热门商品，无法删除！");
         }

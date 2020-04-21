@@ -54,12 +54,17 @@
         update t_sys_user
         set
         user_acco = #{userAccount},
-        user_pwd = #{userPwd},
+        <if test="userPwd != null and userPwd !=''">
+            user_pwd = #{userPwd},
+        </if>
         user_name = #{userName},
         sex = #{sex},
         phone = #{phone},
         email = #{email},
         idcard = #{idCard},
+        <if test="userImg != null and userImg != ''">
+            user_img = #{userImg},
+        </if>
         updater = #{updater},
         update_time = now(),
         version = version + 1

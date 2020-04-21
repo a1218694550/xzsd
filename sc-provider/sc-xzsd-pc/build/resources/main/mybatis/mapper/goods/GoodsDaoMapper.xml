@@ -184,6 +184,7 @@
         order by goods.create_time desc
     </select>
 <!--    删除商品-->
+
     <select id="repeatHotGoodsCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
         select distinct goods_code
         from t_sys_hotgoods

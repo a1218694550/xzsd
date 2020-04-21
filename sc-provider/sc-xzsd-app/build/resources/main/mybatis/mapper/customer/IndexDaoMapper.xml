@@ -86,7 +86,7 @@
             valperiod_over as valperiodOver,
             version
         from t_sys_rotationchart
-        where is_delete = 0 and status = 1
+        where is_delete = 0 and status = 1 and now() between valperiod_start and valperiod_over
         order by sort_ordinal asc
     </select>
 <!--    查询热门商品列表-->

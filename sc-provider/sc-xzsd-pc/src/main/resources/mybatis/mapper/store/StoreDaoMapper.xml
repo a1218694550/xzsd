@@ -76,7 +76,7 @@
         )
     </insert>
 <!--    查询门店详情-->
-    <select id="getStore" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="com.xzsd.pc.store.entity.StoreVO">
+    <select id="getStore" parameterType="java.lang.String" resultType="com.xzsd.pc.store.entity.StoreVO">
         select
             store_code as storeCode,
             store_name as storeName,

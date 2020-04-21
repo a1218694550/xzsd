@@ -19,7 +19,7 @@ public interface HotGoodsDao {
      * @param displayCount
      * @return
      */
-    int setDisplayCount(@Param("updater") String updater,@Param("displayCount") String displayCount,@Param("version") int version);
+    int setDisplayCount(@Param("updater") String updater,@Param("displayCount") String displayCount);
 
     /**
      * 统计序号数量

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.customer.dao.CustomerDao">
+<!--    获取查询人的门店邀请码-->
+    <select id="getInvCode" resultType="java.lang.String" parameterType="java.lang.String">
+        select
+            inv_code
+        from t_sys_store
+        where
+        is_delete = 0
+        and user_code = #{operator}
+    </select>
 <!--    查询客户列表-->
     <select id="listCustomer" parameterType="com.xzsd.pc.customer.entity.CustomerInfo" resultType="com.xzsd.pc.customer.entity.CustomerVo">
         select
@@ -23,8 +32,8 @@
         <if test="cusName != null and cusName !=''">
             AND us.user_name like concat ('%',#{cusName},'%')
         </if>
-        <if test="role == 2">
-            AND cus.inv_code in (select inv_code from t_sys_store where user_code = #{operator})
+        <if test="invCode != null and invCode != ''">
+            AND cus.inv_code = #{invCode}
         </if>
         order by us.create_time desc
     </select>

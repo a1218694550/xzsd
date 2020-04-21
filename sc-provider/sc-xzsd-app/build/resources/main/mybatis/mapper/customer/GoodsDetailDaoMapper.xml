@@ -33,6 +33,7 @@
         where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
 		GROUP BY goods.goods_code
     </select>
+
 <!--    加入购物车-->
     <insert id="addGoodsToCart" parameterType="com.xzsd.app.customer.goodsDetail.entity.OpeGoods">
         insert into t_sys_shopcart(

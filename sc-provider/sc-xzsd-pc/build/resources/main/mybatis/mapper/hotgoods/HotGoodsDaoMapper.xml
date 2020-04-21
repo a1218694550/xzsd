@@ -8,7 +8,7 @@
             updater = #{updater},
             update_time = now(),
             version = version + 1
-        where is_delete = 0 and pub_class = 'hotgoods' and class = 'displaycount' and version = #{version}
+        where is_delete = 0 and pub_class = 'hotgoods' and class = 'displaycount'
     </update>
 <!--    统计序号数量-->
     <select id="countSort" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -75,7 +75,8 @@
             hotgoods.goods_code as goodsCode,
             goods.goods_name as goodsName,
             goods.sellprice as sellPrice,
-            goods.goods_intro as goodsIntro
+            goods.goods_intro as goodsIntro,
+            hotgoods.version as version
         from t_sys_hotgoods hotgoods
         left join t_sys_goods goods on (hotgoods.goods_code = goods.goods_code)
         where hotgoods.is_delete = 0

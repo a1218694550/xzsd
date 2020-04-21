@@ -30,12 +30,11 @@ public class HotGoodsService {
      * 设置热门商品展示数量
      * @param updater
      * @param displayCount
-     * @param version
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse setDisplayCount(String updater,String displayCount,int version){
-       int result =  hotGoodsDao.setDisplayCount(updater,displayCount,version);
+    public AppResponse setDisplayCount(String updater,String displayCount){
+       int result =  hotGoodsDao.setDisplayCount(updater,displayCount);
        if(0 == result){
            return AppResponse.bizError("设置失败");
        }
