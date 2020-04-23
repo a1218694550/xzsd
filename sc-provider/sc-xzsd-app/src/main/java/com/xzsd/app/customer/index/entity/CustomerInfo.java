@@ -5,14 +5,32 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class CustomerInfo {
+    /**
+     * 顾客编号
+     */
     private String userCode;
+    /**
+     * 顾客账号
+     */
     private String userAccount;
+    /**
+     * 密码
+     */
     private String password;
+    /**
+     * 手机号
+     */
     private String phone;
+    /**
+     * 姓名
+     */
     private String name;
     private int sex;
     private String idCard;
     private String email;
+    /**
+     * 邀请码
+     */
     private String invCode;
     private String userImg;
 

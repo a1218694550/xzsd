@@ -30,12 +30,12 @@ public interface GoodsDetailDao {
     int addGoodsToCart(OpeGoods opeGoods);
 
     /**
-     * 修改商品信息
+     * 修改商品库存跟销量
      * @param orderDetailsList
      * @return
      */
     int updateGoods(@Param("orderDetailsList") List<OrderDetails> orderDetailsList);
-
+    int updateGoodsInfo(GoodsInfo goodsInfo);
     /**
      * 新增订单
      * @param addOrderInfo

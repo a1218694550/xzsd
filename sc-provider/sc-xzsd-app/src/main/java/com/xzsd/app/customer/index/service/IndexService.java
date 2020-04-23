@@ -24,16 +24,16 @@ public class IndexService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addCustomer(CustomerInfo customerInfo){
-        //校验邀请码
-        int result = indexDao.findInvCode(customerInfo.getInvCode());
-        if ( 0 == result){
-            return AppResponse.bizError("注册失败，邀请码错误!");
-        }
+//        //校验邀请码
+//        int result = indexDao.findInvCode(customerInfo.getInvCode());
+//        if ( 0 == result){
+//            return AppResponse.bizError("注册失败，邀请码错误!");
+//        }
 
         //校验账号
         int countUser = indexDao.countUserAcct(customerInfo);
         if (0 != countUser){
-            return AppResponse.bizError("注册失败，改账号已存在!");
+            return AppResponse.bizError("注册失败，该账号或手机号已存在!");
         }
         //新增账号
         customerInfo.setUserCode(StringUtil.getCommonCode(6));

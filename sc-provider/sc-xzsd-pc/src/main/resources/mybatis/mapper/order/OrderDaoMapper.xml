@@ -32,7 +32,7 @@
         from t_sys_order od
         left join t_sys_user us on (od.cus_code = us.user_code)
         where od.is_delete = 0
-        <if test="role !=null and role !='' and role == 2">
+        <if test="role == 2">
             AND od.store_code in (select store_code from t_sys_store where user_code = #{operator})
         </if>
         <if test="cusName != null and cusName != ''">

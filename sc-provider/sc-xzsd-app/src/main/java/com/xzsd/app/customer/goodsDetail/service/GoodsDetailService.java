@@ -29,12 +29,17 @@ public class GoodsDetailService {
      * @return
      */
     public AppResponse getGoods(String goodsCode , String userCode){
+        //查询登陆用户绑定的门店信息
         StoreVO storeVO = goodsDetailDao.getStoreOfUser(userCode);
+        //查询商品详情
         GoodsVO goodsVO = goodsDetailDao.getGoods(goodsCode);
-        if (storeVO.getDetailedAddress()==null || "".equals(storeVO.getDetailedAddress())){
-            storeVO.setDetailedAddress("地址发生未知错误!请检查绑定门店或询问门店店长详情！");
+        if (storeVO == null || storeVO.getDetailedAddress()==null || "".equals(storeVO.getDetailedAddress())){
+            return AppResponse.bizError("地址发生未知错误!请检查绑定门店或询问门店店长详情！");
         }
         goodsVO.setAddress(storeVO.getDetailedAddress());
+        //浏览量+1
+        GoodsInfo goodsInfo = new GoodsInfo(goodsCode,1);
+        int updateResult = goodsDetailDao.updateGoodsInfo(goodsInfo);
         return AppResponse.success("查询商品详情成功！",goodsVO);
     }
 
@@ -84,6 +89,10 @@ public class GoodsDetailService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addOrder(AddOrderInfo addOrderInfo){
+        StoreVO storeVO = goodsDetailDao.getStoreOfUser(addOrderInfo.getUserCode());
+        if (storeVO == null){
+            return AppResponse.serverError("对不起，您暂未绑定店铺邀请码，请先绑定店铺邀请码后才能购买书籍！");
+        }
         List<String> goodsList = Arrays.asList(addOrderInfo.getGoodsCode().split(","));
         List<String> countList = Arrays.asList(addOrderInfo.getCount().split(","));
         //设置订单信息

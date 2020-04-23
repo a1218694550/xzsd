@@ -33,7 +33,14 @@
         where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
 		GROUP BY goods.goods_code
     </select>
-
+<!--    修改商品信息(浏览量)-->
+    <update id="updateGoodsInfo" parameterType="com.xzsd.app.customer.goodsDetail.entity.GoodsInfo">
+        update t_sys_goods
+        <if test="browseVolume != 0">
+            set browse_volume = browse_volume + #{browseVolume}
+        </if>
+        where is_delete = 0 and goods_code = #{goodsCode}
+    </update>
 <!--    加入购物车-->
     <insert id="addGoodsToCart" parameterType="com.xzsd.app.customer.goodsDetail.entity.OpeGoods">
         insert into t_sys_shopcart(

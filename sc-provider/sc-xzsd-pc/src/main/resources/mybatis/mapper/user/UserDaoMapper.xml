@@ -75,6 +75,7 @@
         select
             user_code as userCode,
             user_acco as userAccount,
+            user_pwd as userPwd,
             user_name as userName,
             sex,
             phone,
@@ -110,6 +111,7 @@
             email,
             idcard,
             role,
+            user_img as userImg,
             is_delete as isDelete,
             creater,
             create_time as createTime,

@@ -21,6 +21,8 @@ import java.util.List;
 public class CustomerService {
     @Resource
     private CustomerDao customerDao;
+    @Resource
+    private UserDao userDao;
     /**
      * 查询客户列表
      * @param customerInfo
@@ -30,7 +32,14 @@ public class CustomerService {
         /**
          * 如果查询人是店长-->获取查询人的门店邀请码
          */
-        String storeInvCode = customerDao.getInvCode(customerInfo.getOperator());
+        UserInfo userInfo = userDao.getUser(customerInfo.getOperator());
+        if (userInfo.getRole() != 1 && userInfo.getRole() !=2){
+            return AppResponse.bizError("您没有权限查询客户列表！");
+        }
+        String storeInvCode = null;
+        if (userInfo.getRole() == 2){
+            storeInvCode = customerDao.getInvCode(customerInfo.getOperator());
+        }
         if (storeInvCode != null){
             customerInfo.setInvCode(storeInvCode);
         }

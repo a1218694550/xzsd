@@ -132,6 +132,13 @@ public class GoodsInfo implements Serializable {
      */
     private int version;
 
+    public GoodsInfo() {
+    }
+
+    public GoodsInfo(String goodsCode, int browseVolume) {
+        this.goodsCode = goodsCode;
+        this.browseVolume = browseVolume;
+    }
 
     public int getPageNum() {
         return pageNum;

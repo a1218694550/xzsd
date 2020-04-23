@@ -163,7 +163,7 @@
         from t_sys_store store
         left join t_sys_user `user` on (store.user_code = `user`.user_code)
         where store.is_delete = 0
-        <if test="role !=null and role !='' and role == 2">
+        <if test="role == 2">
             AND store.user_code = #{operator}
         </if>
         <if test="storeCode != null and storeCode !=''">

@@ -39,7 +39,9 @@ public class DriverService {
             return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
         driverInfo.setDriverCode(StringUtil.getCommonCode(6));
-        driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
+        if (driverInfo.getDriverPassword() != null && !"".equals(driverInfo.getDriverPassword())){
+            driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
+        }
         driverInfo.setIsDelete(0);
         if (driverInfo.getImage() == null || "".equals(driverInfo.getImage())){
             driverInfo.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");

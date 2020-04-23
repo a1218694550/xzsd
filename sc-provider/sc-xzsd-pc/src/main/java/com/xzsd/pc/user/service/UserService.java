@@ -64,10 +64,11 @@ public class UserService {
         if (0 != countUserAcct){
             return AppResponse.bizError("用户账户已存在，或该手机号已达绑定上限!");
         }
-        if (userInfo.getUserAccount() == null || "".equals(userInfo.getUserAccount()) || userInfo.getUserPwd() == null || "".equals(userInfo.getUserPwd())){
-            return AppResponse.serverError("修改失败，账号密码为空！");
-        }
-        if (userInfo.getUserPwd() != null && "".equals(userInfo.getUserPwd())){
+        UserInfo user = userDao.getUser(userInfo.getUserCode());
+        //如果密码没有修改
+        if (userInfo.getUserPwd().equals(user.getUserPwd())){
+            userInfo.setUserPwd("");
+        }else{//如果密码修改了
             userInfo.setUserPwd(PasswordUtils.generatePassword(userInfo.getUserPwd()));
         }
         // 修改用户

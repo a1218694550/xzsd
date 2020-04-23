@@ -125,13 +125,13 @@
             advwords = #{advWords},
             goods_intro = #{goodsIntro},
             goods_status = #{goodsStatus},
-            shelf_time = #{shelfTime},
-            browse_volume = #{browseVolume},
             merchant = #{merchant},
             book_code = #{bookCode},
             press = #{press},
             author = #{author},
-            image_url = #{image},
+            <if test="image != null and image != ''">
+                image_url = #{image},
+            </if>
             is_delete = #{isDelete},
             updater = #{updater},
             update_time = now(),
@@ -184,7 +184,6 @@
         order by goods.create_time desc
     </select>
 <!--    删除商品-->
-
     <select id="repeatHotGoodsCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
         select distinct goods_code
         from t_sys_hotgoods
@@ -239,6 +238,9 @@
     <update id="updateGoodsStatus" parameterType="com.xzsd.pc.util.CodeList">
         update t_sys_goods set
             goods_status = #{status},
+            <if test="status == 2">
+                shelf_time = now(),
+            </if>
             updater = #{updater},
             update_time = now(),
             version = version + 1

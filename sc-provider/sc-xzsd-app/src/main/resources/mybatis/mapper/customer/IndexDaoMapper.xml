@@ -10,7 +10,7 @@
     <select id="countUserAcct" parameterType="com.xzsd.app.customer.index.entity.CustomerInfo" resultType="int">
         select count(user_acco)
         from t_sys_user
-        where user_acco = #{userAccount}
+        where is_delete = 0 and ( user_acco = #{userAccount} or phone = #{phone} )
         <if test="userCode != null and userCode != ''">
             and user_code != #{userCode}
         </if>

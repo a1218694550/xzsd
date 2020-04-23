@@ -90,11 +90,11 @@ public class GoodsInfo implements Serializable {
      * 库存
      */
     private int stock;
-    /**
-     * 上架时间
-     */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date shelfTime;
+//    /**
+//     * 上架时间
+//     */
+//    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
+//    private Date shelfTime;
     /**
      * 浏览量
      */
@@ -332,14 +332,14 @@ public class GoodsInfo implements Serializable {
     public void setStock(int stock) {
         this.stock = stock;
     }
-
-    public Date getShelfTime() {
-        return shelfTime;
-    }
-
-    public void setShelfTime(Date shelfTime) {
-        this.shelfTime = shelfTime;
-    }
+//
+//    public Date getShelfTime() {
+//        return shelfTime;
+//    }
+//
+//    public void setShelfTime(Date shelfTime) {
+//        this.shelfTime = shelfTime;
+//    }
 
     public String getUpdater() {
         return updater;
