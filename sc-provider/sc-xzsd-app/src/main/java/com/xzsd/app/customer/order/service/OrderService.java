@@ -72,12 +72,13 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse goodsEvaluate(OrderEvaluate orderEvaluate){
         //查询订单状态
-        OrderDetails orderDetails = orderDao.getOrder(orderEvaluate.getOrderCode());
-        if (orderDetails.getOrderStatus() != SystemValue.ORDER_STATUS_SUCCESS_VALUE){
-            if (orderDetails.getOrderStatus() < SystemValue.ORDER_STATUS_SUCCESS_VALUE){
+        OrderVO orderDetails = orderDao.getOrderStatus(orderEvaluate.getOrderCode());
+
+        if (Integer.parseInt(orderDetails.getOrderStatus()) != SystemValue.ORDER_STATUS_SUCCESS_VALUE){
+            if (Integer.parseInt(orderDetails.getOrderStatus()) < SystemValue.ORDER_STATUS_SUCCESS_VALUE){
                 return AppResponse.bizError("评价失败！错误原因：订单未完成");
             }
-            else if (orderDetails.getOrderStatus() == SystemValue.ORDER_STATUS_EVALUETED_VALUE){
+            else if (Integer.parseInt(orderDetails.getOrderStatus()) == SystemValue.ORDER_STATUS_EVALUETED_VALUE){
                 return AppResponse.bizError("评价失败！错误原因：订单已评价");
             }
         }

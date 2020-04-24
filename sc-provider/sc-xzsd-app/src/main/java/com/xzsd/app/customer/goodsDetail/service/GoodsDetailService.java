@@ -103,15 +103,18 @@ public class GoodsDetailService {
         //构建订单详情列表
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         String create = addOrderInfo.getUserCode();
+        //获取商品列表信息
         List<GoodsVO> goodsVOList = goodsDetailDao.goodsList(goodsList);
         StringBuilder unStockGoodsName = new StringBuilder();
         //生成订单详情信息
         for (int i = 0 ; i < goodsList.size() ; i++){
             String orderDetailsCode = StringUtil.getCommonCode(6);
             float price = 0;
+            //查找商品价格
             for (int j = 0; j < goodsList.size(); j++) {
                 if (goodsList.get(i).equals(goodsVOList.get(j).getGoodsCode())){
                     price = goodsVOList.get(j).getSellPrice();
+                    //判断库存是否充足
                     if (Integer.parseInt(countList.get(i))>goodsVOList.get(j).getStock()){
                         unStockGoodsName.append(goodsVOList.get(j).getGoodsName()).append(",");
                     }

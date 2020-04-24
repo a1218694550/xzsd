@@ -1,7 +1,7 @@
 package com.xzsd.app.customer.goodsclass.service;
 
 import com.neusoft.core.restful.AppResponse;
-import com.xzsd.app.customer.goodsclass.dao.GoodsClassDao;
+import com.xzsd.app.customer.goodsclass.dao.AppGoodsClassDao;
 import com.xzsd.app.customer.goodsclass.entity.GoodsClassOne;
 import com.xzsd.app.customer.goodsclass.entity.GoodsClassSecond;
 import org.springframework.stereotype.Service;
@@ -10,9 +10,9 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class GoodsClassService {
+public class AppGoodsClassService {
     @Resource
-    private GoodsClassDao goodsClassDao;
+    private AppGoodsClassDao goodsClassDao;
     /**
      * 查询商品一级分类列表
      * @return

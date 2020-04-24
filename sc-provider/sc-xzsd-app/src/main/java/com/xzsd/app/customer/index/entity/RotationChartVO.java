@@ -12,7 +12,7 @@ public class RotationChartVO {
     /**
      * 图片路径
      */
-    private String image;
+    private String imgUrl;
     /**
      * 排序序号
      */
@@ -48,12 +48,12 @@ public class RotationChartVO {
         this.rotationChartCode = rotationChartCode;
     }
 
-    public String getImage() {
-        return image;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImaUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public int getSortOrdinal() {

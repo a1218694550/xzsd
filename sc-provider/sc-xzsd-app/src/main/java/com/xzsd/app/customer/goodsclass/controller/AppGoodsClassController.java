@@ -1,7 +1,7 @@
 package com.xzsd.app.customer.goodsclass.controller;
 
 import com.neusoft.core.restful.AppResponse;
-import com.xzsd.app.customer.goodsclass.service.GoodsClassService;
+import com.xzsd.app.customer.goodsclass.service.AppGoodsClassService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ *
+ * @author asus
+ */
 @RestController
 @RequestMapping("customer/goodsClass")
-public class GoodsClassController {
-    private static final Logger logger = LoggerFactory.getLogger(GoodsClassController.class);
+public class AppGoodsClassController {
+    private static final Logger logger = LoggerFactory.getLogger(AppGoodsClassController.class);
     @Resource
-    private GoodsClassService goodsClassService;
+    private AppGoodsClassService goodsClassService;
 
     /**
      * 查询商品一级分类列表

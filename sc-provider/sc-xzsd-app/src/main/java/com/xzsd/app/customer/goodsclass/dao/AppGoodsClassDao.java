@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface GoodsClassDao {
+public interface AppGoodsClassDao {
     /**
      * 查询商品一级分类列表
      * @return

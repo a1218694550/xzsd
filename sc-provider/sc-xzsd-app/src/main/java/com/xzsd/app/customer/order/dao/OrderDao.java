@@ -23,6 +23,13 @@ public interface OrderDao {
     OrderDetails getOrder(@Param("orderCode") String orderCode);
 
     /**
+     * 查询订单状态
+     * @param orderCode
+     * @return
+     */
+    OrderVO getOrderStatus(@Param("orderCode") String orderCode);
+
+    /**
      * 修改订单状态
      * @param orderInfo
      * @return

@@ -81,7 +81,12 @@
             version = version + 1
         where is_delete = 0 and order_code = #{orderCode} and version = #{version}
     </update>
-
+<!--    查询订单状态-->
+    <select id="getOrderStatus" parameterType="java.lang.String" resultType="com.xzsd.app.customer.order.entity.OrderVO">
+        select status as orderStatus
+        from t_sys_order
+        where is_delete = 0 and order_code = #{orderCode}
+    </select>
 <!--    新增商品评价-->
     <insert id="addGoodsEvaluate" parameterType="com.xzsd.app.customer.order.entity.OrderEvaluate">
         insert into t_sys_goods_evaluate(
