@@ -121,7 +121,9 @@
         update t_sys_user set
             user_name = #{driverName},
             user_acco = #{driverAccount},
-            user_pwd = #{driverPassword},
+            <if test="driverPassword != null and driverPassword != ''">
+                user_pwd = #{driverPassword},
+            </if>
             idcard = #{idCard},
             sex = #{sex},
             phone = #{phone},

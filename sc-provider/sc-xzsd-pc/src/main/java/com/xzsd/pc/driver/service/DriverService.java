@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.xzsd.pc.driver.dao.DriverDao;
 import com.xzsd.pc.driver.entity.DriverInfo;
 import com.xzsd.pc.driver.entity.DriverVO;
+import com.xzsd.pc.user.dao.UserDao;
 import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.util.AppResponse;
 import com.xzsd.pc.util.CodeList;
@@ -25,7 +26,8 @@ import java.util.List;
 public class DriverService {
     @Resource
     private DriverDao driverDao;
-
+    @Resource
+    private UserDao userDao;
     /**
      * 新增司机信息
      * @param driverInfo
@@ -76,7 +78,10 @@ public class DriverService {
         if (0 != countUserAcct){
             return AppResponse.bizError("用户账户已存在,或该手机号已达绑定上限！");
         }
-        driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
+        //如果密码为空则表示前端没有修改密码，如果密码不为空则表示前端修改过密码
+        if (driverInfo.getDriverPassword() != null && !"".equals(driverInfo.getDriverPassword())){
+            driverInfo.setDriverPassword(PasswordUtils.generatePassword(driverInfo.getDriverPassword()));
+        }
         if (driverInfo.getImage() == null || "".equals(driverInfo.getImage())){
             driverInfo.setImage("https://book-store-1300963863.cos.ap-guangzhou.myqcloud.com/book-store/2020/2/29/223ceba3-59e0-419f-a306-5c3a5d363bbc.ico");
         }

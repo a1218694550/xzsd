@@ -79,10 +79,21 @@ public class GoodsClassService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteGoodsClass(GoodsClassInfo goodsClassInfo){
-        //检查该分类下是否有二级分类
-        int count = goodsClassDao.countChildClass(goodsClassInfo.getClassCode());
-        if (0 != count){
-            return AppResponse.bizError("删除商品一级分类失败，该一级分类下有二级分类！");
+        GoodsClassInfo goodsClassMes = goodsClassDao.getGoodsClass(goodsClassInfo);
+        if (goodsClassMes == null){
+            return AppResponse.bizError("删除商品分类失败，无此商品分类！");
+        }else if (Integer.parseInt(goodsClassMes.getClassLevel()) == 1){
+            //检查该分类下是否有二级分类
+            int count = goodsClassDao.countChildClass(goodsClassInfo.getClassCode());
+            if (0 != count){
+                return AppResponse.bizError("删除商品一级分类失败，该一级分类下有二级分类！");
+            }
+        }else if (Integer.parseInt(goodsClassMes.getClassLevel()) == 2){
+            //检查改分类下是否有商品
+            int countGoods = goodsClassDao.countGoods(goodsClassInfo.getClassCode());
+            if (0 != countGoods){
+                return AppResponse.bizError("删除商品二级分类失败，该二级分类下有商品！");
+            }
         }
         //删除商品分类
         int result = goodsClassDao.deleteGoodsClass(goodsClassInfo);

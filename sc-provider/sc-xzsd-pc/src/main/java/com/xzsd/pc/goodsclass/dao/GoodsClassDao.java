@@ -12,8 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface GoodsClassDao {
-    int getGoodsClassCount(GoodsClassInfo goodsClassInfo);
-
     /**
      * 新增商品分类
      * @param goodsClassInfo
@@ -47,6 +45,13 @@ public interface GoodsClassDao {
      * @return
      */
     int countChildClass(@Param("classCode") String classCode);
+
+    /**
+     * 查询二级分类下商品数量
+     * @param classCode
+     * @return
+     */
+    int countGoods(@Param("classCode") String classCode);
     /**
      * 删除商品分类
      * @param goodsClassInfo

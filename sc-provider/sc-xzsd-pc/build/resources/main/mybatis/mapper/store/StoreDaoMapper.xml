@@ -90,7 +90,7 @@
             province,
             city,
             area,
-            detailed_addr as detailedAddr,
+            detailed_addr as detailedAddress,
             version
         from t_sys_store
         where is_delete =  0 and store_code = #{storeCode}
