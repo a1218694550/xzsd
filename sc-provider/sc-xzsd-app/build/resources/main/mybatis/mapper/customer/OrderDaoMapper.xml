@@ -83,7 +83,7 @@
     </update>
 <!--    查询订单状态-->
     <select id="getOrderStatus" parameterType="java.lang.String" resultType="com.xzsd.app.customer.order.entity.OrderVO">
-        select status as orderStatus
+        select order_status as orderStatus
         from t_sys_order
         where is_delete = 0 and order_code = #{orderCode}
     </select>
