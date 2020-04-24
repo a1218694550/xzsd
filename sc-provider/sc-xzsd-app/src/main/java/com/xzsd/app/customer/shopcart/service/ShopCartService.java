@@ -47,6 +47,9 @@ public class ShopCartService {
     public AppResponse updateGoodsCount(ShopCartGoodsInfo shopCartGoodsInfo){
         //获取商品信息
         GoodsVO goodsVO = goodsDetailDao.getGoods(shopCartGoodsInfo.getGoodsCode());
+        if (goodsVO.getStock() < shopCartGoodsInfo.getGoodsCount()){
+            return AppResponse.bizError("修改商品数量失败,数量超出上限！");
+        }
         //修改总价
         shopCartGoodsInfo.setSumPrice(goodsVO.getSellPrice()*shopCartGoodsInfo.getGoodsCount());
         int count = shopCartDao.updateGoodsCount(shopCartGoodsInfo);
