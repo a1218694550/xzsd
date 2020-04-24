@@ -103,33 +103,45 @@ public class GoodsDetailService {
         //构建订单详情列表
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         String create = addOrderInfo.getUserCode();
+        List<GoodsVO> goodsVOList = goodsDetailDao.goodsList(goodsList);
+        StringBuilder unStockGoodsName = new StringBuilder();
         //生成订单详情信息
         for (int i = 0 ; i < goodsList.size() ; i++){
             String orderDetailsCode = StringUtil.getCommonCode(6);
-            float price = goodsDetailDao.getGoods(goodsList.get(i)).getSellPrice();
-            OrderDetails orderDetails = new OrderDetails(orderDetailsCode,goodsList.get(i),Integer.parseInt(countList.get(i)),price);
-            orderDetails.setCreater(create);
-            orderDetails.setIsDelete(0);
-            orderDetails.setOrderCode(orderCode);
-            //计算总价
-            addOrderInfo.setSumPrice(addOrderInfo.getSumPrice()+price*Integer.parseInt(countList.get(i)));
-            //添加至list
-            orderDetailsList.add(orderDetails);
+            float price = 0;
+            for (int j = 0; j < goodsList.size(); j++) {
+                if (goodsList.get(i).equals(goodsVOList.get(j).getGoodsCode())){
+                    price = goodsVOList.get(j).getSellPrice();
+                    if (Integer.parseInt(countList.get(i))>goodsVOList.get(j).getStock()){
+                        unStockGoodsName.append(goodsVOList.get(j).getGoodsName()).append(",");
+                    }
+                    break;
+                }
+            }
+            if (price != 0){
+                OrderDetails orderDetails = new OrderDetails(orderDetailsCode,goodsList.get(i),Integer.parseInt(countList.get(i)),price);
+                orderDetails.setCreater(create);
+                orderDetails.setIsDelete(0);
+                orderDetails.setOrderCode(orderCode);
+                //计算总价
+                addOrderInfo.setSumPrice(addOrderInfo.getSumPrice()+price*Integer.parseInt(countList.get(i)));
+                //添加至list
+                orderDetailsList.add(orderDetails);
+            }
+        }
+        //修改商品库存跟销量
+        int resUpdateGoods = goodsDetailDao.updateGoods(orderDetailsList);
+        if (0 == resUpdateGoods){
+            return AppResponse.bizError("购买失败，商品:" + unStockGoodsName+"库存不足！");
         }
         //新增订单
         int resAddOrder = goodsDetailDao.addOrder(addOrderInfo);
         if ( 0 == resAddOrder){
-            return AppResponse.bizError("购买失败！");
+            return AppResponse.bizError("购买失败,新增订单失败！");
         }
         //新增订单详情
         int resAddOrderDetails = goodsDetailDao.addOrderDetail(orderDetailsList);
         if ( goodsList.size() != resAddOrderDetails){
-            return AppResponse.bizError("购买失败！");
-        }
-        //修改商品库存跟销量
-        int resUpdateGoods = goodsDetailDao.updateGoods(orderDetailsList);
-        System.out.println("result-----> "+resUpdateGoods);
-        if (0 == resUpdateGoods){
             return AppResponse.bizError("购买失败！");
         }
         //如果是在购物车点的结算 ， 则需要将商品移除购物车

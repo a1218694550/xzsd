@@ -16,8 +16,25 @@
         left join t_sys_customer customer on (store.inv_code = customer.inv_code)
         where store.is_delete = 0 and customer.cus_code = #{userCode}
     </select>
-<!--    查询商品详情信息-->
+    <!--    查询商品详情信息-->
     <select id="getGoods" parameterType="java.lang.String" resultType="com.xzsd.app.customer.goodsDetail.entity.GoodsVO">
+        select
+        goods.goods_code as goodsCode,
+        goods.image_url as goodsImg,
+        goods.goods_name as goodsName,
+        goods.goods_intro as goodsIntro,
+        goods.sellprice as sellPrice,
+        goods.sumsales_volume as sumSalesVolume,
+        goods.stock,
+        avg(evaluate.evaluate_class) as starClass,
+        goods.version
+        from t_sys_goods goods
+        left JOIN t_sys_goods_evaluate evaluate ON (evaluate.goods_code = goods.goods_code and evaluate.is_delete = 0)
+        where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
+        group by goods.goods_code
+    </select>
+<!--    查询商品列表信息-->
+    <select id="goodsList" parameterType="java.util.List" resultType="com.xzsd.app.customer.goodsDetail.entity.GoodsVO">
         select
             goods.goods_code as goodsCode,
             goods.image_url as goodsImg,
@@ -30,10 +47,13 @@
             goods.version
         from t_sys_goods goods
 		left JOIN t_sys_goods_evaluate evaluate ON (evaluate.goods_code = goods.goods_code and evaluate.is_delete = 0)
-        where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
-		GROUP BY goods.goods_code
+        where goods.is_delete = 0 and goods.goods_code in
+        <foreach collection="goodsCode" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by goods.goods_code
     </select>
-<!--    修改商品信息-->
+<!--    修改商品信息(浏览量)-->
     <update id="updateGoodsInfo" parameterType="com.xzsd.app.customer.goodsDetail.entity.GoodsInfo">
         update t_sys_goods
         <if test="browseVolume != 0">
@@ -75,7 +95,7 @@
         update t_sys_goods set
         sumsales_volume = sumsales_volume + #{item.count},
         stock = stock - #{item.count}
-        where is_delete = 0 and goods_code = #{item.goodsCode}
+        where is_delete = 0 and goods_code = #{item.goodsCode} and stock &gt;= #{item.count}
     </foreach>
     </update>
 <!--    新增订单-->

@@ -15,13 +15,18 @@ public interface GoodsDetailDao {
      * @return
      */
     StoreVO getStoreOfUser(@Param("userCode") String userCode);
-
     /**
-     * 查询商品详情信息
+     * 查询商品详情
      * @param goodsCode
      * @return
      */
     GoodsVO getGoods(@Param("goodsCode") String goodsCode);
+    /**
+     * 查询商品列表信息
+     * @param goodsCode
+     * @return
+     */
+    List<GoodsVO> goodsList(@Param("goodsCode") List<String> goodsCode);
     /**
      * 加入购物车
      * @param opeGoods
