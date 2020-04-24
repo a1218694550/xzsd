@@ -83,7 +83,9 @@
     </update>
 <!--    查询订单状态-->
     <select id="getOrderStatus" parameterType="java.lang.String" resultType="com.xzsd.app.customer.order.entity.OrderVO">
-        select order_status as orderStatus
+        select
+        order_status as orderStatus,
+        version
         from t_sys_order
         where is_delete = 0 and order_code = #{orderCode}
     </select>
@@ -118,7 +120,6 @@
             )
         </foreach>
     </insert>
-
 <!--    新增评价图片-->
     <insert id="addEvaluateImg" parameterType="com.xzsd.app.customer.order.entity.EvaluateImg">
         insert into t_sys_evaluate_img(
@@ -148,4 +149,12 @@
             )
         </foreach>
     </insert>
+    <!--    修改商品星级-->
+    <update id="updateGoodsStar" parameterType="com.xzsd.app.customer.order.entity.EvaluateInfo" >
+        <foreach collection="evaluateInfoList" item="item" open="" separator=";" close="" index="index">
+            update t_sys_goods set
+            star_class = (star_class + #{item.evaluateClass}) / 2
+            where goods_code = #{item.goodsCode}
+        </foreach>
+    </update>
 </mapper>

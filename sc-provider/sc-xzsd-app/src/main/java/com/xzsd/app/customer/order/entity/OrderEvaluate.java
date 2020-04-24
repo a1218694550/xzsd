@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author asus
+ */
 public class OrderEvaluate implements Serializable {
     private String orderCode;
     private String customerCode;

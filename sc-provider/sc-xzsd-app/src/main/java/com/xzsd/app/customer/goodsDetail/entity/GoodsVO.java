@@ -31,6 +31,7 @@ public class GoodsVO {
      * 销售量
      */
     private int sumSalesVolume;
+    private int browseVolume;
     /**
      * 库存
      */
@@ -94,6 +95,14 @@ public class GoodsVO {
 
     public void setSumSalesVolume(int sumSalesVolume) {
         this.sumSalesVolume = sumSalesVolume;
+    }
+
+    public int getBrowseVolume() {
+        return browseVolume;
+    }
+
+    public void setBrowseVolume(int browseVolume) {
+        this.browseVolume = browseVolume;
     }
 
     public int getStock() {

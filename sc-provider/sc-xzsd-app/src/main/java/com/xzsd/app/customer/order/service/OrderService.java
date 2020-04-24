@@ -1,20 +1,13 @@
 package com.xzsd.app.customer.order.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
 import com.neusoft.core.restful.AppResponse;
-import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.app.customer.order.dao.OrderDao;
 import com.xzsd.app.customer.order.entity.*;
-import com.xzsd.app.util.JsonUtils;
 import com.xzsd.app.util.StringUtil;
 import com.xzsd.app.util.SystemValue;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -22,6 +15,10 @@ import java.util.List;
 
 import static com.neusoft.core.page.PageUtils.getPageInfo;
 
+/**
+ * 订单管理
+ * @author asus
+ */
 @Service
 public class OrderService {
     @Resource
@@ -83,9 +80,6 @@ public class OrderService {
             }
         }
         String userCode = orderEvaluate.getCustomerCode();
-        if (orderEvaluate==null){
-            return AppResponse.bizError("评价失败！错误原因：Json转化失败!");
-        }
         //初始化评价图片列表
         List<EvaluateImg> evaluateImgList = new ArrayList<>();
         for (int i = 0 ; i < orderEvaluate.getEvaluateList().size() ; i ++){
@@ -107,17 +101,23 @@ public class OrderService {
                 evaluateImgList.add(evaluateImg);
             }
         }
+        //修改商品评价星级
+        int updateResult = orderDao.updateGoodsStar(orderEvaluate.getEvaluateList());
+        if ( 0 == updateResult){
+            return AppResponse.bizError("评价失败！修改商品星级失败！");
+        }
         //新增评价信息跟评价图片
-        int addGEResult = orderDao.addGoodsEvaluate(orderEvaluate);
-        int addEIResult = orderDao.addEvaluateImg(evaluateImgList);
-        if (orderEvaluate.getEvaluateList().size() != addGEResult && evaluateImgList.size() != addEIResult){
-            return AppResponse.bizError("评价失败！请稍后重试！");
+        int addGoodsEvaResult = orderDao.addGoodsEvaluate(orderEvaluate);
+        int addEvaImgResult = orderDao.addEvaluateImg(evaluateImgList);
+        if (orderEvaluate.getEvaluateList().size() != addGoodsEvaResult && evaluateImgList.size() != addEvaImgResult){
+            return AppResponse.bizError("评价失败，新增评价信息失败！请稍后重试！");
         }
         //设置订单状态为已评价
         OrderInfo orderInfo = new OrderInfo(orderEvaluate.getOrderCode(), SystemValue.ORDER_STATUS_EVALUETED_VALUE,orderEvaluate.getUpdater());
+        orderInfo.setVersion(orderDetails.getVersion());
         int updateStatus = orderDao.updateOrderStatus(orderInfo);
         if (0 == updateStatus){
-            return AppResponse.bizError("评价失败！请稍后重试！");
+            return AppResponse.bizError("评价失败，数据以变化，订单版本已更新！请稍后重试！");
         }
         return AppResponse.success("评价成功！");
     }

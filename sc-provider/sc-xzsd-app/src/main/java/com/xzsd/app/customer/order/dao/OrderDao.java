@@ -36,6 +36,12 @@ public interface OrderDao {
      */
     int updateOrderStatus(OrderInfo orderInfo);
 
+    /**
+     * 商品评价
+     * @param orderEvaluate
+     * @return
+     */
     int addGoodsEvaluate( OrderEvaluate orderEvaluate);
     int addEvaluateImg(@Param("evaluateImgList") List<EvaluateImg> evaluateImgList);
+    int updateGoodsStar(@Param("evaluateInfoList") List<EvaluateInfo> evaluateInfoList);
 }

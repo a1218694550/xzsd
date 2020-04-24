@@ -33,10 +33,15 @@ public class GoodsDetailService {
         StoreVO storeVO = goodsDetailDao.getStoreOfUser(userCode);
         //查询商品详情
         GoodsVO goodsVO = goodsDetailDao.getGoods(goodsCode);
-        if (storeVO == null || storeVO.getDetailedAddress()==null || "".equals(storeVO.getDetailedAddress())){
-            return AppResponse.bizError("地址发生未知错误!请检查绑定门店或询问门店店长详情！");
+        //如果星级为0表示未评价 ， 将星级改为满星
+        if (goodsVO.getStarClass() == 0){
+            goodsVO.setStarClass(5);
         }
-        goodsVO.setAddress(storeVO.getDetailedAddress());
+        if (storeVO == null || storeVO.getDetailedAddress()==null || "".equals(storeVO.getDetailedAddress())){
+            goodsVO.setAddress("地址发生未知错误!请检查绑定门店或询问门店店长详情！");
+        }else{
+            goodsVO.setAddress(storeVO.getDetailedAddress());
+        }
         //浏览量+1
         GoodsInfo goodsInfo = new GoodsInfo(goodsCode,1);
         int updateResult = goodsDetailDao.updateGoodsInfo(goodsInfo);

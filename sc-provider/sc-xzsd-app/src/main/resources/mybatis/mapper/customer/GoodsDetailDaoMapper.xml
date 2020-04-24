@@ -25,6 +25,7 @@
         goods.goods_intro as goodsIntro,
         goods.sellprice as sellPrice,
         goods.sumsales_volume as sumSalesVolume,
+        goods.browse_volume as browseVolume,
         goods.stock,
         avg(evaluate.evaluate_class) as starClass,
         goods.version
