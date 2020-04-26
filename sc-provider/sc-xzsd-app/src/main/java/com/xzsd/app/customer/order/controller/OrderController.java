@@ -1,19 +1,20 @@
 package com.xzsd.app.customer.order.controller;
 
-import com.alibaba.fastjson.JSONObject;
+
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
 import com.xzsd.app.customer.order.entity.OrderEvaluate;
 import com.xzsd.app.customer.order.entity.OrderInfo;
 
 import com.xzsd.app.customer.order.service.OrderService;
+import com.xzsd.app.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.spring.web.json.Json;
+
 
 import javax.annotation.Resource;
 
@@ -79,16 +80,19 @@ public class OrderController {
 
     /**
      * 商品评价
-     * @param orderEvaluate
+     * @param jsonStr
      * @return
      */
     @PostMapping("goodsEvaluate")
-    public AppResponse goodsEvaluate(@RequestBody OrderEvaluate orderEvaluate){
+    public AppResponse goodsEvaluate(String jsonStr){
         try{
-            String userCode = SecurityUtils.getCurrentUserId();
-            orderEvaluate.setCustomerCode(userCode);
-            orderEvaluate.setUpdater(userCode);
-            orderEvaluate.setCreater(userCode);
+            //@RequestBody(required=false) OrderEvaluate orderEvaluate
+//            System.out.println("userCode:" + userCode);
+//            orderEvaluate.setCustomerCode(userCode);
+            System.out.println("接收的Str:" + jsonStr);
+            OrderEvaluate orderEvaluate = JsonUtils.fromJson(jsonStr,OrderEvaluate.class);
+            orderEvaluate.setUpdater(SecurityUtils.getCurrentUserId());
+            orderEvaluate.setCreater(SecurityUtils.getCurrentUserId());
             AppResponse appResponse = orderService.goodsEvaluate(orderEvaluate);
             return appResponse;
         }catch (Exception e){

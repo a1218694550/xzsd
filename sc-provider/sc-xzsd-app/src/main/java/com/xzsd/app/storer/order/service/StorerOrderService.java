@@ -41,6 +41,7 @@ public class StorerOrderService {
      */
     public AppResponse getOrder(String orderCode){
         OrderDetails orderDetails = stoereOrderDao.getOrder(orderCode);
+        orderDetails.setClassCount(orderDetails.getGoodsList().size());
         return AppResponse.success("查询订单详情成功！",orderDetails);
     }
 

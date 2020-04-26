@@ -24,12 +24,14 @@ public class IndexService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addCustomer(CustomerInfo customerInfo){
-//        //校验邀请码
-//        int result = indexDao.findInvCode(customerInfo.getInvCode());
-//        if ( 0 == result){
-//            return AppResponse.bizError("注册失败，邀请码错误!");
-//        }
-
+        //如果邀请码不为空，则校验邀请码
+        if (customerInfo.getInvCode() != null && "".equals(customerInfo.getInvCode())){
+            //校验邀请码
+            int result = indexDao.findInvCode(customerInfo.getInvCode());
+            if ( 0 == result){
+                return AppResponse.bizError("注册失败，邀请码错误!");
+            }
+        }
         //校验账号
         int countUser = indexDao.countUserAcct(customerInfo);
         if (0 != countUser){

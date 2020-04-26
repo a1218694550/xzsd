@@ -43,6 +43,18 @@ public class OrderEvaluate implements Serializable {
     public OrderEvaluate() {
     }
 
+    public OrderEvaluate(String orderCode, String customerCode, List<EvaluateInfo> evaluateList, int isDelete, String creater, Date createTime, String updater, Date updateTime, int version) {
+        this.orderCode = orderCode;
+        this.customerCode = customerCode;
+        this.evaluateList = evaluateList;
+        this.isDelete = isDelete;
+        this.creater = creater;
+        this.createTime = createTime;
+        this.updater = updater;
+        this.updateTime = updateTime;
+        this.version = version;
+    }
+
     public String getOrderCode() {
         return orderCode;
     }

@@ -2,6 +2,7 @@ package com.xzsd.app.customer.order.service;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.xzsd.app.customer.goodsDetail.dao.GoodsDetailDao;
 import com.xzsd.app.customer.order.dao.OrderDao;
 import com.xzsd.app.customer.order.entity.*;
 import com.xzsd.app.util.StringUtil;
@@ -23,7 +24,8 @@ import static com.neusoft.core.page.PageUtils.getPageInfo;
 public class OrderService {
     @Resource
     private OrderDao orderDao;
-
+    @Resource
+    private GoodsDetailDao goodsDetailDao;
     /**
      * 查询订单列表
      * @param orderInfo
@@ -44,6 +46,7 @@ public class OrderService {
      */
     public AppResponse getOrder(String orderCode){
         OrderDetails orderDetails = orderDao.getOrder(orderCode);
+        orderDetails.setClassCount(orderDetails.getGoodsList().size());
         return AppResponse.success("查询订单详情成功！",orderDetails);
     }
 
@@ -57,6 +60,21 @@ public class OrderService {
         int result = orderDao.updateOrderStatus(orderInfo);
         if (0 == result){
             return AppResponse.bizError("修改订单状态失败!");
+        }
+        if (orderInfo.getOrderStatus() == SystemValue.ORDER_STATUS_CANCEL_VALUE){
+            OrderDetails orderDetails =  orderDao.getOrder(orderInfo.getOrderCode());
+            List<Goods> goodsList = orderDetails.getGoodsList();
+            List<com.xzsd.app.customer.goodsDetail.entity.OrderDetails> orderDetailsList = new ArrayList<>();
+            for (int i = 0; i < goodsList.size(); i++) {
+                com.xzsd.app.customer.goodsDetail.entity.OrderDetails orderDetails1 = new com.xzsd.app.customer.goodsDetail.entity.OrderDetails();
+                orderDetails1.setGoodsCode(goodsList.get(i).getGoodsCode());
+                orderDetails1.setCount(-goodsList.get(i).getBuyCount());
+                orderDetailsList.add(orderDetails1);
+            }
+            int updateResult = goodsDetailDao.updateGoods(orderDetailsList);
+            if (0 == updateResult){
+                return AppResponse.bizError("修改订单状态失败,商品库存与销量修改失败!");
+            }
         }
         return AppResponse.success("修改订单状态成功!");
     }
@@ -79,7 +97,7 @@ public class OrderService {
                 return AppResponse.bizError("评价失败！错误原因：订单已评价");
             }
         }
-        String userCode = orderEvaluate.getCustomerCode();
+        String userCode = orderEvaluate.getCreater();
         //初始化评价图片列表
         List<EvaluateImg> evaluateImgList = new ArrayList<>();
         for (int i = 0 ; i < orderEvaluate.getEvaluateList().size() ; i ++){
@@ -89,6 +107,10 @@ public class OrderService {
             orderEvaluate.getEvaluateList().get(i).setIsDelete(0);
             //获取评价信息
             EvaluateInfo evaluateInfo = orderEvaluate.getEvaluateList().get(i);
+            //如果没有上传图片则跳过
+            if (evaluateInfo.getImgUrlList() == null){
+                continue;
+            }
             //设置评价图片信息
             for (int j = 0 ; j < evaluateInfo.getImgUrlList().size(); j ++){
                 //获取图片信息
@@ -108,9 +130,14 @@ public class OrderService {
         }
         //新增评价信息跟评价图片
         int addGoodsEvaResult = orderDao.addGoodsEvaluate(orderEvaluate);
-        int addEvaImgResult = orderDao.addEvaluateImg(evaluateImgList);
-        if (orderEvaluate.getEvaluateList().size() != addGoodsEvaResult && evaluateImgList.size() != addEvaImgResult){
+        if (orderEvaluate.getEvaluateList().size() != addGoodsEvaResult){
             return AppResponse.bizError("评价失败，新增评价信息失败！请稍后重试！");
+        }
+        if (!evaluateImgList.isEmpty()){
+            int addEvaImgResult = orderDao.addEvaluateImg(evaluateImgList);
+            if (evaluateImgList.size() != addEvaImgResult){
+                return AppResponse.bizError("评价失败，新增评价图片失败！请稍后重试！");
+            }
         }
         //设置订单状态为已评价
         OrderInfo orderInfo = new OrderInfo(orderEvaluate.getOrderCode(), SystemValue.ORDER_STATUS_EVALUETED_VALUE,orderEvaluate.getUpdater());

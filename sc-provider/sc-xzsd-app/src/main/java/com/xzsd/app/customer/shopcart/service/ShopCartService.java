@@ -45,6 +45,7 @@ public class ShopCartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateGoodsCount(ShopCartGoodsInfo shopCartGoodsInfo){
+        System.out.println("购买的数量:" + shopCartGoodsInfo.getGoodsCount());
         //获取商品信息
         GoodsVO goodsVO = goodsDetailDao.getGoods(shopCartGoodsInfo.getGoodsCode());
         if (goodsVO.getStock() < shopCartGoodsInfo.getGoodsCount()){

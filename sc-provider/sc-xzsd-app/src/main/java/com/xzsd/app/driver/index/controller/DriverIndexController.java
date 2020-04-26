@@ -2,7 +2,6 @@ package com.xzsd.app.driver.index.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
-import com.xzsd.app.customer.goodsclass.controller.GoodsClassController;
 import com.xzsd.app.driver.index.entity.StoreInfo;
 import com.xzsd.app.driver.index.service.DriverIndexService;
 import org.slf4j.Logger;
