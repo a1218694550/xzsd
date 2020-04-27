@@ -137,7 +137,7 @@ public class GoodsDetailService {
                 orderDetailsList.add(orderDetails);
             }
         }
-        //修改商品库存跟销量
+        //修改商品库存
         int resUpdateGoods = goodsDetailDao.updateGoods(orderDetailsList);
         if (0 == resUpdateGoods){
             return AppResponse.bizError("购买失败，商品:" + unStockGoodsName+"库存不足！");

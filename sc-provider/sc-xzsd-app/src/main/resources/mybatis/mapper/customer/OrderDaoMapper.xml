@@ -149,4 +149,20 @@
             where goods_code = #{item.goodsCode}
         </foreach>
     </update>
+<!--    恢复商品库存-->
+    <update id="updateGoodsStock" parameterType="java.util.List">
+        <foreach collection="goodsList" index="index" item="item" open="" separator=";" close="">
+            update t_sys_goods set
+            stock = stock + #{item.buyCount}
+            where is_delete = 0 and goods_code = #{item.goodsCode}
+        </foreach>
+    </update>
+<!--    修改商品销量-->
+    <update id="updateGoodsSales" parameterType="java.util.List">
+        <foreach collection="goodsList" index="index" item="item" open="" separator=";" close="">
+            update t_sys_goods set
+            sumsales_volume = sumsales_volume + #{item.buyCount},
+            where is_delete = 0 and goods_code = #{item.goodsCode}
+        </foreach>
+    </update>
 </mapper>

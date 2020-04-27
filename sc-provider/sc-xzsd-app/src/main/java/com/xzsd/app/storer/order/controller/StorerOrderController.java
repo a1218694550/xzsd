@@ -26,7 +26,7 @@ public class StorerOrderController {
      * @param orderInfo
      * @return
      */
-    @RequestMapping("listOrderByPage")
+    @RequestMapping("storeListOrderByPage")
     public AppResponse listOrderByPage(OrderInfo orderInfo){
         try{
             orderInfo.setStorerCode(SecurityUtils.getCurrentUserId());
@@ -44,7 +44,7 @@ public class StorerOrderController {
      * @param orderCode
      * @return
      */
-    @RequestMapping("getOrder")
+    @RequestMapping("storeGetOrder")
     public AppResponse getOrder(String orderCode){
         try{
             AppResponse appResponse = storerOrderService.getOrder(orderCode);
@@ -61,7 +61,7 @@ public class StorerOrderController {
      * @param orderInfo
      * @return
      */
-    @PostMapping("updateOrderStatus")
+    @PostMapping("storeUpdateOrderStatus")
     public AppResponse updateOrderStatus(OrderInfo orderInfo){
         try{
             orderInfo.setUpdater(SecurityUtils.getCurrentUserId());

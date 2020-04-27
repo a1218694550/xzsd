@@ -4,7 +4,7 @@
 <!--    统计邀请码数量-->
     <select id="countInvCode" parameterType="java.lang.String" resultType="int">
         select count(*)
-        from t_sys_customer
+        from t_sys_store
         where is_delete = 0 and inv_code = #{invCode}
     </select>
 <!--    修改邀请码-->

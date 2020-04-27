@@ -90,11 +90,10 @@
             0
         )
     </insert>
-<!--    修改商品库存跟销售量-->
+<!--    修改商品库存-->
     <update id="updateGoods" parameterType="java.util.List">
     <foreach collection="orderDetailsList" index="index" item="item" open="" separator=";" close="">
         update t_sys_goods set
-        sumsales_volume = sumsales_volume + #{item.count},
         stock = stock - #{item.count}
         where is_delete = 0 and goods_code = #{item.goodsCode} and stock &gt;= #{item.count}
     </foreach>

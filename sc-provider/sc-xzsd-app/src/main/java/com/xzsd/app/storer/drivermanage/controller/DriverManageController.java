@@ -21,7 +21,7 @@ public class DriverManageController {
      * 查询司机列表
      * @return
      */
-    @RequestMapping("listDriverByPage")
+    @RequestMapping("storeListDriverByPage")
     public AppResponse listDriverByPage(){
         try{
             String userCode = SecurityUtils.getCurrentUserId();
