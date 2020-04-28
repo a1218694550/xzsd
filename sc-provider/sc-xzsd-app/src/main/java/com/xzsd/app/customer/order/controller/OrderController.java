@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 订单管理模块：顾客端
+ * @author zehong
+ * @time 2020/4/28
+ */
 @RestController
 @RequestMapping("customer/order")
 public class OrderController {
@@ -87,9 +92,6 @@ public class OrderController {
     public AppResponse goodsEvaluate(String jsonStr){
         try{
             //@RequestBody(required=false) OrderEvaluate orderEvaluate
-//            System.out.println("userCode:" + userCode);
-//            orderEvaluate.setCustomerCode(userCode);
-            System.out.println("接收的Str:" + jsonStr);
             OrderEvaluate orderEvaluate = JsonUtils.fromJson(jsonStr,OrderEvaluate.class);
             orderEvaluate.setUpdater(SecurityUtils.getCurrentUserId());
             orderEvaluate.setCreater(SecurityUtils.getCurrentUserId());

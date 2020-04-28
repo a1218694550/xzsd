@@ -33,7 +33,7 @@ public class GoodsDetailService {
         StoreVO storeVO = goodsDetailDao.getStoreOfUser(userCode);
         //查询商品详情
         GoodsVO goodsVO = goodsDetailDao.getGoods(goodsCode);
-        //如果星级为0表示未评价 ， 将星级改为满星
+        //如果星级为0表示未评价，将星级改为满星
         if (goodsVO.getStarClass() == 0){
             goodsVO.setStarClass(5);
         }
@@ -56,7 +56,7 @@ public class GoodsDetailService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addGoodsToCart(OpeGoods opeGoods){
         //查询商品是否已在购物车内，如果已存在直接修改商品数量
-        ShopCartGoodsInfo shopCartGoodsInfo = shopCartDao.getGoodsForCart(opeGoods.getGoodsCode());
+        ShopCartGoodsInfo shopCartGoodsInfo = shopCartDao.getGoodsForCart(opeGoods);
         if (shopCartGoodsInfo != null){
             ShopCartGoodsInfo goodsData = new ShopCartGoodsInfo();
             goodsData.setShopCartCode(shopCartGoodsInfo.getShopCartCode());

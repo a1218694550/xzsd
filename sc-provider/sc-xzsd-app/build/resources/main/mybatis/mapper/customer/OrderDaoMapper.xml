@@ -145,7 +145,7 @@
     <update id="updateGoodsStar" parameterType="com.xzsd.app.customer.order.entity.EvaluateInfo" >
         <foreach collection="evaluateInfoList" item="item" open="" separator=";" close="" index="index">
             update t_sys_goods set
-            star_class = (star_class + #{item.evaluateClass}) / 2
+                star_class = (select round(avg(evaluate_class),1) from t_sys_goods_evaluate where is_delete = 0 and goods_code = #{item.goodsCode})
             where goods_code = #{item.goodsCode}
         </foreach>
     </update>
@@ -161,7 +161,7 @@
     <update id="updateGoodsSales" parameterType="java.util.List">
         <foreach collection="goodsList" index="index" item="item" open="" separator=";" close="">
             update t_sys_goods set
-            sumsales_volume = sumsales_volume + #{item.buyCount},
+            sumsales_volume = sumsales_volume + #{item.buyCount}
             where is_delete = 0 and goods_code = #{item.goodsCode}
         </foreach>
     </update>

@@ -25,7 +25,7 @@ public class IndexService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addCustomer(CustomerInfo customerInfo){
         //如果邀请码不为空，则校验邀请码
-        if (customerInfo.getInvCode() != null && "".equals(customerInfo.getInvCode())){
+        if (customerInfo.getInvCode() != null && !"".equals(customerInfo.getInvCode())){
             //校验邀请码
             int result = indexDao.findInvCode(customerInfo.getInvCode());
             if ( 0 == result){

@@ -126,11 +126,6 @@ public class OrderService {
                 evaluateImgList.add(evaluateImg);
             }
         }
-        //修改商品评价星级
-        int updateResult = orderDao.updateGoodsStar(orderEvaluate.getEvaluateList());
-        if ( 0 == updateResult){
-            return AppResponse.bizError("评价失败！修改商品星级失败！");
-        }
         //新增评价信息跟评价图片
         int addGoodsEvaResult = orderDao.addGoodsEvaluate(orderEvaluate);
         if (orderEvaluate.getEvaluateList().size() != addGoodsEvaResult){
@@ -141,6 +136,11 @@ public class OrderService {
             if (evaluateImgList.size() != addEvaImgResult){
                 return AppResponse.bizError("评价失败，新增评价图片失败！请稍后重试！");
             }
+        }
+        //修改商品评价星级
+        int updateResult = orderDao.updateGoodsStar(orderEvaluate.getEvaluateList());
+        if ( 0 == updateResult){
+            return AppResponse.bizError("评价失败！修改商品星级失败！");
         }
         //设置订单状态为已评价
         OrderInfo orderInfo = new OrderInfo(orderEvaluate.getOrderCode(), SystemValue.ORDER_STATUS_EVALUETED_VALUE,orderEvaluate.getUpdater());

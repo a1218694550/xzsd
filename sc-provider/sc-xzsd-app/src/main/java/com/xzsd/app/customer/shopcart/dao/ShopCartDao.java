@@ -1,5 +1,6 @@
 package com.xzsd.app.customer.shopcart.dao;
 
+import com.xzsd.app.customer.goodsDetail.entity.OpeGoods;
 import com.xzsd.app.customer.shopcart.entity.ShopCartGoodsInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,10 +21,10 @@ public interface ShopCartDao {
 
     /**
      * 查询购物车内商品信息
-     * @param goodsCode
+     * @param opeGoods
      * @return
      */
-    ShopCartGoodsInfo getGoodsForCart(@Param("goodsCode") String goodsCode);
+    ShopCartGoodsInfo getGoodsForCart(OpeGoods opeGoods);
     /**
      * 修改商品数量
      * @param shopCartGoodsInfo
