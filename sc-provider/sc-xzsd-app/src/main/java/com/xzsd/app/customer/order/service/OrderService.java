@@ -62,20 +62,23 @@ public class OrderService {
             return AppResponse.bizError("修改订单状态失败!");
         }
         //取消订单时恢复商品库存与销量
-        if (orderInfo.getOrderStatus() == SystemValue.ORDER_STATUS_CANCEL_VALUE){
+        if (orderInfo.getOrderStatus() == SystemValue.ORDER_STATUS_CANCEL_VALUE
+                || orderInfo.getOrderStatus() == SystemValue.ORDER_STATUS_SUCCESS_VALUE){
             //获取订单内商品信息
             OrderDetails orderDetails =  orderDao.getOrder(orderInfo.getOrderCode());
             List<Goods> goodsList = orderDetails.getGoodsList();
-//            List<com.xzsd.app.customer.goodsDetail.entity.OrderDetails> orderDetailsList = new ArrayList<>();
-//            for (int i = 0; i < goodsList.size(); i++) {
-//                com.xzsd.app.customer.goodsDetail.entity.OrderDetails orderDetails1 = new com.xzsd.app.customer.goodsDetail.entity.OrderDetails();
-//                orderDetails1.setGoodsCode(goodsList.get(i).getGoodsCode());
-//                orderDetails1.setCount(-goodsList.get(i).getBuyCount());
-//                orderDetailsList.add(orderDetails1);
-//            }
-            int updateResult = orderDao.updateGoodsStock(goodsList);
-            if (0 == updateResult){
-                return AppResponse.bizError("修改订单状态失败,商品库存修改失败!");
+            if (orderInfo.getOrderStatus() == SystemValue.ORDER_STATUS_SUCCESS_VALUE){
+                //如果订单已完成，修改商品销量
+                int updateGoodsSales = orderDao.updateGoodsSales(goodsList);
+                if (0 == updateGoodsSales){
+                    return AppResponse.bizError("评价失败，商品销量修改失败！");
+                }
+            }else if (orderInfo.getOrderStatus() == SystemValue.ORDER_STATUS_CANCEL_VALUE){
+                //如果订单取消，恢复商品库存
+                int updateResult = orderDao.updateGoodsStock(goodsList);
+                if (0 == updateResult){
+                    return AppResponse.bizError("修改订单状态失败,商品库存修改失败!");
+                }
             }
         }
         return AppResponse.success("修改订单状态成功!");
@@ -89,7 +92,6 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse goodsEvaluate(OrderEvaluate orderEvaluate){
         //查询订单状态
-        //OrderVO orderDetails = orderDao.getOrderStatus(orderEvaluate.getOrderCode());
         OrderDetails orderDetails =orderDao.getOrder(orderEvaluate.getOrderCode());
         int orderStatus = orderDetails.getOrderStatus();
         if (orderStatus != SystemValue.ORDER_STATUS_SUCCESS_VALUE){
@@ -148,11 +150,6 @@ public class OrderService {
         int updateStatus = orderDao.updateOrderStatus(orderInfo);
         if (0 == updateStatus){
             return AppResponse.bizError("评价失败，数据以变化，订单版本已更新！请稍后重试！");
-        }
-        //修改商品销量
-        int updateGoodsSales = orderDao.updateGoodsSales(orderDetails.getGoodsList());
-        if (0 == updateGoodsSales){
-            return AppResponse.bizError("评价失败，商品销量修改失败！");
         }
         return AppResponse.success("评价成功！");
     }
