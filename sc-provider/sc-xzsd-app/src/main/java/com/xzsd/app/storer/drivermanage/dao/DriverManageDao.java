@@ -5,6 +5,10 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * 司机管理模块
+ * @author 泽宏
+ */
 public interface DriverManageDao {
     /**
      * 查询司机列表

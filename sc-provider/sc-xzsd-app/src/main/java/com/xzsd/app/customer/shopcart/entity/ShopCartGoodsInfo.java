@@ -6,6 +6,7 @@ public class ShopCartGoodsInfo {
     private String goodsCode;
     private String goodsImg;
     private String goodsName;
+    private String goodsIntro;
     private float sellPrice;
     private int goodsCount;
     private float sumPrice;
@@ -47,6 +48,14 @@ public class ShopCartGoodsInfo {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public String getGoodsIntro() {
+        return goodsIntro;
+    }
+
+    public void setGoodsIntro(String goodsIntro) {
+        this.goodsIntro = goodsIntro;
     }
 
     public float getSellPrice() {

@@ -77,9 +77,9 @@
             #{provinceCode},
             #{cityCode},
             #{areaCode},
-            #{province},
-            #{city},
-            #{area},
+            #{provinceName},
+            #{cityName},
+            #{areaName},
             #{isDelete},
             #{creater},
             now(),
@@ -103,9 +103,9 @@
             driver.province_code as provinceCode,
             driver.city_code as cityCode,
             driver.area_code as areaCode,
-            driver.province,
-            driver.city,
-            driver.area,
+            driver.province as provinceName,
+            driver.city as cityName,
+            driver.area as areaName,
             `user`.is_delete as isDelete,
             `user`.creater,
             `user`.create_time as createTime,
@@ -139,9 +139,9 @@
             province_code = #{provinceCode},
             city_code = #{cityCode},
             area_code = #{areaCode},
-            province = #{province},
-            city = #{city},
-            area = #{area},
+            province = #{provinceName},
+            city = #{cityName},
+            area = #{areaName},
             updater = #{updater},
             update_time = now(),
             version = #{version} + 1
@@ -162,9 +162,9 @@
             driver.province_code as provinceCode,
             driver.city_code as cityCode,
             driver.area_code as areaCode,
-            driver.province,
-            driver.city,
-            driver.area,
+            driver.province as provinceName,
+            driver.city as cityName,
+            driver.area as areaName,
             `user`.is_delete as isDelete,
             `user`.creater,
             `user`.create_time as createTime,
@@ -174,7 +174,7 @@
         from t_sys_user `user`
         left join t_sys_driver driver on (`user`.user_code = driver.driver_code)
         where `user`.is_delete = 0 and `user`.role = 4
-        <if test="role != null and role !='' and role == 2">
+        <if test="role == 2">
             AND driver.area_code in (select area_code from t_sys_store where user_code = #{operator} and is_delete = 0)
         </if>
         <if test="driverCode !=null and driverCode !=''">
@@ -189,7 +189,7 @@
         <if test="cityCode !=null and cityCode !=''">
             AND driver.city_code = #{cityCode}
         </if>
-        <if test="area !=null and area !=''">
+        <if test="areaCode !=null and areaCode !=''">
             AND driver.area_code = #{areaCode}
         </if>
         order by driver.create_time desc

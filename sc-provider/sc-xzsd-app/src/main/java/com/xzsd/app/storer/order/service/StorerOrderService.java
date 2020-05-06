@@ -12,6 +12,9 @@ import java.util.List;
 
 import static com.neusoft.core.page.PageUtils.getPageInfo;
 
+/**
+ * 店长订单管理模块
+ */
 @Service
 public class StorerOrderService {
     @Resource

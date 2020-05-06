@@ -111,7 +111,7 @@ public class RotationChartService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateRotationChartState(String rotationChartCode , String status , String updater){
-        if (Integer.valueOf(status) != -1 && Integer.valueOf(status) != 1){
+        if (Integer.parseInt(status) != -1 && Integer.parseInt(status) != 1){
             return AppResponse.bizError("修改轮播图状态失败,参数 status 错误,1 启用 -1禁用");
         }
         List<String> rotationChartCodeList = Arrays.asList(rotationChartCode.split(","));

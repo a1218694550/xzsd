@@ -33,14 +33,12 @@ public class GoodsDetailService {
         StoreVO storeVO = goodsDetailDao.getStoreOfUser(userCode);
         //查询商品详情
         GoodsVO goodsVO = goodsDetailDao.getGoods(goodsCode);
-        //如果星级为0表示未评价，将星级改为满星
-        if (goodsVO.getStarClass() == 0){
-            goodsVO.setStarClass(5);
-        }
         if (storeVO == null || storeVO.getDetailedAddress()==null || "".equals(storeVO.getDetailedAddress())){
             goodsVO.setAddress("地址发生未知错误!请检查绑定门店或询问门店店长详情！");
         }else{
-            goodsVO.setAddress(storeVO.getDetailedAddress());
+            //地址拼接
+            List<String> address = Arrays.asList(storeVO.getDetailedAddress().split("-"));
+            goodsVO.setAddress(address.get(0) + "(" + address.get(1) + address.get(2) + address.get(3) + address.get(4) + ")");
         }
         //浏览量+1
         GoodsInfo goodsInfo = new GoodsInfo(goodsCode,1);
@@ -117,30 +115,38 @@ public class GoodsDetailService {
             float price = 0;
             //查找商品价格
             for (int j = 0; j < goodsList.size(); j++) {
+                //遍历获取商品信息
                 if (goodsList.get(i).equals(goodsVOList.get(j).getGoodsCode())){
-                    price = goodsVOList.get(j).getSellPrice();
                     //判断库存是否充足
                     if (Integer.parseInt(countList.get(i))>goodsVOList.get(j).getStock()){
+                        //库存不足
                         unStockGoodsName.append(goodsVOList.get(j).getGoodsName()).append(",");
+                    }else {
+                        //库存充足
+                        price = goodsVOList.get(j).getSellPrice();
                     }
                     break;
                 }
             }
             if (price != 0){
+                //如果库存充足则生成订单详情
                 OrderDetails orderDetails = new OrderDetails(orderDetailsCode,goodsList.get(i),Integer.parseInt(countList.get(i)),price);
                 orderDetails.setCreater(create);
                 orderDetails.setIsDelete(0);
                 orderDetails.setOrderCode(orderCode);
                 //计算总价
                 addOrderInfo.setSumPrice(addOrderInfo.getSumPrice()+price*Integer.parseInt(countList.get(i)));
-                //添加至list
+                //添加订单至订单详情列表
                 orderDetailsList.add(orderDetails);
             }
+        }
+        if (orderDetailsList.isEmpty()){
+            return AppResponse.bizError("购买失败，商品库存不足！");
         }
         //修改商品库存
         int resUpdateGoods = goodsDetailDao.updateGoods(orderDetailsList);
         if (0 == resUpdateGoods){
-            return AppResponse.bizError("购买失败，商品:" + unStockGoodsName+"库存不足！");
+            return AppResponse.bizError("购买失败，修改库存失败！");
         }
         //新增订单
         int resAddOrder = goodsDetailDao.addOrder(addOrderInfo);
@@ -149,7 +155,7 @@ public class GoodsDetailService {
         }
         //新增订单详情
         int resAddOrderDetails = goodsDetailDao.addOrderDetail(orderDetailsList);
-        if ( goodsList.size() != resAddOrderDetails){
+        if ( 0 == resAddOrderDetails){
             return AppResponse.bizError("购买失败！");
         }
         //如果是在购物车点的结算 ， 则需要将商品移除购物车
@@ -160,7 +166,11 @@ public class GoodsDetailService {
                 return AppResponse.bizError("移除购物车失败，购买失败！");
             }
         }
-        return AppResponse.success("购买商品成功！");
+        if (!"".contentEquals(unStockGoodsName)){
+            return AppResponse.success("购买商品成功！但商品：" + unStockGoodsName +"库存不足，购买失败。");
+        }else{
+            return AppResponse.success("购买商品成功！");
+        }
     }
 
     /**
@@ -170,26 +180,6 @@ public class GoodsDetailService {
      */
     public AppResponse listGoodsEvaluateByPage(GoodsEvaluateInfo goodsEvaluateInfo){
         List<GoodsEvaluateVO> goodsEvaluateVOList = goodsDetailDao.listGoodsEvaluateByPage(goodsEvaluateInfo);
-//        List<ImageInfo> imageInfoList = goodsDetailDao.listGoodsEvaluateImage(goodsEvaluateVOList);
-//        int start;
-//        for (int i = 0; i < goodsEvaluateVOList.size(); i++) {
-//            String evaluateCode = goodsEvaluateVOList.get(i).getEvaluateCode();
-//            List<ImageInfo> list = new ArrayList<>();
-//            start = 0 ;
-//            for (int j = 0 ; j < imageInfoList.size() ; j ++){
-//                if (evaluateCode.equals(imageInfoList.get(j).getEvaluateCode())){
-//                    list.add(imageInfoList.get(j));
-//                    if (start == 0){
-//                        start = 1;
-//                    }
-//                }else {
-//                    if (start == 1){
-//                        break;
-//                    }
-//                }
-//            }
-//            goodsEvaluateVOList.get(i).setListImgUrl(list);
-//        }
         return AppResponse.success("查询商品评价列表成功！",getPageInfo(goodsEvaluateVOList));
     }
 }

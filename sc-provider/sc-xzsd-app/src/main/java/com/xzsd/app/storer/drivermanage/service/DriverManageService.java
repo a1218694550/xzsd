@@ -10,6 +10,10 @@ import java.util.List;
 
 import static com.neusoft.core.page.PageUtils.getPageInfo;
 
+/**
+ * 司机管理模块
+ * @author 泽宏
+ */
 @Service
 public class DriverManageService {
     @Resource

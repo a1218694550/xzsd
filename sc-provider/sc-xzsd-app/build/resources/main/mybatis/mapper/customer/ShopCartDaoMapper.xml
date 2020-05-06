@@ -25,6 +25,7 @@
             goods.image_url as goodsImg,
             goods.goods_name as goodsName,
             goods.sellprice as sellPrice,
+            goods.goods_intro as goodsIntro,
             shopcart.buy_count as goodsCount,
             shopcart.sum_price as sumPrice
         from t_sys_shopcart shopcart

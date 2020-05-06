@@ -44,7 +44,7 @@ public class OrderInfo {
     /**
      * 订单状态 0:已下单 1:待取货  2:已取货 3:已完成未评价 4:已评价 5:取消
      */
-    private int orderStatus;
+    private String orderStatus;
     /**
      * 支付时间
      */
@@ -160,11 +160,11 @@ public class OrderInfo {
         this.sumPrice = sumPrice;
     }
 
-    public int getOrderStatus() {
+    public String getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(int orderStatus) {
+    public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 

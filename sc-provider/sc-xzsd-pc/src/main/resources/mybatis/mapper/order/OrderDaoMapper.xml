@@ -19,7 +19,7 @@
             us.user_name as cusName,
             us.phone,
             od.sum_price as sumPrice,
-            od.order_Status as orderStatus,
+            CONVERT(od.order_Status, char) as orderStatus,
             od.pay_time as payTime,
             od.store_code as storeCode,
             od.remarks,
@@ -50,8 +50,11 @@
         <if test="phone != null and phone != ''">
             AND us.phone like concat ('%',#{phone},'%')
         </if>
+        <if test="orderStatus == null or orderStatus == ''">
+            AND od.order_status != 5
+        </if>
         <if test="orderStatus != null and orderStatus != ''">
-            AND od.order_status = #{orderStatus}
+            AND od.order_status = CONVERT(#{orderStatus}, SIGNED)
         </if>
         order by od.create_time desc
     </select>
@@ -84,6 +87,52 @@
         where od.is_delete = 0 and od.order_code = #{orderCode}
         order by odd.create_time desc
     </select>
+<!--    查询订单详情列表-->
+    <select id="listOrderDetails" parameterType="java.util.List" resultType="com.xzsd.pc.order.entity.Goods">
+        select
+            od.cus_code as cusCode,
+            od.order_code as orderCode,
+            odd.ord_details_code as ordDetailsCode,
+            odd.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            odd.buy_count as buyCount,
+            odd.sum_price as sumPrice,
+            goods.sellprice as sellPrice
+        from t_sys_order od
+        left join t_sys_order_details odd on (od.order_code = odd.order_code)
+        left join t_sys_goods goods on (odd.goods_code = goods.goods_code)
+        where od.is_delete = 0 and od.order_code in
+        <foreach collection="orderCodeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by odd.create_time desc
+    </select>
+<!--    查询订单信息列表-->
+    <select id="listOrderMes" parameterType="java.util.List" resultType="com.xzsd.pc.order.entity.OrderVO">
+        select
+        od.order_code as orderCode,
+        od.cus_code as cusCode,
+        us.user_name as cusName,
+        us.phone,
+        od.sum_price as sumPrice,
+        CONVERT(od.order_Status, char) as orderStatus,
+        od.pay_time as payTime,
+        od.store_code as storeCode,
+        od.remarks,
+        od.is_delete as isDelete,
+        od.creater,
+        od.create_time as createTime,
+        od.updater,
+        od.update_time as updateTime,
+        od.version
+        from t_sys_order od
+        left join t_sys_user us on (od.cus_code = us.user_code)
+        where od.is_delete = 0 and od.order_code in
+        <foreach collection="orderCodeList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by od.create_time desc
+    </select>
 <!--    修改订单状态-->
     <update id="updateOrderState" parameterType="java.lang.String">
         update t_sys_order set
@@ -94,6 +143,14 @@
         where is_delete = 0 and order_code in
         <foreach collection="orderCodeList" index="index" item="item" open="(" separator="," close=")">
             #{item}
+        </foreach>
+    </update>
+<!--    恢复商品库存    -->
+    <update id="updateGoodsStock" parameterType="java.util.List">
+        <foreach collection="goodsList" index="index" item="item" open="" separator=";" close="">
+            update t_sys_goods set
+            stock = stock + #{item.buyCount}
+            where is_delete = 0 and goods_code = #{item.goodsCode}
         </foreach>
     </update>
 </mapper>

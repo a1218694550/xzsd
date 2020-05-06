@@ -27,10 +27,9 @@
         goods.sumsales_volume as sumSalesVolume,
         goods.browse_volume as browseVolume,
         goods.stock,
-        avg(evaluate.evaluate_class) as starClass,
+        goods.star_class as starClass,
         goods.version
         from t_sys_goods goods
-        left JOIN t_sys_goods_evaluate evaluate ON (evaluate.goods_code = goods.goods_code and evaluate.is_delete = 0)
         where goods.is_delete = 0 and goods.goods_code = #{goodsCode}
         group by goods.goods_code
     </select>

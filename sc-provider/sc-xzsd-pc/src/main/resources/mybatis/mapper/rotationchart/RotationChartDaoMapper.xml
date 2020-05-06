@@ -79,20 +79,23 @@
 <!--    查询轮播图列表-->
     <select id="listRotationChart" parameterType="com.xzsd.pc.rotationchart.entity.RotationChartInfo" resultType="com.xzsd.pc.rotationchart.entity.RotationChartVO">
         select
-            rotationchart_code as rotationChartCode,
-            img_url as image,
-            sort_ordinal as sortOrdinal,
-            status,
-            goods_code as goodsCode,
-            valperiod_start as valperiodStart,
-            valperiod_over as valperiodOver,
-            version
-        from t_sys_rotationchart
-        where is_delete = 0
+            rotationchart.rotationchart_code as rotationChartCode,
+            rotationchart.img_url as image,
+            rotationchart.img_url as imageUrl,
+            rotationchart.sort_ordinal as sortOrdinal,
+            rotationchart.status,
+            rotationchart.goods_code as goodsCode,
+            goods.goods_name as goodsName,
+            rotationchart.valperiod_start as valperiodStart,
+            rotationchart.valperiod_over as valperiodOver,
+            rotationchart.version
+        from t_sys_rotationchart rotationchart
+        left join t_sys_goods goods on (rotationchart.goods_code = goods.goods_code and goods.is_delete = 0)
+        where rotationchart.is_delete = 0
         <if test="status != 0">
-            AND status = #{status}
+            AND rotationchart.status = #{status}
         </if>
-        order by sort_ordinal asc
+        order by rotationchart.sort_ordinal asc
     </select>
 <!--    删除轮播图-->
     <update id="deleteRotationChart" parameterType="com.xzsd.pc.util.CodeList">

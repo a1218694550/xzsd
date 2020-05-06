@@ -21,6 +21,7 @@ public class RotationChartVO {
      * 图片路径
      */
     private String image;
+    private String imageUrl;
     /**
      * 排序序号
      */
@@ -33,6 +34,7 @@ public class RotationChartVO {
      * 商品编号
      */
     private String goodsCode;
+    private String goodsName;
     /**
      * 有效期起
      */
@@ -80,6 +82,14 @@ public class RotationChartVO {
         this.image = image;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public int getSortOrdinal() {
         return sortOrdinal;
     }
@@ -102,6 +112,14 @@ public class RotationChartVO {
 
     public void setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     public Date getValPeriodStart() {

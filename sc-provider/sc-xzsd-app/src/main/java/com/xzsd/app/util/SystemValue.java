@@ -22,4 +22,7 @@ public class SystemValue {
     public static final int ORDER_STATUS_EVALUETED_VALUE = 4;
     //订单状态 取消
     public static final int ORDER_STATUS_CANCEL_VALUE = 5;
+
+    //未评价
+    public static final int NOT_EVALUATE = 0;
 }

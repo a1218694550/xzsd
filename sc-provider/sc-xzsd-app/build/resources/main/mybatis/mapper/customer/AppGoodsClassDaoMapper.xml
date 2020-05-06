@@ -24,6 +24,7 @@
             <result property="version" column="version"/>
         </collection>
     </resultMap>
+<!--    查询二级分类跟分类下商品列表-->
     <select id="listGoodsSecondAndGoods" parameterType="java.lang.String" resultMap="goodsMap">
         select
             goodsclass.goodsclass_code,
@@ -35,7 +36,7 @@
             goods.sumsales_volume,
             goods.version
         from t_sys_goodsclassification goodsclass
-        left join t_sys_goods goods on (goods.goodsclass_code = goodsclass.goodsclass_code and goods.is_delete = 0)
+        left join t_sys_goods goods on (goods.goodsclass_code = goodsclass.goodsclass_code and goods.is_delete = 0 and goods.goods_status = 2)
         where goodsclass.is_delete = 0 and goodsclass.parent_code = #{classOneCode}
     </select>
 </mapper>

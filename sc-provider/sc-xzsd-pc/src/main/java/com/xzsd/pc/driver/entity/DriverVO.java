@@ -46,7 +46,7 @@ public class DriverVO {
     /**
      * 省名
      */
-    private String province;
+    private String provinceName;
     /**
      * 市编号
      */
@@ -54,7 +54,7 @@ public class DriverVO {
     /**
      * 市名
      */
-    private String city;
+    private String cityName;
     /**
      * 区编号
      */
@@ -62,7 +62,7 @@ public class DriverVO {
     /**
      * 区名
      */
-    private String area;
+    private String areaName;
     /**
      * 版本号
      */
@@ -148,12 +148,12 @@ public class DriverVO {
         this.provinceCode = provinceCode;
     }
 
-    public String getProvince() {
-        return province;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
     public String getCityCode() {
@@ -164,12 +164,12 @@ public class DriverVO {
         this.cityCode = cityCode;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getAreaCode() {
@@ -180,12 +180,12 @@ public class DriverVO {
         this.areaCode = areaCode;
     }
 
-    public String getArea() {
-        return area;
+    public String getAreaName() {
+        return areaName;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public int getVersion() {

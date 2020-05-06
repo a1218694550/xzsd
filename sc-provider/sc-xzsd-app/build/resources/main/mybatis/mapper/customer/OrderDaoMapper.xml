@@ -29,8 +29,16 @@
             `order`.version
         from t_sys_order `order`
         where `order`.is_delete = 0 and `order`.cus_code = #{customerCode}
+        <if test="orderStatus == -1">
+            AND `order`.order_status != 5
+        </if>
         <if test="orderStatus != -1">
-            AND `order`.order_status = #{orderStatus}
+            <if test="orderStatus == 3 ">
+                AND `order`.order_status in (3,4)
+            </if>
+            <if test="orderStatus != 3 ">
+                AND `order`.order_status = #{orderStatus}
+            </if>
         </if>
         order by `order`.create_time desc
     </select>

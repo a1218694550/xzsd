@@ -7,6 +7,9 @@ import com.xzsd.app.storer.order.entity.StoreVO;
 
 import java.util.List;
 
+/**
+ * 店长订单管理模块
+ */
 public interface StorerOrderDao {
     /**
      * 获取门店详情

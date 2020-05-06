@@ -106,12 +106,22 @@ public class OrderService {
         //初始化评价图片列表
         List<EvaluateImg> evaluateImgList = new ArrayList<>();
         for (int i = 0 ; i < orderEvaluate.getEvaluateList().size() ; i ++){
+            //获取评价信息
+            EvaluateInfo evaluateInfo = orderEvaluate.getEvaluateList().get(i);
+            //如果未评价，则剔除本条评价信息
+            if (evaluateInfo.getEvaluateClass() == SystemValue.NOT_EVALUATE){
+                orderEvaluate.getEvaluateList().remove(i--);
+                continue;
+            }
+            //如果用户未填写评价内容，则设置默认评价信息
+            if (evaluateInfo.getContent() == null || "".equals(evaluateInfo.getContent())){
+                orderEvaluate.getEvaluateList().get(i).setContent("该用户未填写评价哦！");
+            }
             //设置评价信息
             orderEvaluate.getEvaluateList().get(i).setEvaluateCode(StringUtil.getCommonCode(6));
             orderEvaluate.getEvaluateList().get(i).setCreater(userCode);
             orderEvaluate.getEvaluateList().get(i).setIsDelete(0);
-            //获取评价信息
-            EvaluateInfo evaluateInfo = orderEvaluate.getEvaluateList().get(i);
+
             //如果没有上传图片则跳过
             if (evaluateInfo.getImgUrlList() == null){
                 continue;

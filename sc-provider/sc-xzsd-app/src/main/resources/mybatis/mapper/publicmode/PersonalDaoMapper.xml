@@ -19,6 +19,7 @@
             `user`.user_code as userCode,
             `user`.user_name as userName,
             `user`.role,
+            `user`.user_img as userImg,
             `user`.phone
             <if test="role !=null and role !='' and (role == 2 or role == 3)">
                 ,

@@ -94,8 +94,12 @@ public class HotGoodsService {
                 return AppResponse.bizError("修改热门商品失败，该序号已存在！");
             }
         }
+        System.out.println("hotgoodsCode："+hotGoodsInfo.getHotGoodsCode());
+        System.out.println("新goodsCode："+hotGoodsInfo.getGoodsCode());
+        System.out.println("原goodsCode："+hotGoodsVO.getGoodsCode());
+        System.out.println(hotGoodsVO);
         //如果商品改了
-        if (!hotGoodsVO.getGoodsCode().equals(hotGoodsInfo.getGoodsCode())){
+        if (hotGoodsVO.getGoodsCode() != null && !hotGoodsVO.getGoodsCode().equals(hotGoodsInfo.getGoodsCode())){
             int countGoods = hotGoodsDao.countGoods(hotGoodsInfo.getGoodsCode());
             if (0 != countGoods){
                 return AppResponse.bizError("修改热门商品失败，该商品已存在！");

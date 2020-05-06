@@ -56,7 +56,7 @@ public class StoreInfo {
     /**
      * 省名
      */
-    private String province;
+    private String provinceName;
     /**
      * 市编号
      */
@@ -64,7 +64,7 @@ public class StoreInfo {
     /**
      * 市名
      */
-    private String city;
+    private String cityName;
     /**
      * 区编号
      */
@@ -72,7 +72,7 @@ public class StoreInfo {
     /**
      * 区名
      */
-    private String area;
+    private String areaName;
     /**
      * 详细地址
      */
@@ -202,12 +202,12 @@ public class StoreInfo {
         this.provinceCode = provinceCode;
     }
 
-    public String getProvince() {
-        return province;
+    public String getProvinceName() {
+        return provinceName;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
     public String getCityCode() {
@@ -218,12 +218,12 @@ public class StoreInfo {
         this.cityCode = cityCode;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public String getAreaCode() {
@@ -234,12 +234,12 @@ public class StoreInfo {
         this.areaCode = areaCode;
     }
 
-    public String getArea() {
-        return area;
+    public String getAreaName() {
+        return areaName;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getDetailedAddress() {

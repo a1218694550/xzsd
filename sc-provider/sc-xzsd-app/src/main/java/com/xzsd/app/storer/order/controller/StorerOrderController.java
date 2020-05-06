@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * 店长订单管理模块
+ * @author asus
+ */
 @RestController
 @RequestMapping("storer/order")
 public class StorerOrderController {
