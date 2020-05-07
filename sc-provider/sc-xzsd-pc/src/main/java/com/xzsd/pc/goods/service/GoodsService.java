@@ -175,23 +175,28 @@ public class GoodsService {
         codeList.setCodeList(goodsCodeList);
         List<String> repeatHGCodeList = goodsDao.repeatHotGoodsCount(codeList);
         List<String> repeatRCCodeList = goodsDao.repeatRotationChartCount(codeList);
-//        if (repeatHGCodeList != null && repeatHGCodeList.size() != 0 || (repeatRCCodeList != null && repeatRCCodeList.size() != 0)){
-//            for (int i = 0 ; i < goodsCodeList.size(); i++) {
-//                for (int j = 0 , k = 0; j < repeatHGCodeList.size() || k < repeatRCCodeList.size();){
-//                    if (j <= repeatHGCodeList.size() && goodsCodeList.get(i).equals(repeatHGCodeList.get(j))){
-//                        System.out.println(goodsCodeList.get(i));
-//                        goodsCodeList.remove(i--);
-//                        j++;
-//                        break;
-//                    }
-//                    if (k <= repeatHGCodeList.size() && goodsCodeList.get(i).equals(repeatRCCodeList.get(k))){
-//                        goodsCodeList.remove(i--);
-//                        k++;
-//                        break;
-//                    }
-//                }
-//            }
-//        }
+        if (repeatHGCodeList == null && repeatRCCodeList == null) {
+        }else{
+            for (int i = 0 ; i < goodsCodeList.size(); i++) {
+                int countHGGode = 0 , countRCCode = 0;
+                if (repeatHGCodeList != null){
+                    countHGGode = repeatHGCodeList.size();
+                }
+                if (repeatRCCodeList != null){
+                    countRCCode = repeatRCCodeList.size();
+                }
+                for (int j = 0; j < countHGGode || j < countRCCode; j++){
+                    if (j < countHGGode && goodsCodeList.get(i).equals(repeatHGCodeList.get(j))){
+                        goodsCodeList.remove(i--);
+                        break;
+                    }
+                    if (j < countRCCode && goodsCodeList.get(i).equals(repeatRCCodeList.get(j))){
+                        goodsCodeList.remove(i--);
+                        break;
+                    }
+                }
+            }
+        }
         //删除商品
         if (repeatHGCodeList != null && repeatHGCodeList.size() != 0){
             codeList.setRepeatHGCodeList(repeatHGCodeList);

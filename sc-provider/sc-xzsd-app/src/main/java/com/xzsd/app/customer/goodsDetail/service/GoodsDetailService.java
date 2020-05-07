@@ -16,6 +16,10 @@ import java.util.List;
 
 import static com.neusoft.core.page.PageUtils.getPageInfo;
 
+/**
+ * 商品详情管理
+ * @author 泽宏
+ */
 @Service
 public class GoodsDetailService {
     @Resource
